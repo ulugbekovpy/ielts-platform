@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IELTS Reading Test – The Mystery of Migratory Birds | IeltsPro</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f8fafc; overflow: hidden; color: #0f172a; }
+    .test-wrapper { display:flex; flex-direction:column; height:100vh; }
+    .test-container { display:flex; flex:1; overflow:hidden; }
+    .header{ background:#ffffff; border-bottom:1px solid #e2e8f0; padding:0.75rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .passage-container{ width:45%; height:100%; overflow-y:auto; padding:2rem; background:#ffffff; border-right:1px solid #e2e8f0; }
+    .questions-container{ flex:1; height:100%; overflow-y:auto; padding:2rem; background:#f8fafc; }
+    .para-label { font-weight:700; color:#2563eb; background: #eff6ff; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.25rem;}
+    .questionCard{ background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:1.25rem; margin-bottom:1rem; }
+    .tfng-btn{ padding:0.4rem 1rem; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; font-weight:500; cursor:pointer; background:#fff; margin-right:0.4rem;}
+    .tfng-btn.active-choice { background:#2563eb !important; border-color:#2563eb !important; color:#ffffff !important; }
+    .q-input { width:140px; padding:.25rem .5rem; border:1px solid #e2e8f0; border-radius: 6px; font-size:0.9rem; background:#f8fafc; }
+    #submitBtn{ background:#2563eb; color:#fff; padding:0.8rem 2.5rem; border:none; border-radius:10px; font-weight:600; cursor:pointer; }
+    .modal{ display:none; position:fixed; z-index:3000; left:0; top:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.4); align-items:center; justify-content:center; backdrop-filter:blur(8px); }
+    .modal-content{ background:#ffffff; border-radius:16px; padding:2.5rem; max-width:560px; width:90%; }
+  </style>
+</head>
+<body>
+<div class="test-wrapper">
+  <div class="header">
+    <div class="font-bold text-xl text-blue-600">IELTS<span>Pro</span> — Reading 2</div>
+    <div id="timer" class="font-mono font-bold text-blue-600 bg-blue-50 px-4 py-1 rounded-lg">00:00</div>
+  </div>
+  
+  <div class="test-container">
+    <div class="passage-container">
+      <div id="passageContent">
+        <h2>The Mystery of Migratory Birds</h2>
+        <p><span class="para-label">A</span> Every year, billions of birds embark on an incredible journey across the globe. From the tiny Arctic Tern flying from the Arctic to the Antarctic and back, to large raptors navigating thousands of miles, avian migration remains one of nature’s most fascinating spectacles. For decades, scientists have puzzled over how these creatures manage such precise navigation without the aid of modern instruments.</p>
+        <p><span class="para-label">B</span> Recent studies suggest that birds possess a biological "compass" that allows them to detect the Earth’s magnetic field. This ability, known as magnetoreception, is believed to be linked to specialized proteins in the bird’s eye, which allow them to "see" magnetic lines. Furthermore, they use a combination of celestial cues, such as the position of the sun and stars, and environmental landmarks to adjust their course during flight.</p>
+        <p><span class="para-label">C</span> Migration is not solely an instinctual drive; it is also a learned behavior. Juvenile birds often follow their parents on their first migration, absorbing knowledge about essential stopover points—wetlands, forests, and islands where they can rest and refuel. The loss of these habitats due to urban development and climate change has led to a alarming decline in many migratory species.</p>
+        <p><span class="para-label">D</span> As the climate shifts, migratory patterns are changing. Some species are arriving at their breeding grounds earlier than before, which can create a mismatch between their arrival and the peak availability of food. Protecting migratory corridors has become a global priority, as these long-distance travelers are critical for ecosystem health, acting as pollinators and seed dispersers.</p>
+      </div>
+    </div>
+
+    <div class="questions-container">
+      <div class="questionCard">
+        <h3>Questions 1-6 (True/False/Not Given)</h3>
+        <p>1. Arctic Terns fly a longer distance than all other migratory birds.</p>
+        <button class="tfng-btn" data-q="1" data-val="NOT GIVEN">NOT GIVEN</button><button class="tfng-btn" data-q="1" data-val="TRUE">TRUE</button><button class="tfng-btn" data-q="1" data-val="FALSE">FALSE</button><input type="hidden" name="q1">
+        <p>2. Magnetoreception allows birds to visualize magnetic lines.</p>
+        <button class="tfng-btn" data-q="2" data-val="TRUE">TRUE</button><button class="tfng-btn" data-q="2" data-val="FALSE">FALSE</button><button class="tfng-btn" data-q="2" data-val="NOT GIVEN">NOT GIVEN</button><input type="hidden" name="q2">
+        <p>3. Birds rely exclusively on stars to find their way.</p>
+        <button class="tfng-btn" data-q="3" data-val="TRUE">TRUE</button><button class="tfng-btn" data-q="3" data-val="FALSE">FALSE</button><button class="tfng-btn" data-q="3" data-val="NOT GIVEN">NOT GIVEN</button><input type="hidden" name="q3">
+        <p>4. Young birds never learn migration routes from their parents.</p>
+        <button class="tfng-btn" data-q="4" data-val="TRUE">TRUE</button><button class="tfng-btn" data-q="4" data-val="FALSE">FALSE</button><button class="tfng-btn" data-q="4" data-val="NOT GIVEN">NOT GIVEN</button><input type="hidden" name="q4">
+        <p>5. Habitat loss is a major cause of population decline.</p>
+        <button class="tfng-btn" data-q="5" data-val="TRUE">TRUE</button><button class="tfng-btn" data-q="5" data-val="FALSE">FALSE</button><button class="tfng-btn" data-q="5" data-val="NOT GIVEN">NOT GIVEN</button><input type="hidden" name="q5">
+        <p>6. Early arrival at breeding grounds always benefits the birds.</p>
+        <button class="tfng-btn" data-q="6" data-val="TRUE">TRUE</button><button class="tfng-btn" data-q="6" data-val="FALSE">FALSE</button><button class="tfng-btn" data-q="6" data-val="NOT GIVEN">NOT GIVEN</button><input type="hidden" name="q6">
+      </div>
+      <div class="questionCard">
+        <h3>Questions 7-13 (Note Completion)</h3>
+        <p>7. Navigation is aided by the Earth's <input class="q-input" name="q7"> field.</p>
+        <p>8. Birds use <input class="q-input" name="q8"> landmarks to guide their journey.</p>
+        <p>9. Essential stopover points include wetlands and <input class="q-input" name="q9">.</p>
+        <p>10. Changing <input class="q-input" name="q10"> is causing migratory patterns to shift.</p>
+        <p>11. Food <input class="q-input" name="q11"> is often mismatched with arrival times.</p>
+        <p>12. Migratory birds act as seed <input class="q-input" name="q12">.</p>
+        <p>13. Protecting corridors is now a global <input class="q-input" name="q13">.</p>
+      </div>
+      <div class="submit-container">
+        <button id="submitBtn" onclick="submitAnswers()">Submit Test</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="submissionModal">
+  <div class="modal-content">
+    <h2 class="text-xl font-bold mb-4">Results Analyzed</h2>
+    <div id="scoreDisplay" class="text-2xl font-bold mb-4"></div>
+    <button onclick="window.location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-lg">Close</button>
+  </div>
+</div>
+
+<script>
+  const ANSWER_KEY = { 1: 'NOT GIVEN', 2: 'TRUE', 3: 'FALSE', 4: 'FALSE', 5: 'TRUE', 6: 'FALSE', 7: 'magnetic', 8: 'environmental', 9: 'islands', 10: 'climate', 11: 'availability', 12: 'dispersers', 13: 'priority' };
+  
+  document.querySelectorAll('.tfng-btn').forEach(b => b.onclick = () => {
+    document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(btn => btn.classList.remove('active-choice'));
+    b.classList.add('active-choice');
+    document.querySelector(`input[name="q${b.dataset.q}"]`).value = b.dataset.val;
+  });
+
+  function submitAnswers() {
+    let correct = 0;
+    Object.keys(ANSWER_KEY).forEach(i => {
+      const val = document.querySelector(`input[name="q${i}"]`)?.value || "";
+      if(val.toLowerCase() === ANSWER_KEY[i].toLowerCase()) correct++;
+    });
+    document.getElementById('scoreDisplay').innerText = `Your Score: ${correct} / 13`;
+    document.getElementById('submissionModal').style.display = 'flex';
+  }
+
+  let time = 0;
+  setInterval(() => { time++; document.getElementById('timer').innerText = new Date(time * 1000).toISOString().substr(14, 5); }, 1000);
+</script>
+</body>
+</html>

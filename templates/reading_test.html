@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ test.title }} | IELTSPRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger-light: #fee2e2;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main);
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; /* Отключаем общий скролл страницы */
+        }
+
+        /* --- ВЕРХНЯЯ ПАНЕЛЬ (Top Bar) --- */
+        .test-header {
+            height: 65px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 10;
+        }
+        .test-title { font-weight: 800; font-size: 18px; color: #2e28a2; }
+        .test-title span { color: var(--primary); }
+
+        .parts-tabs { display: flex; gap: 6px; height: 100%; align-items: flex-end; }
+        .part-tab {
+            background: var(--bg-main);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 12px 12px 0 0;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            transition: all 0.2s;
+        }
+        .part-tab.active { background: var(--primary-light); color: var(--primary); border-color: var(--primary-light); }
+
+        .timer-box { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; color: var(--text-muted); }
+        .timer { background: var(--danger-light); color: var(--danger); padding: 6px 14px; border-radius: 10px; font-weight: 700; font-size: 16px; }
+
+        /* --- ДВУХПАНЕЛЬНЫЙ МАКЕТ (100% как в IELTS CD) --- */
+        .test-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Ровно пополам */
+            flex-grow: 1;
+            height: calc(100vh - 145px); /* Вычитаем высоту хедера и футера */
+            background: var(--border);
+            gap: 2px; /* Элегантный разделитель между панелями */
+        }
+
+        .panel {
+            overflow-y: auto; /* Каждая панель скроллится независимо! */
+            padding: 40px;
+            height: 100%;
+            background: var(--card-bg);
+            scroll-behavior: smooth;
+        }
+
+        /* Левая панель — Текст */
+        .left-panel {
+            line-height: 1.8;
+            font-size: 16px;
+            color: #334155;
+        }
+        .left-panel h2 { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+
+        /* Правая панель — Вопросы */
+        .right-panel {
+            background: var(--bg-main);
+        }
+
+        /* Карточки групп вопросов */
+        .question-group-box {
+            background: var(--card-bg);
+            border: 1px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.02);
+        }
+        .instruction {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        /* Строки вопросов */
+        .q-row { 
+            display: flex; 
+            margin-bottom: 24px; 
+            align-items: flex-start; 
+            gap: 16px; 
+            font-size: 15px; 
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border);
+        }
+        .q-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .q-num { font-weight: 800; background: var(--bg-main); color: var(--primary); padding: 4px 10px; border-radius: 8px; min-width: 34px; text-align: center; }
+        
+        /* Современные инпуты */
+        .ielts-input {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+            width: 240px;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        .ielts-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08); background: #ffffff; }
+
+        /* Кастомные радио-кнопки (Multiple Choice) */
+        .options-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .option-item { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; }
+        .option-item input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+
+        /* Инструмент Review */
+        .review-label { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            font-size: 13px; 
+            color: var(--text-muted); 
+            margin-top: 12px; 
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+        }
+        .review-label input { accent-color: #eab308; }
+
+        /* --- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (Question Band) --- */
+        .bottom-nav-band {
+            height: 80px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 10;
+        }
+        
+        .questions-line { display: flex; gap: 8px; overflow-x: auto; max-width: 75%; padding: 5px 0; }
+        
+        /* Кнопки вопросов в стиле IELTSPRO */
+        .q-btn {
+            min-width: 36px;
+            height: 36px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+        .q-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* Точка снизу, если на вопрос ОТВЕТИЛИ */
+        .q-btn.answered {
+            background: #ffffff;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .q-btn.answered::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: calc(50% - 3px);
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Круглая желтая кнопка, если включен режим REVIEW */
+        .q-btn.under-review {
+            border-radius: 50% !important;
+            background: #fef9c3 !important;
+            border-color: #eab308 !important;
+            color: #ca8a04 !important;
+        }
+
+        .btn-submit-ielts {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-submit-ielts:hover { background: #4338ca; }
+    </style>
+</head>
+<body>
+
+    <div class="test-header">
+        <div class="test-title">🎓 IELTS<span>PRO</span></div>
+        
+        <div class="parts-tabs">
+            <a href="#" class="part-tab active">Passage 1</a>
+            <a href="#" class="part-tab">Passage 2</a>
+            <a href="#" class="part-tab">Passage 3</a>
+        </div>
+
+        <div class="timer-box">
+            <span>Qolgan vaqt:</span>
+            <div class="timer" id="ielts-timer">60:00</div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        
+        <div class="panel left-panel">
+            <h2>{{ passage.title }}</h2>
+            <div class="passage-text">
+                {{ passage.text_content|safe }}
+            </div>
+        </div>
+
+        <div class="panel right-panel" id="questions-viewport">
+            <form id="reading-test-form" method="POST" action="">
+                {% csrf_token %}
+                
+                {% for group in passage.question_groups.all %}
+                    <div class="question-group-box">
+                        <div class="instruction">
+                            Questions {{ group.questions.first.number }} - {{ group.questions.last.number }}<br>
+                            {{ group.instruction }}
+                        </div>
+
+                        {% for q in group.questions.all %}
+                            <div class="q-row" id="question-block-{{ q.number }}">
+                                <span class="q-num">{{ q.number }}</span>
+                                <div style="flex-grow: 1;">
+                                    <span style="font-weight: 600; line-height: 1.5;">{{ q.text }}</span>
+                                    
+                                    <div>
+                                        {% if group.question_type == 'MULTIPLE_CHOICE' %}
+                                            <div class="options-list">
+                                                {% for option in q.options %}
+                                                    <label class="option-item">
+                                                        <input type="radio" name="q_{{ q.number }}" value="{{ option }}" onchange="markAsAnswered('{{ q.number }}')">
+                                                        <span>{{ option }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <input type="text" name="q_{{ q.number }}" class="ielts-input" autocomplete="off" oninput="checkInputEmpty(this, '{{ q.number }}')">
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <label class="review-label">
+                                        <input type="checkbox" onchange="toggleReview('{{ q.number }}', this.checked)"> 
+                                        Review qilish uchun belgilash
+                                    </label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom-nav-band">
+        <div class="questions-line">
+            {% for group in passage.question_groups.all %}
+                {% for q in group.questions.all %}
+                    <a href="javascript:void(0)" onclick="scrollToQuestion('{{ q.number }}')" class="q-btn" id="nav-btn-{{ q.number }}">
+                        {{ q.number }}
+                    </a>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <button type="submit" form="reading-test-form" class="btn-submit-ielts">
+            Javoblarni yuborish ➔
+        </button>
+    </div>
+
+    <script>
+        // 1. Таймер обратного отсчета
+        let time = 60 * 60;
+        const timerEl = document.getElementById('ielts-timer');
+        setInterval(() => {
+            let minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerEl.innerHTML = `${minutes}:${seconds}`;
+            if(time > 0) time--;
+        }, 1000);
+
+        // 2. Умный скролл к вопросу внутри ПРАВОЙ панели при клике на нижнюю кнопку
+        function scrollToQuestion(qNum) {
+            const target = document.getElementById(`question-block-${qNum}`);
+            const viewport = document.getElementById('questions-viewport');
+            if (target && viewport) {
+                // Вычисляем позицию элемента относительно скролл-контейнера
+                viewport.scrollTop = target.offsetTop - viewport.offsetTop - 20;
+            }
+        }
+
+        // 3. Активация индикатора ответа (для радио-кнопок)
+        function markAsAnswered(qNum) {
+            document.getElementById(`nav-btn-${qNum}`).classList.add('answered');
+        }
+
+        // 4. Проверка ввода текста (активируем точку, только если инпут не пустой)
+        function checkInputEmpty(input, qNum) {
+            const btn = document.getElementById(`nav-btn-${qNum}`);
+            if (input.value.trim() !== "") {
+                btn.classList.add('answered');
+            } else {
+                btn.classList.remove('answered');
+            }
+        }
+
+        // 5. Логика кнопки Review (превращение кнопки в круглую и желтую)
+        function toggleReview(qNum, isChecked) {
+            const btn = document.getElementById(`nav-btn-${qNum}`);
+            if (isChecked) {
+                btn.classList.add('under-review');
+            } else {
+                btn.classList.remove('under-review');
+            }
+        }
+    </script>
+</body>
+</html>

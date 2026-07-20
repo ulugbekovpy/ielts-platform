@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil | IELTSPRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --sidebar-width: 260px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); display: flex; min-height: 100vh; }
+
+        /* --- SIDEBAR (Как в дашборде) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 32px 20px;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar .logo { font-size: 22px; font-weight: 800; color: #2e28a2; margin-bottom: 40px; padding-left: 12px; }
+        .sidebar .logo span { color: var(--primary); }
+        
+        .nav-menu { display: flex; flex-direction: column; gap: 8px; list-style: none; }
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .nav-item a:hover { background-color: var(--bg-main); color: var(--text-main); }
+        .nav-item.active a { background-color: var(--primary-light); color: var(--primary); }
+
+        /* --- MAIN CONTENT AREA --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        /* Шапка контента */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .content-header h1 { font-size: 28px; font-weight: 800; }
+        .content-header p { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+
+        /* Сетка профиля (Левая колонка инфо, Правая — баллы) */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 32px;
+        }
+
+        .dashboard-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.02);
+            padding: 32px;
+        }
+
+        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; color: var(--text-main); }
+
+        /* Поля ввода */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #334155; font-weight: 700; font-size: 14px; }
+        
+        input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            font-size: 15px; 
+            color: var(--text-main); 
+            outline: none; 
+            transition: all 0.2s; 
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08); }
+        input:disabled { background-color: #f1f5f9; color: var(--text-muted); cursor: not-allowed; }
+
+        /* Кнопки-карточки выбора баллов */
+        .options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+        .option-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .option-card:hover { border-color: var(--primary); background: var(--bg-main); }
+        .option-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .full-width { grid-column: span 4; }
+
+        /* Кнопка сохранения */
+        .btn-save { 
+            background: var(--primary); 
+            border: none; 
+            border-radius: 12px; 
+            color: white; 
+            padding: 14px 28px;
+            font-size: 15px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: background 0.2s; 
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-save:hover { background: #4338ca; }
+
+        /* Аватар юзера в стиле дашборда */
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-main);
+            padding: 8px 16px;
+            border-radius: 100px;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .user-badge span { font-weight: 600; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. SIDEBAR (Левое меню как на дашборде) -->
+    <div class="sidebar">
+        <div class="logo">🎓 IELTS<span>PRO</span></div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="{% url 'dashboard' %}">📊 Asosiy Panel</a>
+            </li>
+            <!-- Добавьте ваши другие пункты меню из дашборда сюда -->
+            <li class="nav-item active">
+                <a href="{% url 'profile' %}">⚙️ Profil Sozlamalari</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 2. MAIN CONTENT AREA -->
+    <div class="main-content">
+        <div class="content-header">
+            <div>
+                <h1>Profil Sozlamalari</h1>
+                <p>Ma'lumotlaringizni boshqaring va maqsadlarni tahrirlang</p>
+            </div>
+            <!-- Юзер-бэдж в углу -->
+            <div class="user-badge">
+                <div class="avatar">{{ user.first_name|slice:":1"|upper }}</div>
+                <span>{{ user.first_name }}</span>
+            </div>
+        </div>
+
+        <!-- Форма, отправляющая данные в Django -->
+        <form method="POST" action="{% url 'profile' %}">
+            {% csrf_token %}
+            <input type="hidden" name="has_result" id="has_result_input" value="{{ user.has_result }}">
+            <input type="hidden" name="want_result" id="want_result_input" value="{{ user.want_result }}">
+
+            <div class="profile-grid">
+                
+                <!-- Левая карточка: Личные данные -->
+                <div class="dashboard-card">
+                    <div class="card-title">Shaxsiy ma'lumotlar</div>
+                    
+                    <div class="form-group">
+                        <label>To'liq ism-sharifingiz</label>
+                        <input type="text" name="fullname" value="{{ user.first_name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email manzil (O'zgartirib bo'lmaydi)</label>
+                        <input type="email" value="{{ user.email }}" disabled>
+                    </div>
+
+                    <div style="margin-top: 32px;">
+                        <button type="submit" class="btn-save">O'zgarishlarni saqlash ✨</button>
+                    </div>
+                </div>
+
+                <!-- Правая карточка: Управление баллами (кнопками) -->
+                <div class="dashboard-card">
+                    <div class="card-title">IELTS Maqsadlari</div>
+
+                    <div style="font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 12px;">Hozirgi darajangiz</div>
+                    <div class="options-grid" id="has-grid">
+                        <div class="option-card {% if user.has_result == '0' %}selected{% endif %}" data-value="0">0 (Yo'q)</div>
+                        <div class="option-card {% if user.has_result == '4.5' %}selected{% endif %}" data-value="4.5">4.5</div>
+                        <div class="option-card {% if user.has_result == '5.0' %}selected{% endif %}" data-value="5.0">5.0</div>
+                        <div class="option-card {% if user.has_result == '5.5' %}selected{% endif %}" data-value="5.5">5.5</div>
+                        <div class="option-card {% if user.has_result == '6.0' %}selected{% endif %}" data-value="6.0">6.0</div>
+                        <div class="option-card {% if user.has_result == '6.5' %}selected{% endif %}" data-value="6.5">6.5</div>
+                        <div class="option-card {% if user.has_result == '7.0' %}selected{% endif %}" data-value="7.0">7.0</div>
+                        <div class="option-card {% if user.has_result == '7.5+' %}selected{% endif %}" data-value="7.5+">7.5+</div>
+                    </div>
+
+                    <div style="font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 12px;">Maqsadli ballingiz</div>
+                    <div class="options-grid" id="want-grid">
+                        <div class="option-card {% if user.want_result == '5.5' %}selected{% endif %}" data-value="5.5">5.5</div>
+                        <div class="option-card {% if user.want_result == '6.0' %}selected{% endif %}" data-value="6.0">6.0</div>
+                        <div class="option-card {% if user.want_result == '6.5' %}selected{% endif %}" data-value="6.5">6.5</div>
+                        <div class="option-card {% if user.want_result == '7.0' %}selected{% endif %}" data-value="7.0">7.0</div>
+                        <div class="option-card {% if user.want_result == '7.5' %}selected{% endif %}" data-value="7.5">7.5</div>
+                        <div class="option-card {% if user.want_result == '8.0' %}selected{% endif %}" data-value="8.0">8.0</div>
+                        <div class="option-card full-width {% if user.want_result == '8.5+' %}selected{% endif %}" data-value="8.5+">8.5 - 9.0 Max Ball</div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // JS для обработки выбора кнопок-баллов
+        setupGridSelectors('has-grid', 'has_result_input');
+        setupGridSelectors('want-grid', 'want_result_input');
+
+        function setupGridSelectors(gridId, inputId) {
+            const grid = document.getElementById(gridId);
+            const input = document.getElementById(inputId);
+            
+            grid.querySelectorAll('.option-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    grid.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    input.value = card.getAttribute('data-value');
+                });
+            });
+        }
+    </script>
+</body>
+</html>

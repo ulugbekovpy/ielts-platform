@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTSPro - Interactive Vocabulary</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Модальное окно "Скоро" */
+.modal-overlay#soonModal { z-index: 2000; }
+.soon-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+        :root {
+            --brand-blue: #2563eb;       
+            --brand-dark: #0b1329;       
+            --card-bg: #ffffff;
+            --border-subtle: rgba(15, 23, 42, 0.06);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --streak-bg: #fff5f5;        
+            --streak-text: #e03131;      
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 200;
+            padding: 32px 20px;
+            transition: var(--transition-smooth);
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            margin-bottom: 40px;
+            padding-left: 12px;
+            letter-spacing: -1px;
+        }
+        .sidebar-brand span { color: var(--brand-blue); font-weight: 800; }
+
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            color: var(--brand-dark);
+            background: #f1f5f9;
+        }
+        .sidebar-menu a.active {
+            background: var(--brand-dark);
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .sidebar-menu a.soon-link {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .sidebar-menu a.soon-link:hover {
+            background: transparent;
+            color: var(--text-muted);
+        }
+
+        /* Mobile Navigation */
+        .mobile-top-bar {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 150;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .menu-toggle-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--brand-dark);
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            max-width: 1400px;
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            gap: 20px;
+        }
+        .welcome-title h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+
+        .user-action-group { display: flex; align-items: center; gap: 16px; position: relative; }
+        
+        .streak-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--streak-bg);
+            border: 1px solid rgba(224, 49, 49, 0.15);
+            padding: 10px 18px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--streak-text);
+            white-space: nowrap;
+        }
+        
+        .premium-user-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #e2e8f0;
+            padding: 6px 16px 6px 6px;
+            border-radius: 14px;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition-smooth);
+        }
+        .premium-user-box:hover { background: #cbd5e1; }
+        
+        .box-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--brand-blue);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .box-info .user-name { font-size: 14px; font-weight: 700; display: block; }
+        .box-info .status-text { font-size: 11px; color: var(--text-muted); display: block; }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 200px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 300;
+        }
+        .profile-dropdown.show { display: flex; }
+        
+        .profile-dropdown button {
+            background: none;
+            border: none;
+            text-align: left;
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .profile-dropdown button:hover { background: #f1f5f9; }
+        .profile-dropdown .logout-btn { color: #ef4444; border-top: 1px solid #f1f5f9; }
+
+        /* Modern 3D Flashcard Flip Mechanics */
+        .flashcard-container { perspective: 1200px; }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flashcard-inner.is-flipped { transform: rotateY(180deg); }
+        .flashcard-side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flashcard-back { transform: rotateY(180deg); }
+
+        .timer-badge-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            border: 1px solid var(--border-subtle);
+            padding: 8px 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 8px;
+        }
+
+        /* Promo banner */
+        .promo-banner {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            gap: 20px;
+        }
+        .promo-text { font-size: 14px; color: #1e3a8a; line-height: 1.5; }
+        .upgrade-link-btn {
+            background: var(--brand-blue);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            transition: var(--transition-smooth);
+            white-space: nowrap;
+            cursor: pointer;
+            border: none;
+        }
+        .upgrade-link-btn:hover { background: #1d4ed8; }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(16px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        
+        .modal-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 36px;
+            width: 92%;
+            max-width: 500px;
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.04);
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .modal-title { font-size: 22px; font-weight: 700; color: var(--brand-dark); letter-spacing: -0.5px; }
+        
+        .modal-close-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+        .modal-close-btn:hover { background: #e2e8f0; transform: rotate(90deg); }
+
+        /* Пластиковая карта */
+        .payment-card-visual {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #090d16 100%);
+            border-radius: 16px;
+            padding: 24px;
+            color: #ffffff;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-brand { font-size: 18px; font-weight: 800; }
+        .card-brand span { color: var(--brand-blue); }
+        .card-chip {
+            width: 40px; height: 30px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 6px;
+            position: relative;
+        }
+        .card-number {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            margin: 12px 0;
+            user-select: all;
+            cursor: pointer;
+        }
+        .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-holder { font-size: 11px; text-transform: uppercase; color: #94a3b8; }
+        .card-holder-name { font-size: 14px; font-weight: 600; color: #ffffff; margin-top: 4px; }
+        
+        .payment-instructions { background: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.04); border-radius: 12px; padding: 18px; }
+        .instruction-step { display: flex; gap: 12px; margin-bottom: 12px; font-size: 13.5px; line-height: 1.5; }
+        .step-num {
+            width: 24px; height: 24px;
+            background: #eff6ff; color: var(--brand-blue);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 12px; flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .mobile-top-bar { display: flex; }
+            .sidebar { transform: translateX(-100%); top: 60px; box-shadow: 10px 0 30px rgba(0,0,0,0.05); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrapper { margin-left: 0; padding: 80px 16px 40px 16px; }
+            .header-grid { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .user-action-group { width: 100%; justify-content: space-between; }
+            .promo-banner { flex-direction: column; align-items: flex-start; }
+            .upgrade-link-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-top-bar">
+        <button class="menu-toggle-btn" id="menuToggle">☰</button>
+        <div style="font-size: 18px; font-weight: 700; color: var(--brand-dark);">IELTS<span style="color: var(--brand-blue);">Pro</span></div>
+        <div class="flex items-center gap-2">
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 text-amber-500" onclick="toggleFavoritesMode()">
+                <i class="fa-solid fa-star text-sm"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebarMenu">
+        <div class="sidebar-brand">IELTS<span>Pro</span></div>
+        <ul class="sidebar-menu">
+            <li><a href="{% url 'dashboard' %}">🏠 <span>Home</span></a></li>
+            <li><a href="{% url 'listening' %}">🎧 <span>Listening</span></a></li>
+            <li><a href="{% url 'reading' %}">📕 <span>Reading</span></a></li>
+            <li><a href="#" class="soon-link" onclick="event.preventDefault(); showSoonAlert('Writing xizmati', 'Writing AI xizmati ustida ishlayapmiz, u tez orada faollashadi!');">📝 <span>Writing (AI) <span style="font-size:10px; background:#eff6ff; color:#2563eb; padding:2px 6px; border-radius:10px; margin-left:4px;">Soon</span></span></a></li>
+            <li><a href="{% url 'vocabulary' %}" class="active">📖 <span>Vocabulary</span></a></li>
+            <li><a href="#" class="soon-link" onclick="event.preventDefault(); showSoonAlert('Mock test', 'Mock test topshirish xizmati tez orada faollashadi!');">🖥 <span>Mock <span style="font-size:10px; background:#eff6ff; color:#2563eb; padding:2px 6px; border-radius:10px; margin-left:4px;">Closed</span></span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <main class="main-wrapper">
+        
+        <!-- Header -->
+        <header class="header-grid">
+            <div class="welcome-title">
+                <p style="font-size: 11px; text-transform: uppercase; color: var(--brand-blue); font-weight: 700; letter-spacing: 0.5px;">IELTS Key Lexicon</p>
+                <h1 style="margin-top: 2px;">Interactive Vocabulary</h1>
+                <div class="timer-badge-header">
+                    <span>⏳ Keyingi mavzuga:</span>
+                    <span id="countdown" style="font-variant-numeric: tabular-nums; font-weight: 700;">--:--:--</span>
+                </div>
+            </div>
+            
+            <div class="user-action-group">
+                <button class="w-10 h-10 rounded-xl flex items-center justify-center bg-white hover:bg-slate-50 border border-slate-200 text-amber-500 transition-all shadow-sm" title="Tanlangan so'zlar" onclick="toggleFavoritesMode()">
+                    <i class="fa-solid fa-star text-lg"></i>
+                </button>
+
+                <div class="streak-badge">🔥 {{ current_streak }} kunlik</div>
+                
+                <div class="premium-user-box" id="profileBox">
+                    <div class="box-avatar">{{ user.first_name|slice:":1"|upper }}</div>
+                    <div class="box-info">
+                        <span class="user-name">{{ user.first_name }}</span>
+                        <span class="status-text">{% if is_premium %}👑 Premium{% else %}Free Account{% endif %}</span>
+                    </div>
+                </div>
+
+                <!-- Dropdown -->
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button onclick="openModal('profileModal')">👤 Mening profilim</button>
+                    {% if not is_premium %}
+                    <button onclick="openModal('premiumModal')" style="color: var(--brand-blue); font-weight: 700;">✨ Premium sotib olish</button>
+                    {% endif %}
+                    <form action="{% url 'logout' %}" method="POST" style="width:100%;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">🚪 Tizimdan chiqish</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Engine -->
+        <section class="mt-4">
+            {% if not is_premium %}
+            <div class="promo-banner">
+                <div class="promo-text">
+                    <strong>Free tarif faol:</strong> Har kuni 1 ta IELTS mavzusida 10 ta eng muhim akademik so'zlarni o'rganishingiz mumkin. Barcha 1000+ so'zlarga cheksiz kirish uchun Premiumga o'ting.
+                </div>
+                <button onclick="openModal('premiumModal')" class="upgrade-link-btn">Premiumga o'tish ✨</button>
+            </div>
+            {% endif %}
+
+            <!-- WELCOME SCREEN (TOPICS LIST) -->
+            <div id="home-view" class="space-y-8">
+                <div class="max-w-md mx-auto pt-2 text-center">
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="search-input" oninput="searchVocabulary()" placeholder="So'zlarni qidirish (Masalan: sustainable)..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 text-slate-800 transition-all font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-slate-900" id="grid-title">Vocabulary Topics</h2>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider" id="total-categories-text">IELTS Core Topics</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="categories-grid">
+                        <!-- Cards render dynamically inside JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDY ROOM (FLASHCARD PLAYROOM) -->
+            <div id="study-view" class="hidden max-w-xl mx-auto space-y-6">
+                <!-- Back navigation -->
+                <div class="flex items-center justify-between">
+                    <button onclick="resetToHome()" class="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-semibold transition-colors text-sm">
+                        <i class="fa-solid fa-arrow-left text-xs"></i> Mavzularga qaytish
+                    </button>
+                    <div class="text-xs font-bold px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg border border-blue-100" id="card-progress-badge">
+                        Topic: Environment
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-bold text-slate-400 tracking-wider">
+                        <span>O'RGANISH PROGRESSI</span>
+                        <span id="progress-percentage">0%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar-fill" class="h-full bg-blue-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- 3D Flashcard Flip Mechanics -->
+                <div class="w-full h-[340px] flashcard-container cursor-pointer" onclick="flipCard()">
+                    <div class="flashcard-inner" id="flashcard">
+                        
+                        <!-- FRONT SIDE -->
+                        <div id="card-front" class="flashcard-side bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col justify-between shadow-sm hover:border-slate-300 transition-all">
+                            <div class="flex justify-between items-center w-full">
+                                <span class="text-[11px] font-extrabold px-2.5 py-1 bg-blue-50 text-blue-600 rounded-md" id="word-band">
+                                    Band 7.5
+                                </span>
+                                <button onclick="toggleBookmark(event)" class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50 hover:bg-slate-100 text-slate-300 transition-colors" id="btn-card-star">
+                                    <i class="fa-solid fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="text-center space-y-2 flex-grow flex flex-col justify-center">
+                                <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight" id="front-word">
+                                    Biodiversity
+                                </h2>
+                                <p class="text-slate-400 text-xs font-medium">Tarjimani ko'rish uchun bosing • Ovoz uchun karnaychani bosing</p>
+                            </div>
+                            <div class="flex justify-between items-center w-full">
+                                <button onclick="speakWord(event)" class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-colors" title="Pronounce word">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                                <span class="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-rotate text-[10px]"></i> Aylantirish
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- BACK SIDE -->
+                        <div id="card-back" class="flashcard-side flashcard-back bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between shadow-sm border border-slate-800">
+                            <div class="flex justify-between items-center w-full">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tarjimasi va misol</span>
+                                <span class="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-rotate text-[10px]"></i> Qaytish
+                                </span>
+                            </div>
+                            <div class="text-center space-y-4 flex-grow flex flex-col justify-center px-4">
+                                <h3 class="text-xl font-bold text-white tracking-tight leading-snug" id="back-translation">
+                                    The variety of plant and animal life in a particular habitat.
+                                </h3>
+                                <p class="text-slate-400 text-sm italic max-w-md mx-auto" id="back-example">
+                                    "The protection of biodiversity is vital for ecological balance."
+                                </p>
+                            </div>
+                            <div class="flex justify-center items-center w-full">
+                                <span class="text-[11px] text-blue-500 font-extrabold bg-blue-950/40 px-3 py-1 rounded-md border border-blue-900/30">
+                                    IELTSPro Interactive Engine
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-between gap-4">
+                    <button onclick="previousWord()" class="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-arrow-left text-xs"></i> Oldingisi
+                    </button>
+                    <button onclick="nextWord()" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm shadow-sm">
+                        Keyingisi <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- COMPLETED VIEW -->
+            <div id="completed-view" class="hidden text-center max-w-md mx-auto py-12 space-y-6">
+                <div class="w-16 h-16 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto text-2xl border border-emerald-100">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-bold text-slate-900">Mavzu muvaffaqiyatli yakunlandi!</h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Ajoyib natija! Siz ushbu mavzu doirasidagi barcha akademik kalit so'zlarni muvaffaqiyatli o'rganib chiqdingiz.
+                    </p>
+                </div>
+
+                <div class="space-y-2.5 pt-2">
+                    <button onclick="resetToHome()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all text-sm">
+                        Mavzularga qaytish
+                    </button>
+                    <button onclick="restartCurrentTopic()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold transition-all text-sm">
+                        Mavzuni qayta o'rganish
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- TOAST POPUP NOTIFICATION -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">Foydalanuvchi profili</div>
+                <button class="modal-close-btn" onclick="closeModal('profileModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 20px;">
+                    <div style="width: 56px; height: 56px; background: var(--brand-dark); color: #fff; font-size: 24px; font-weight: 700; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                        {{ user.first_name|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 700;">{{ user.first_name }}</h3>
+                        <p style="font-size: 13px; color: var(--text-muted);">{{ user.email }}</p>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md);">
+                        <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Maqsad (Target)</div>
+                        <div style="font-size: 14px; font-weight: 700; color: var(--brand-blue);">Band {{ user.want_result }}</div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md);">
+                        <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Hisob Maqomi</div>
+                        <div style="font-size: 14px; font-weight: 700;">{% if is_premium %}Premium 👑{% else %}Standart{% endif %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Uzcard Pay Modal -->
+    <div class="modal-overlay" id="premiumModal">
+        <div class="modal-card" style="max-width: 540px;">
+            <div class="modal-header" style="margin-bottom: 20px;">
+                <div class="modal-title">✨ IELTSPro Premium faollashtirish</div>
+                <button class="modal-close-btn" onclick="closeModal('premiumModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-card-visual">
+                    <div class="card-top">
+                        <div class="card-brand">IELTS<span>Pro</span></div>
+                        <div class="card-chip"></div>
+                    </div>
+                    <div class="card-number" title="Nusxa olish uchun bosing" onclick="copyCardNumber(this)">
+                        5614 6821 1137 5095
+                    </div>
+                    <div class="card-bottom">
+                        <div>
+                            <div class="card-holder">Card Holder</div>
+                            <div class="card-holder-name">IELTSPro Jamoasi</div>
+                        </div>
+                        <div class="card-system">Uzcard</div>
+                    </div>
+                </div>
+
+                <div class="payment-instructions">
+                    <div class="instruction-step">
+                        <div class="step-num">1</div>
+                        <div>Yuqoridagi Uzcard kartasiga to'lovni amalga oshiring (Ustiga bosing).</div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-num">2</div>
+                        <div>Muvaffaqiyatli to'lov chekini saqlab oling.</div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-num">3</div>
+                        <div>Chekni Telegram botimizga yuboring: 
+                            <a href="https://t.me/ieltspropayment" target="_blank" style="color: var(--brand-blue); font-weight: 700;">@ieltspropayment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="soonModal">
+    <div class="modal-card" style="text-align: center; max-width: 400px;">
+        <span class="soon-icon">🚀</span>
+        <div class="modal-title" id="soonModalTitle" style="margin-bottom: 16px;">Tez orada...</div>
+        <p style="color: var(--text-muted); margin-bottom: 24px;" id="soonModalText">Bu funksiya ustida ishlayapmiz, u tez orada siz uchun ochiq bo'ladi!</p>
+        <button class="plan-btn" style="width: 100%; padding: 12px;" onclick="closeModal('soonModal')">Tushunarli</button>
+    </div>
+</div>
+
+    <script>
+        // Функция для красивых уведомлений
+function showSoonAlert(title, text) {
+    document.getElementById('soonModalTitle').innerText = title;
+    document.getElementById('soonModalText').innerText = text;
+    openModal('soonModal');
+}
+        const rawCategoryData = [
+            {% for cat in categories %}
+            {
+                id: "{{ cat.id }}",
+                title: "{{ cat.title }}",
+                icon: "{{ cat.icon }}",
+                is_today: {% if cat.is_today %}true{% else %}false{% endif %},
+                is_unlocked: {% if cat.is_unlocked %}true{% else %}false{% endif %},
+                words_count: {{ cat.words_count }},
+                words: [
+                    {% for w in cat.words %}
+                    {
+                        word: "{{ w.word|escapejs }}",
+                        translation: "{{ w.translation|escapejs }}",
+                        example: "{{ w.example|escapejs }}",
+                        band: "{{ w.band|escapejs }}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        let bookmarks = JSON.parse(localStorage.getItem('ieltspro_bookmarks')) || [];
+        let currentTopic = null;
+        let currentWordIndex = 0;
+        let isFlipped = false;
+        let favoritesStudyMode = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories(rawCategoryData);
+
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            if (menuToggle && sidebarMenu) {
+                menuToggle.addEventListener('click', (e) => {
+                    sidebarMenu.classList.toggle('open');
+                    e.stopPropagation();
+                });
+                document.addEventListener('click', () => sidebarMenu.classList.remove('open'));
+            }
+
+            const profileBox = document.getElementById('profileBox');
+            const profileDropdown = document.getElementById('profileDropdown');
+            if (profileBox && profileDropdown) {
+                profileBox.addEventListener('click', (e) => {
+                    profileDropdown.classList.toggle('show');
+                    e.stopPropagation();
+                });
+                document.addEventListener('click', () => profileDropdown.classList.remove('show'));
+            }
+
+            let secondsLeft = {{ seconds_left|default:0 }};
+            function updateTimer() {
+                if (secondsLeft <= 0) {
+                    document.getElementById('countdown').innerText = "00:00:00";
+                    return;
+                }
+                let h = Math.floor(secondsLeft / 3600);
+                let m = Math.floor((secondsLeft % 3600) / 60);
+                let s = secondsLeft % 60;
+                
+                h = h < 10 ? '0' + h : h;
+                m = m < 10 ? '0' + m : m;
+                s = s < 10 ? '0' + s : s;
+                
+                document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
+                secondsLeft--;
+            }
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        });
+
+        function renderCategories(data) {
+            const grid = document.getElementById('categories-grid');
+            grid.innerHTML = '';
+            
+            data.forEach(topic => {
+                const card = document.createElement('div');
+                card.className = `bg-white border rounded-xl p-5 shadow-sm transition-all flex flex-col justify-between ${!topic.is_unlocked ? 'opacity-55 bg-slate-50' : 'hover:border-blue-500'}`;
+                
+                const wordsListHTML = topic.words.slice(0, 3).map(w => `
+                    <div class="flex flex-col border-b border-dashed border-slate-100 py-2 first:pt-0 last:border-none last:pb-0">
+                        <span class="text-sm font-bold text-slate-800 flex items-center justify-between">
+                            ${w.word}
+                            <span class="text-[9px] text-blue-600 bg-blue-50 font-extrabold px-1.5 py-0.5 rounded">${w.band}</span>
+                        </span>
+                        <span class="text-xs text-slate-400 mt-0.5 truncate font-medium">${w.translation}</span>
+                    </div>
+                `).join('');
+
+                const todayBadge = topic.is_today ? `<span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded">Kunlik vazifa</span>` : '';
+                const lockedBadge = !topic.is_unlocked ? `<span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">🔒 Locked</span>` : '';
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-base shrink-0">
+                                    <i class="fa-solid ${topic.icon}"></i>
+                                </div>
+                                <h3 class="font-bold text-base text-slate-800">${topic.title}</h3>
+                            </div>
+                            <div class="flex gap-1">${todayBadge}${lockedBadge}</div>
+                        </div>
+                        <div class="py-1">
+                            ${wordsListHTML}
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
+                        <span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">${topic.words_count} so'z</span>
+                        ${topic.is_unlocked 
+                            ? `<button onclick="startTopic('${topic.id}')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5">Kirish →</button>`
+                            : `<button class="px-4 py-2 bg-slate-200 text-slate-400 font-semibold text-xs rounded-lg cursor-not-allowed" disabled>Locked</button>`
+                        }
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function searchVocabulary() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            if (query === '') {
+                document.getElementById('grid-title').innerText = "Vocabulary Topics";
+                renderCategories(rawCategoryData);
+                return;
+            }
+
+            document.getElementById('grid-title').innerText = "Qidiruv natijalari";
+            const filtered = rawCategoryData.filter(topic => {
+                const matchedWords = topic.words.filter(w => 
+                    w.word.toLowerCase().includes(query) || 
+                    w.translation.toLowerCase().includes(query)
+                );
+                return matchedWords.length > 0;
+            });
+
+            renderCategories(filtered);
+        }
+
+        function startTopic(topicId) {
+            favoritesStudyMode = false;
+            currentTopic = rawCategoryData.find(t => t.id === topicId);
+            currentWordIndex = 0;
+            resetCardFlipState();
+            
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('completed-view').classList.add('hidden');
+            document.getElementById('study-view').classList.remove('hidden');
+            
+            updateCardUI();
+        }
+
+        function toggleFavoritesMode() {
+            if (bookmarks.length === 0) {
+                showToast("Sizda hali tanlangan so'zlar yo'q", "info");
+                return;
+            }
+
+            favoritesStudyMode = true;
+            currentTopic = {
+                id: 'favorites',
+                title: 'Tanlangan so\'zlar',
+                icon: 'fa-star',
+                words: bookmarks,
+                words_count: bookmarks.length
+            };
+            currentWordIndex = 0;
+            resetCardFlipState();
+
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('completed-view').classList.add('hidden');
+            document.getElementById('study-view').classList.remove('hidden');
+
+            updateCardUI();
+            showToast("Tanlangan so'zlar rejimi faollashdi", "star");
+        }
+
+        function resetCardFlipState() {
+            isFlipped = false;
+            document.getElementById('flashcard').classList.remove('is-flipped');
+        }
+
+        function updateCardUI() {
+            if (!currentTopic || currentTopic.words.length === 0) return;
+            const word = currentTopic.words[currentWordIndex];
+            
+            document.getElementById('card-progress-badge').innerText = `${currentTopic.title}`;
+            
+            if (isFlipped) {
+                resetCardFlipState();
+                setTimeout(() => injectCardData(word), 200);
+            } else {
+                injectCardData(word);
+            }
+
+            const percent = Math.round(((currentWordIndex + 1) / currentTopic.words.length) * 100);
+            document.getElementById('progress-percentage').innerText = `${percent}%`;
+            document.getElementById('progress-bar-fill').style.width = `${percent}%`;
+        }
+
+        function injectCardData(word) {
+            document.getElementById('front-word').innerText = word.word;
+            document.getElementById('back-translation').innerText = word.translation;
+            document.getElementById('back-example').innerText = word.example ? `"${word.example}"` : "";
+            document.getElementById('word-band').innerText = word.band || "Band 7.0+";
+
+            const isBookmarked = bookmarks.some(b => b.word === word.word);
+            const cardStarBtn = document.getElementById('btn-card-star');
+            if (isBookmarked) {
+                cardStarBtn.innerHTML = `<i class="fa-solid fa-star text-amber-500"></i>`;
+            } else {
+                cardStarBtn.innerHTML = `<i class="fa-solid fa-star text-slate-300"></i>`;
+            }
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            const cardInner = document.getElementById('flashcard');
+            if (isFlipped) {
+                cardInner.classList.add('is-flipped');
+            } else {
+                cardInner.classList.remove('is-flipped');
+            }
+        }
+
+        function nextWord() {
+            if (currentWordIndex < currentTopic.words.length - 1) {
+                currentWordIndex++;
+                updateCardUI();
+            } else {
+                document.getElementById('study-view').classList.add('hidden');
+                document.getElementById('completed-view').classList.remove('hidden');
+            }
+        }
+
+        function previousWord() {
+            if (currentWordIndex > 0) {
+                currentWordIndex--;
+                updateCardUI();
+            } else {
+                showToast("Bu birinchi so'z!", "info");
+            }
+        }
+
+        function restartCurrentTopic() {
+            currentWordIndex = 0;
+            document.getElementById('completed-view').classList.add('hidden');
+            document.getElementById('study-view').classList.remove('hidden');
+            resetCardFlipState();
+            updateCardUI();
+        }
+
+        function resetToHome() {
+            document.getElementById('study-view').classList.add('hidden');
+            document.getElementById('completed-view').classList.add('hidden');
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('search-input').value = '';
+            resetCardFlipState();
+            renderCategories(rawCategoryData);
+        }
+
+        function speakWord(event) {
+            event.stopPropagation(); 
+            if (!currentTopic || currentTopic.words.length === 0) return;
+            const word = currentTopic.words[currentWordIndex].word;
+            
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85; 
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast("Ushbu brauzerda ovozli tizim ishlamaydi", "info");
+            }
+        }
+
+        function toggleBookmark(event) {
+            event.stopPropagation(); 
+            if (!currentTopic || currentTopic.words.length === 0) return;
+
+            const wordObj = currentTopic.words[currentWordIndex];
+            const index = bookmarks.findIndex(b => b.word === wordObj.word);
+
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+                showToast("Sevimlilardan olib tashlandi", "star");
+            } else {
+                bookmarks.push(wordObj);
+                showToast("Sevimlilarga qo'shildi", "star");
+            }
+
+            localStorage.setItem('ieltspro_bookmarks', JSON.stringify(bookmarks));
+            
+            const isBookmarked = bookmarks.some(b => b.word === wordObj.word);
+            document.getElementById('btn-card-star').innerHTML = isBookmarked 
+                ? `<i class="fa-solid fa-star text-amber-500"></i>` 
+                : `<i class="fa-solid fa-star text-slate-300"></i>`;
+
+            if (favoritesStudyMode && bookmarks.length === 0) {
+                resetToHome();
+            }
+        }
+
+        function showToast(message, iconName = "info") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 transition-all duration-300 border border-slate-800 transform translate-y-2 opacity-0 pointer-events-auto max-w-sm";
+            
+            let iconHTML = `<i class="fa-solid fa-circle-info text-blue-400 text-xs"></i>`;
+            if (iconName === 'star') {
+                iconHTML = `<i class="fa-solid fa-star text-amber-400 text-xs"></i>`;
+            }
+
+            toast.innerHTML = `
+                <div class="text-sm flex items-center">${iconHTML}</div>
+                <div class="text-xs font-semibold tracking-tight">${message}</div>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 2500);
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.getElementById('profileDropdown').classList.remove('show');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function copyCardNumber(element) {
+            const cleanNumber = element.innerText.replace(/\s+/g, '');
+            navigator.clipboard.writeText(cleanNumber).then(() => {
+                const originalText = element.innerText;
+                element.innerText = "Nusxa olindi! ✅";
+                element.style.color = "#10b981";
+                setTimeout(() => {
+                    element.innerText = originalText;
+                    element.style.color = "#ffffff";
+                }, 1500);
+            }).catch(err => {
+                console.error("Xatolik:", err);
+            });
+        }
+    </script>
+</body>
+</html>

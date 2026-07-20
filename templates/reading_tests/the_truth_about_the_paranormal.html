@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IELTS Reading Test – Telepathy (Q1–13) | IeltsPro</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      overflow: hidden;
+      color: #0f172a;
+    }
+    .test-wrapper { display:flex; flex-direction:column; height:100vh; }
+    .test-container { display:flex; flex:1; overflow:hidden; }
+
+    /* Header IeltsPro Style */
+    .header{
+      background:#ffffff; border-bottom:1px solid #e2e8f0;
+      padding:0.75rem 2rem; display:flex;
+      justify-content:space-between; align-items:center;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      gap:1rem; flex-wrap:wrap;
+    }
+    .header__logo { display:flex; align-items:center; gap:.5rem; font-weight: 800; font-size: 1.3rem; color: #2563eb; letter-spacing: -0.025em;}
+    .header__logo span.pro { background: #2563eb; color: #fff; padding: 0.1rem 0.4rem; border-radius: 6px; font-size: 0.9rem; font-weight: 700; margin-left: 2px;}
+    .header__title { font-size:1rem; font-weight:500; color:#475569; border-left: 1px solid #e2e8f0; padding-left: 1rem; flex:1; min-width:300px; }
+    .header__timer{
+      font-size:1.1rem; font-weight:600; color:#2563eb;
+      background:#eff6ff; padding:.4rem 1.2rem;
+      border-radius:8px; border:1px solid #bfdbfe;
+      transition:all .3s ease; white-space:nowrap;
+    }
+    .header__icons { display:flex; gap:1rem; align-items:center; }
+    .header__icon{ font-size:1.25rem; color:#94a3b8; cursor:pointer; transition:all .2s ease; }
+    .header__icon:hover { color:#2563eb; }
+    .header__telegram{
+      display:flex; align-items:center; gap:0.5rem;
+      padding:0.45rem 1rem;
+      background:#0f172a;
+      color:#fff; border-radius:8px; text-decoration:none;
+      font-weight:500; font-size:0.85rem; transition:all .2s ease;
+    }
+    .header__telegram:hover{ background: #1e293b; }
+
+    /* Modern Progress Indicators */
+    .answer-indicators{
+      display:flex; gap:0.4rem; flex-wrap:wrap;
+      padding:0.75rem 2rem; background:#ffffff;
+      border-bottom:1px solid #e2e8f0; align-items:center; font-size:0.8rem;
+    }
+    .indicator-label { font-weight:600; color:#64748b; margin-right:0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem;}
+    .answer-circle{
+      width:2rem; height:2rem; border-radius:6px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:600; cursor:default; transition:all .2s ease;
+      border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; font-size:0.8rem;
+    }
+    .answer-circle.answered{ background:#2563eb; border-color:#2563eb; color:#fff; }
+    .answer-circle.unanswered{ background:#fef2f2; border-color:#fee2e2; color:#ef4444; }
+
+    /* Rubric IeltsPro */
+    .sectionRubric{
+      margin:1.25rem; padding:1.25rem; background:#ffffff;
+      border:1px solid #e2e8f0; border-radius:12px;
+    }
+    .sectionRubric h2 { font-size:1.1rem; color:#0f172a; margin-bottom:.5rem; font-weight:700; }
+    .sectionRubric p { margin:0.4rem 0; color:#475569; font-size:0.9rem; line-height: 1.5; }
+
+    /* Panels Layout */
+    .passage-container{
+      width:45%; height:100%; overflow-y:auto;
+      padding:2rem; box-sizing:border-box;
+      background:#ffffff; border-right:1px solid #e2e8f0;
+      position:relative; user-select:text; -webkit-user-select:text;
+    }
+    .questions-container{
+      flex:1; height:100%; overflow-y:auto;
+      padding:2rem; box-sizing:border-box;
+      background:#f8fafc; position:relative;
+      user-select:text; -webkit-user-select:text;
+    }
+    .passage-container::-webkit-scrollbar,
+    .questions-container::-webkit-scrollbar { width:6px; }
+    .passage-container::-webkit-scrollbar-track,
+    .questions-container::-webkit-scrollbar-track { background:#f1f5f9; }
+    .passage-container::-webkit-scrollbar-thumb,
+    .questions-container::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:10px; }
+
+    /* Minimalist Divider */
+    .divider { width:10px; background:#e2e8f0; cursor:col-resize; position:relative; transition: background 0.2s; }
+    .divider:hover { background: #cbd5e1; }
+    .divider-handle{
+      width:4px; height:40px; background:#94a3b8; border-radius:4px;
+      position:absolute; top:50%; left:3px; transform:translateY(-50%);
+    }
+
+    /* Highlight Tool */
+    .highlight { border-radius:2px; padding:0 1px; }
+    .highlight.yellow { background:rgba(254,240,138,0.9); }
+    .highlight.green  { background:rgba(187,247,208,0.9); }
+    .highlight.pink   { background:rgba(fbcfe8,247,208,0.9); }
+    .highlight.blue   { background:rgba(bfdbfe,247,208,0.9); }
+    .highlight.purple { background:rgba(e9d5ff,247,208,0.9); }
+    .highlight.red    { background:rgba(fee2e2,247,208,0.9); }
+
+    .highlight-toolbar{
+      position:fixed; background:#ffffff;
+      border:1px solid #e2e8f0; border-radius:8px;
+      box-shadow:0 10px 25px -5px rgba(0,0,0,0.1);
+      display:none; z-index:2000; padding:.4rem;
+      transform:translate(-50%,-100%); margin-top:-.5rem;
+      gap:.35rem; align-items:center; flex-direction:row;
+    }
+    .highlight-toolbar button{
+      background:none; border:none; width:1.75rem; height:1.75rem;
+      cursor:pointer; border-radius:4px; transition:all .2s ease;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .highlight-toolbar button:hover { background:#f1f5f9; }
+    .highlight-toolbar button.remove { color:#ef4444; width:auto; padding:0 .4rem; gap:.25rem; font-weight: 500;}
+    .highlight-color { width:1.2rem; height:1.2rem; border-radius:50%; border:1px solid rgba(0,0,0,0.1); }
+    .highlight-color.yellow { background:#fef08a; }
+    .highlight-color.green  { background:#bbf7d0; }
+    .highlight-color.pink   { background:#fbcfe8; }
+    .highlight-color.blue   { background:#bfdbfe; }
+    .highlight-color.purple { background:#e9d5ff; }
+    .highlight-color.red    { background:#fee2e2; }
+
+    /* Typography & Passage Design */
+    #passageContent { line-height:1.75; font-size:1.05rem; color:#334155; }
+    #passageContent h2 { margin:0 0 0.5rem; line-height:1.2; color:#0f172a; font-size:1.5rem; font-weight:800; letter-spacing: -0.02em; }
+    #passageContent p { margin:1rem 0; text-align:justify; }
+    .para-label { font-weight:700; color:#2563eb; background: #eff6ff; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.25rem;}
+
+    /* Modern Question Cards */
+    .questionCard{
+      background:#ffffff; border:1px solid #e2e8f0;
+      border-radius:12px; padding:1.25rem; margin-bottom:1rem;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02); transition:all .2s ease;
+    }
+    .questionCard:hover { border-color: #cbd5e1; }
+    .questionCard h3 { font-size:0.95rem; color:#64748b; margin-bottom:.5rem; font-weight:600; text-transform: uppercase; letter-spacing: 0.05em;}
+    .questionCard p { margin:0 0 .75rem; color:#0f172a; font-weight: 500; font-size: 1rem; line-height: 1.5; }
+
+    /* Minimalist Choice Buttons */
+    .tfng-options { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.5rem; }
+    .tfng-btn{
+      padding:0.4rem 1rem; border:1px solid #e2e8f0; border-radius:8px;
+      font-size:0.85rem; font-weight:500; cursor:pointer; background:#fff;
+      transition:all .15s ease; color:#475569;
+    }
+    .tfng-btn:hover { border-color:#cbd5e1; background: #f8fafc; color:#0f172a; }
+    .tfng-btn.selected-true  { background:#eff6ff; border-color:#2563eb; color:#1e40af; font-weight: 600; }
+    .tfng-btn.selected-false { background:#fef2f2; border-color:#ef4444; color:#991b1b; font-weight: 600; }
+    .tfng-btn.selected-ng    { background:#f8fafc; border-color:#64748b; color:#334155; font-weight: 600; }
+
+    /* Note Completion Structure */
+    .notes-group { margin-bottom:0.5rem; }
+    .notes-group-label {
+      font-weight:600; color:#0f172a; font-size:0.95rem; margin-bottom:0.5rem;
+      padding-bottom: 0.25rem; border-bottom: 2px solid #e2e8f0; display:block;
+    }
+    .notes-group ul { margin:0.5rem 0 0 0; padding-left:0; list-style: none; }
+    .notes-group li { margin:0.75rem 0; line-height:1.7; font-size:0.95rem; display:flex; align-items:center; flex-wrap:wrap; gap:0.4rem; color: #334155;}
+
+    /* Flat Modern Inputs */
+    .q-input {
+      width:140px; padding:.25rem .5rem;
+      border:1px solid #e2e8f0; border-radius: 6px;
+      font-size:0.9rem; background:#f8fafc; transition:all .15s;
+      color: #0f172a; font-weight: 600;
+    }
+    .q-input:focus { outline:none; border-color:#2563eb; background: #fff; box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
+    .blank-num{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:1.4rem; height:1.4rem; background:#e2e8f0; color:#475569;
+      border-radius:4px; font-size:0.75rem; font-weight:700; flex-shrink:0;
+    }
+
+    /* Submit IeltsPro Button */
+    .submit-container { padding:2rem 1.5rem 3rem; text-align:center; }
+    #submitBtn{
+      background:#2563eb;
+      color:#fff; padding:0.8rem 2.5rem; border:none; border-radius:10px;
+      font-size:1rem; font-weight:600; cursor:pointer; transition:all .2s ease;
+    }
+    #submitBtn:hover { background: #1d4ed8; }
+
+    /* IeltsPro Modern Dashboard Modal */
+    .modal{
+      display:none; position:fixed; z-index:3000;
+      left:0; top:0; width:100%; height:100%;
+      background:rgba(15, 23, 42, 0.4); align-items:center;
+      justify-content:center; backdrop-filter:blur(8px);
+    }
+    .modal-content{
+      background:#ffffff; border-radius:16px; padding:2.5rem;
+      max-width:560px; width:90%; max-height:85vh; overflow-y:auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid #e2e8f0;
+    }
+    .modal-content h2 { color:#0f172a; margin-bottom:1.5rem; font-size:1.5rem; font-weight:800; text-align:center; letter-spacing: -0.02em;}
+    
+    /* Elegant IeltsPro Score Widget */
+    .score-dashboard {
+      display: grid; grid-template-columns: 1fr 1fr;
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+      padding: 1.25rem; margin-bottom: 1.5rem; text-align: center; gap: 1rem;
+    }
+    .score-tile { display: flex; flex-direction: column; justify-content: center; align-items: center;}
+    .score-tile:first-child { border-right: 1px solid #e2e8f0; }
+    .score-tile .tile-label { font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;}
+    #scoreDisplay { font-size:2.25rem; font-weight:800; color:#0f172a; }
+    #bandDisplay { font-size:3rem; font-weight:900; color:#2563eb; line-height: 1;}
+
+    #feedbackMessage { text-align:center; font-size:0.95rem; color:#475569; margin-bottom:1.5rem; }
+    .result-item { padding:1rem; margin:.5rem 0; border-radius:8px; border:1px solid #e2e8f0; background: #f8fafc;}
+    .result-item.correct   { border-left: 4px solid #10b981; }
+    .result-item.incorrect { border-left: 4px solid #ef4444; }
+    .result-item .detail { margin:.25rem 0; font-size:.9rem; color: #475569; }
+    #closeResultsBtn{
+      background:#0f172a; color:#fff; padding:.75rem 2rem;
+      border:none; border-radius:10px; font-weight:600;
+      cursor:pointer; margin-top:1rem; width:100%; transition:all .2s ease;
+    }
+    #closeResultsBtn:hover { background:#1e293b; }
+
+    /* High contrast */
+    body.high-contrast { background:#0a0a0a; color:#f8fafc; }
+    body.high-contrast .passage-container,
+    body.high-contrast .questions-container { background:#121212; color:#f8fafc; }
+    body.high-contrast .questionCard,
+    body.high-contrast .sectionRubric,
+    body.high-contrast .header,
+    body.high-contrast .answer-indicators { background:#1e1e1e; border-color:#2d2d2d; color:#f8fafc; }
+    body.high-contrast #passageContent, body.high-contrast .questionCard p { color:#e2e8f0; }
+    body.high-contrast .tfng-btn { background:#2d2d2d; color:#e2e8f0; border-color: #404040; }
+    body.high-contrast .notes-group-label { border-color:#404040; color: #fff;}
+    body.high-contrast .q-input { background: #2d2d2d; border-color: #404040; color: #fff; }
+    :root { --primary: #2563eb}
+    .logo { font-size: 24px; font-weight: 800; color: #000000; margin-bottom: 12px; }
+    .logo span { color: var(--primary); }
+  </style>
+</head>
+<body>
+<div class="test-wrapper">
+
+  <div class="header">
+    <div class="header__logo">
+      <div class="logo">IELTS<span>Pro</span></div>
+      <span class="header__title">Reading Practice — Telepathy and Psi Experiments</span>
+    </div>
+    <div class="header__timer" id="timer">00:00</div>
+    <div class="header__icons">
+      <i class="fas fa-adjust header__icon" id="contrastToggle" title="Toggle High Contrast"></i>
+      <i class="fas fa-text-height header__icon" id="textSizeToggle" title="Change Text Size"></i>
+    </div>
+  </div>
+
+  <div class="answer-indicators">
+    <span class="indicator-label">Progress Dashboard:</span>
+    <div class="answer-circle" data-question="1">1</div>
+    <div class="answer-circle" data-question="2">2</div>
+    <div class="answer-circle" data-question="3">3</div>
+    <div class="answer-circle" data-question="4">4</div>
+    <div class="answer-circle" data-question="5">5</div>
+    <div class="answer-circle" data-question="6">6</div>
+    <div class="answer-circle" data-question="7">7</div>
+    <div class="answer-circle" data-question="8">8</div>
+    <div class="answer-circle" data-question="9">9</div>
+    <div class="answer-circle" data-question="10">10</div>
+    <div class="answer-circle" data-question="11">11</div>
+    <div class="answer-circle" data-question="12">12</div>
+    <div class="answer-circle" data-question="13">13</div>
+  </div>
+
+  <div class="test-container">
+
+    <div class="passage-container">
+      <div id="passageContent">
+        <h2>Telepathy</h2>
+        <p style="font-style:italic;color:#64748b; font-size: 0.9rem; margin-top: -0.25rem;">Reading Passage 1 — Questions 1–13</p>
+
+        <p><span class="para-label">A</span> Principles of telepathy and parapsychology have split the scientific community for decades. Skeptics point out that after more than a century of intensive research, there is still no clear evolutionary or physical explanation of how one human brain could communicate directly with another. However, recent rigorous laboratory trials have provided a growing volume of evidence suggesting that telepathy might actually exist.</p>
+
+        <p><span class="para-label">B</span> Throughout the history of parapsychology, early practitioners were criticized for utilizing loose methodology. Many experiments relied heavily on manual card-guessing tasks where the researcher could inadvertently signal the correct answer to the test subject. The breakthrough came when researchers developed the ganzfeld experiments—a highly controlled approach named after the German term for 'entire field'. In these tests, targets are selected completely at random by computers to ensure total academic integrity, and subjects are placed in a state of sensory deprivation to minimize external environmental interference.</p>
+
+        <p><span class="para-label">C</span> The basic setup of a modern ganzfeld experiment is carefully standardized. The person acting as the 'receiver' is placed in an isolated room, sitting in a comfortable reclining chair. They wear headphones playing uniform white noise and have their eyes covered with halved ping-pong balls under a soothing red light. In a completely separate, soundproofed room, another person acts as the 'sender' and attempts to mentally transmit a randomly chosen visual target—such as a specific picture, image, or short video clip—directly to the receiver's mind.</p>
+
+        <p><span class="para-label">D</span> Once the transmission session concludes, the receiver is presented with four distinct visual options. One of these options is the true target, while the remaining three act as completely unrelated dummy selections. The receiver is then asked to identify which image most closely matches the psychological impressions they experienced during the deprivation session. Statistically, if telepathy does not exist, a subject should naturally select the correct target by pure chance exactly 25 per cent of the time.</p>
+
+        <p><span class="para-label">E</span> Over several hundred individual trials, researchers discovered that the actual success rate across various laboratories reached over 32 per cent. This margin represents a statistically significant deviation that cannot be easily dismissed as mere luck. However, some traditional mainstream scientists remained intensely skeptical, suggesting that subtle flaws in experimental design—such as the sender's monitor leaking a faint signal, or researchers accidentally giving out clues—might account for the higher success rates.</p>
+
+        <p><span class="para-label">F</span> To completely rule out these potential leaks, parapsychologists developed an automated variation known as the 'autoganzfeld' experiment. In this format, the selection, presentation, and evaluation of visual targets are fully controlled by sophisticated computer programs. Humans are removed from the technical workflow entirely, preventing any accidental sensory leakage. Despite these rigorous automated protections, the overall hit rate remained consistently above the 25 per cent baseline, proving that automated setups do not eliminate the phenomenon.</p>
+      </div>
+    </div>
+
+    <div class="divider" id="divider"><div class="divider-handle"></div></div>
+
+    <div class="questions-container">
+      <div id="questionsContent">
+
+        <div class="sectionRubric">
+          <h2>Questions 1–6</h2>
+          <p>Do the following statements agree with the information given in <strong>Reading Passage 1</strong>?</p>
+          <p>In boxes 1–6 on your answer sheet, write:</p>
+          <p><strong>TRUE</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement agrees with the information</p>
+          <p><strong>FALSE</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement contradicts the information</p>
+          <p><strong>NOT GIVEN</strong> &nbsp; if there is no information on this</p>
+        </div>
+
+        <div class="questionCard">
+          <h3>Question 1</h3>
+          <p>Researchers have successfully mapped the evolutionary background of telepathy.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="1" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="1" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="1" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q1" value="">
+        </div>
+
+        <div class="questionCard">
+          <h3>Question 2</h3>
+          <p>Early parapsychology trials were frequently criticized for their poor experimental methods.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="2" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="2" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="2" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q2" value="">
+        </div>
+
+        <div class="questionCard">
+          <h3>Question 3</h3>
+          <p>Ganzfeld experiments derive their name from a specific German scientific institute.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="3" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="3" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="3" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q3" value="">
+        </div>
+
+        <div class="questionCard">
+          <h3>Question 4</h3>
+          <p>The ganzfeld setup relies heavily on sensory deprivation to isolate the receiver.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="4" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="4" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="4" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q4" value="">
+        </div>
+
+        <div class="questionCard">
+          <h3>Question 5</h3>
+          <p>Receivers who have practiced meditation achieve higher success scores in trials.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="5" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="5" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="5" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q5" value="">
+        </div>
+
+        <div class="questionCard">
+          <h3>Question 6</h3>
+          <p>Automated autoganzfeld tests caused the telepathic success rate to drop down to exactly 25 per cent.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="6" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="6" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="6" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q6" value="">
+        </div>
+
+        <div class="sectionRubric">
+          <h2>Questions 7–9</h2>
+          <p>Write <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+        </div>
+
+        <div class="questionCard">
+          <h3>Questions 7–9 — Standard Ganzfeld Procedure</h3>
+          <div class="notes-group">
+            <span class="notes-group-label">How receivers are tested</span>
+            <ul>
+              <li>
+                The receiver sits comfortably in a specialized, relaxing
+                <span class="blank-num">7</span>
+                <input class="q-input" type="text" name="q7" placeholder="one word" maxlength="20">
+              </li>
+              <li>
+                The receiver listens to a steady stream of white
+                <span class="blank-num">8</span>
+                <input class="q-input" type="text" name="q8" placeholder="one word" maxlength="20">
+                to block ambient sound.
+              </li>
+              <li>
+                The sender attempts to mentally transmit a randomly selected visual
+                <span class="blank-num">9</span>
+                <input class="q-input" type="text" name="q9" placeholder="one word" maxlength="20">
+                from a soundproof room.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sectionRubric">
+          <h2>Questions 10–13</h2>
+          <p>Write <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+        </div>
+
+        <div class="questionCard">
+          <h3>Questions 10–13 — Statistical and Technical Analysis</h3>
+          <div class="notes-group">
+            <span class="notes-group-label">Results and variations of psi experiments</span>
+            <ul>
+              <li>
+                By pure mathematical probability, a subject should choose correctly by
+                <span class="blank-num">10</span>
+                <input class="q-input" type="text" name="q10" placeholder="one word" maxlength="20">
+                one-quarter of the time.
+              </li>
+              <li>
+                Skeptics argued that higher results could be caused by technical
+                <span class="blank-num">11</span>
+                <input class="q-input" type="text" name="q11" placeholder="one word" maxlength="20">
+                in the design.
+              </li>
+              <li>
+                Mainstream critics worried that details might be passed via sensory
+                <span class="blank-num">12</span>
+                <input class="q-input" type="text" name="q12" placeholder="one word" maxlength="20">
+              </li>
+              <li>
+                Parapsychologists introduced advanced computer
+                <span class="blank-num">13</span>
+                <input class="q-input" type="text" name="q13" placeholder="one word" maxlength="20">
+                to completely run the autoganzfeld trials.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="submit-container">
+          <button onclick="submitAnswers()" id="submitBtn">Submit Test</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="highlight-toolbar" id="highlightToolbar">
+  <button data-color="yellow"><span class="highlight-color yellow"></span></button>
+  <button data-color="green"><span class="highlight-color green"></span></button>
+  <button data-color="pink"><span class="highlight-color pink"></span></button>
+  <button data-color="blue"><span class="highlight-color blue"></span></button>
+  <button data-color="purple"><span class="highlight-color purple"></span></button>
+  <button data-color="red"><span class="highlight-color red"></span></button>
+  <button class="remove" id="removeHighlight">
+    <i class="fas fa-times"></i>
+    <span>Clear</span>
+  </button>
+</div>
+
+<div class="modal" id="submissionModal">
+  <div class="modal-content">
+    <h2>Performance Report</h2>
+    
+    <div class="score-dashboard">
+      <div class="score-tile">
+        <span class="tile-label">Raw Score</span>
+        <div id="scoreDisplay">0 / 13</div>
+      </div>
+      <div class="score-tile">
+        <span class="tile-label">Estimated Band</span>
+        <div id="bandDisplay">4.0</div>
+      </div>
+    </div>
+
+    <div id="feedbackMessage"></div>
+    <div id="detailedResults"></div>
+    <a href="{% url 'dashboard' %}">
+    <button id="closeResultsBtn">Return to Dashboard</button>
+    </a>
+  </div>
+</div>
+
+<script>
+  /*** INTERNAL CONFIG & KEY ***/
+  const ANSWER_KEY = {
+    1: 'FALSE', 2: 'TRUE', 3: 'FALSE', 4: 'TRUE', 5: 'NOT GIVEN', 6: 'FALSE',
+    7: 'chair', 8: 'noise', 9: 'target',
+    10: 'chance', 11: 'flaws', 12: 'leakage', 13: 'programs'
+  };
+
+  const ALTERNATES = {};
+  const Q_NUMS = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+  const TOTAL = Q_NUMS.length;
+
+  /*** TIMER LOOPER ***/
+  let timeElapsed = 0, testSubmitted = false;
+  setInterval(() => {
+    if (!testSubmitted) {
+      timeElapsed++;
+      const m = Math.floor(timeElapsed / 60), s = timeElapsed % 60;
+      document.getElementById('timer').textContent =
+        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+  }, 1000);
+
+  /*** Choice Listeners ***/
+  document.querySelectorAll('.tfng-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (testSubmitted) return;
+      const q = btn.dataset.q;
+      const val = btn.dataset.val;
+      document.querySelectorAll(`.tfng-btn[data-q="${q}"]`).forEach(b =>
+        b.classList.remove('selected-true','selected-false','selected-ng'));
+      if (val==='TRUE') btn.classList.add('selected-true');
+      else if (val==='FALSE') btn.classList.add('selected-false');
+      else btn.classList.add('selected-ng');
+      document.querySelector(`input[name="q${q}"]`).value = val;
+      updateIndicators();
+    });
+  });
+
+  function getVal(i) {
+    const el = document.querySelector(`input[name="q${i}"]`);
+    return el ? el.value.trim() : '';
+  }
+
+  function updateIndicators() {
+    Q_NUMS.forEach(i => {
+      const circle = document.querySelector(`.answer-circle[data-question="${i}"]`);
+      if (!circle) return;
+      const answered = getVal(i) !== '';
+      circle.classList.toggle('answered', answered);
+      circle.classList.toggle('unanswered', !answered);
+    });
+  }
+  document.querySelectorAll('input[type="text"]').forEach(el => {
+    el.addEventListener('input', updateIndicators);
+  });
+
+  function checkAnswer(i) {
+    const user = getVal(i).toLowerCase().trim();
+    const correct = String(ANSWER_KEY[i]).toLowerCase().trim();
+    if (user === correct) return true;
+    if (ALTERNATES[i]) return ALTERNATES[i].some(a => a.toLowerCase() === user);
+    return false;
+  }
+
+  /*** OFFICIAL READING BAND FORMULA ***/
+  function getIELTSBand(score) {
+    if (score >= 12) return 9.0;
+    if (score === 11) return 8.5;
+    if (score === 10) return 8.0;
+    if (score === 9) return 7.5;
+    if (score === 8) return 7.0;
+    if (score === 7) return 6.5;
+    if (score === 6) return 6.0;
+    if (score === 5) return 5.5;
+    if (score === 4) return 5.0;
+    if (score === 3) return 4.5;
+    return 4.0;
+  }
+
+  /*** MAIN ACTION SUBMIT ***/
+  function submitAnswers() {
+    if (testSubmitted) return;
+    testSubmitted = true;
+    let correct = 0;
+    const results = {};
+
+    Q_NUMS.forEach(i => {
+      const isCorrect = checkAnswer(i);
+      if (isCorrect) correct++;
+      results[i] = { answer: getVal(i), isCorrect };
+    });
+
+    const calculatedBand = getIELTSBand(correct);
+    const elapsed = `${String(Math.floor(timeElapsed/60)).padStart(2,'0')}:${String(timeElapsed%60).padStart(2,'0')}`;
+
+    // POST Payload to backend django endpoint
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            score: correct,
+            band: calculatedBand,
+            time_spent: elapsed
+        })
+    })
+    .then(response => response.json())
+    .then(data => console.log("IeltsPro Secure Core Saved:", data.message))
+    .catch(err => console.error("Network/DB Error:", err));
+
+    // Fill modern interface analytics cards
+    document.getElementById('scoreDisplay').textContent = `${correct} / ${TOTAL}`;
+    document.getElementById('bandDisplay').textContent = calculatedBand.toFixed(1);
+    
+    const pct = Math.round((correct / TOTAL) * 100);
+    document.getElementById('feedbackMessage').textContent = `Time elapsed: ${elapsed} • Completion rate: ${pct}%`;
+
+    let html = '';
+    Q_NUMS.forEach(i => {
+      const r = results[i];
+      html += `<div class="result-item ${r.isCorrect ? 'correct' : 'incorrect'}">
+        <strong>Question ${i} &nbsp; ${r.isCorrect ? '✓' : '✗'}</strong>
+        <div class="detail">Your submission: <span class="font-semibold">${r.answer || '(blank)'}</span></div>
+        <div class="detail">System Answer: <span class="font-semibold text-blue-600">${ANSWER_KEY[i]}</span></div>
+      </div>`;
+    });
+    document.getElementById('detailedResults').innerHTML = html;
+    document.getElementById('submissionModal').style.display = 'flex';
+  }
+
+  document.getElementById('closeResultsBtn').addEventListener('click', () => {
+    document.getElementById('submissionModal').style.display = 'none';
+  });
+
+  /*** RESIZER GRID PANEL ***/
+  const divider = document.getElementById('divider');
+  const passagePanel = document.querySelector('.passage-container');
+  const testContainer = document.querySelector('.test-container');
+  let isResizing = false;
+  divider.addEventListener('mousedown', () => { isResizing = true; });
+  document.addEventListener('mouseup', () => { isResizing = false; });
+  document.addEventListener('mousemove', e => {
+    if (!isResizing) return;
+    const box = testContainer.getBoundingClientRect();
+    const w = e.clientX - box.left;
+    if (w > 300 && w < box.width - 300) passagePanel.style.width = w + 'px';
+  });
+
+  /*** CORE AESTHETIC TOGGLES ***/
+  document.getElementById('contrastToggle').addEventListener('click', () => {
+    document.body.classList.toggle('high-contrast');
+  });
+  let textSizeIndex = 0;
+  const textSizes = ['1.05rem','1.15rem','1.25rem'];
+  document.getElementById('textSizeToggle').addEventListener('click', () => {
+    textSizeIndex = (textSizeIndex + 1) % textSizes.length;
+    document.getElementById('passageContent').style.fontSize = textSizes[textSizeIndex];
+    document.getElementById('questionsContent').style.fontSize = textSizes[textSizeIndex];
+  });
+
+  /*** CANVAS TEXT ENGINE HIGHLIGHTS ***/
+  const ROOTS = [document.getElementById('passageContent'), document.getElementById('questionsContent')];
+  const toolbar = document.getElementById('highlightToolbar');
+
+  document.addEventListener('mouseup', e => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) { toolbar.style.display='none'; return; }
+    const range = sel.getRangeAt(0);
+    if (!ROOTS.some(r => r.contains(range.commonAncestorContainer))) { toolbar.style.display='none'; return; }
+    const rect = range.getBoundingClientRect();
+    toolbar.style.left = rect.left + rect.width/2 + 'px';
+    toolbar.style.top  = rect.top + window.scrollY + 'px';
+    toolbar.style.display = 'flex';
+  });
+
+  toolbar.querySelectorAll('button[data-color]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyHighlight(btn.getAttribute('data-color'));
+      toolbar.style.display = 'none';
+      window.getSelection().removeAllRanges();
+    });
+  });
+
+  document.getElementById('removeHighlight').addEventListener('click', () => {
+    removeHighlights();
+    toolbar.style.display = 'none';
+    window.getSelection().removeAllRanges();
+  });
+
+  function applyHighlight(color) {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+    const root = ROOTS.find(r => r.contains(range.commonAncestorContainer)) || ROOTS[0];
+    getTextNodes(root, range).forEach(node => {
+      const {s,e} = getOffsets(node, range);
+      if (s===e) return;
+      const chosen = splitNode(node,s,e);
+      const span = document.createElement('span');
+      span.className = `highlight ${color}`;
+      chosen.parentNode.insertBefore(span, chosen);
+      span.appendChild(chosen);
+      mergeAdjacent(span);
+    });
+  }
+
+  function removeHighlights() {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+    const root = ROOTS.find(r => r.contains(range.commonAncestorContainer)) || ROOTS[0];
+    Array.from(root.querySelectorAll('span.highlight')).forEach(sp => {
+      if (intersects(range,sp)) unwrap(sp);
+    });
+  }
+
+  function unwrap(span) {
+    const p = span.parentNode;
+    while (span.firstChild) p.insertBefore(span.firstChild, span);
+    p.removeChild(span); p.normalize();
+  }
+
+  function mergeAdjacent(span) {
+    const prev = span.previousSibling;
+    if (prev && prev.nodeType===1 && prev.className===span.className) {
+      while (span.firstChild) prev.appendChild(span.firstChild);
+      span.remove(); span = prev;
+    }
+    const next = span.nextSibling;
+    if (next && next.nodeType===1 && next.className===span.className) {
+      while (next.firstChild) span.appendChild(next.firstChild);
+      next.remove();
+    }
+  }
+
+  function getTextNodes(root, range) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: node => {
+        if (!node.nodeValue?.trim()) return NodeFilter.FILTER_REJECT;
+        const p = node.parentElement;
+        if (p?.closest?.('script,style,input,select,textarea,button')) return NodeFilter.FILTER_REJECT;
+        return intersects(range,node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    const nodes=[]; let n;
+    while (n=walker.nextNode()) nodes.push(n);
+    return nodes;
+  }
+
+  function intersects(range, node) {
+    const nr = document.createRange();
+    try { nr.selectNodeContents(node); } catch { return false; }
+    return range.compareBoundaryPoints(Range.END_TO_START,nr)<0 &&
+           range.compareBoundaryPoints(Range.START_TO_END,nr)>0;
+  }
+
+  function getOffsets(node, range) {
+    const len = node.nodeValue.length;
+    let s=0, e=len;
+    if (range.startContainer===node) s=range.startOffset;
+    else { const r=document.createRange(); r.selectNodeContents(node); if(range.compareBoundaryPoints(Range.START_TO_END,r)>=0) s=e; }
+    if (range.endContainer===node) e=range.endOffset;
+    else { const r=document.createRange(); r.selectNodeContents(node); if(range.compareBoundaryPoints(Range.END_TO_START,r)<=0) e=s; }
+    s=Math.max(0,Math.min(s,len)); e=Math.max(0,Math.min(e,len));
+    if(e<s) e=s;
+    return {s,e};
+  }
+
+  function splitNode(node,s,e) {
+    if (e<node.nodeValue.length) node.splitText(e);
+    if (s>0) node=node.splitText(s);
+    return node;
+  }
+</script>
+</body>
+</html>

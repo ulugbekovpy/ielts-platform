@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Full Test Builder | IELTSPRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-main); color: var(--text-main); padding: 50px 20px; }
+        
+        .builder-container { max-width: 900px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; }
+        h1 { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 30px; text-align: center; }
+        
+        .form-group { margin-bottom: 24px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; color: #334155; }
+        input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; outline: none; font-size: 15px; background: #fff; transition: all 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08); }
+        textarea { height: 160px; font-family: monospace; font-size: 14px; resize: vertical; }
+
+        /* Стили для блоков пассажей */
+        .passage-section { background: #fafafa; border: 1px solid var(--border); padding: 24px; border-radius: 16px; margin-bottom: 32px; }
+        .passage-section h3 { font-size: 18px; font-weight: 800; color: #1e1b4b; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .badge { background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 8px; font-size: 12px; }
+
+        .hint { font-size: 12px; color: #64748b; margin-top: 6px; line-height: 1.4; }
+        
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: background 0.2s; margin-top: 20px; }
+        .btn-submit:hover { background: #4338ca; }
+    </style>
+</head>
+<body>
+
+<div class="builder-container">
+    <h1>🛠️ IELTSPRO Full Test Builder</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Название IELTS теста целиком</label>
+            <input type="text" name="test_title" placeholder="Например: Cambridge 18 - Academic Test 1" required>
+        </div>
+
+        <div class="passage-section">
+            <h3><span class="badge">Раздел 1</span> Reading Passage 1</h3>
+            
+            <div class="form-group">
+                <label>Заголовок текста</label>
+                <input type="text" name="p1_title" placeholder="Например: Urban Transport Trends" required>
+            </div>
+
+            <div class="form-group">
+                <label>HTML-текст статьи (Passage 1)</label>
+                <textarea name="p1_text" placeholder="<p>Paragraph 1...</p><p>Paragraph 2...</p>" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Тип вопросов</label>
+                <select name="p1_qtype">
+                    <option value="TRUE_FALSE_NOT_GIVEN">True / False / Not Given</option>
+                    <option value="FILL_GAPS">Sentence Completion (Fill Gaps)</option>
+                    <option value="MULTIPLE_CHOICE">Multiple Choice (A, B, C, D)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Инструкция к вопросам</label>
+                <input type="text" name="p1_instruction" value="Do the following statements agree with the information given in Reading Passage 1?">
+            </div>
+
+            <div class="form-group">
+                <label>Вопросы и Ответы (Формат: Номер. Вопрос | Ответ)</label>
+                <textarea name="p1_qdata" placeholder="1. Четкий текст вопроса под номером один | TRUE&#10;2. Текст второго вопроса | NOT GIVEN&#10;3. Текст третьего вопроса | FALSE" required></textarea>
+                <div class="hint">Каждый вопрос строго с новой строки. Разделитель — вертикальный слэш <b>|</b>. Регистр ответа значения не имеет.</div>
+            </div>
+        </div>
+
+        <div class="passage-section">
+            <h3><span class="badge">Раздел 2</span> Reading Passage 2</h3>
+            
+            <div class="form-group">
+                <label>Заголовок текста</label>
+                <input type="text" name="p2_title" placeholder="Например: The History of Glass">
+            </div>
+
+            <div class="form-group">
+                <label>HTML-текст статьи (Passage 2)</label>
+                <textarea name="p2_text" placeholder="<p>Paragraph 1...</p>"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Тип вопросов</label>
+                <select name="p2_qtype">
+                    <option value="FILL_GAPS">Sentence Completion (Fill Gaps)</option>
+                    <option value="TRUE_FALSE_NOT_GIVEN">True / False / Not Given</option>
+                    <option value="MULTIPLE_CHOICE">Multiple Choice (A, B, C, D)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Инструкция к вопросам</label>
+                <input type="text" name="p2_instruction" value="Choose NO MORE THAN TWO WORDS from the passage for each answer.">
+            </div>
+
+            <div class="form-group">
+                <label>Вопросы и Ответы</label>
+                <textarea name="p2_qdata" placeholder="14. Получение стекла требовало высокой | температуры&#10;15. Первые изделия из стекла были | бусины"></textarea>
+            </div>
+        </div>
+
+        <div class="passage-section">
+            <h3><span class="badge">Раздел 3</span> Reading Passage 3</h3>
+            
+            <div class="form-group">
+                <label>Заголовок текста</label>
+                <input type="text" name="p3_title" placeholder="Например: Artificial Intelligence in Medicine">
+            </div>
+
+            <div class="form-group">
+                <label>HTML-текст статьи (Passage 3)</label>
+                <textarea name="p3_text" placeholder="<p>Paragraph 1...</p>"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Тип вопросов</label>
+                <select name="p3_qtype">
+                    <option value="MULTIPLE_CHOICE">Multiple Choice (A, B, C, D)</option>
+                    <option value="TRUE_FALSE_NOT_GIVEN">True / False / Not Given</option>
+                    <option value="FILL_GAPS">Sentence Completion (Fill Gaps)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Инструкция к вопросам</label>
+                <input type="text" name="p3_instruction" value="Choose the correct letter, A, B, C or D.">
+            </div>
+
+            <div class="form-group">
+                <label>Вопросы и Ответы</label>
+                <textarea name="p3_qdata" placeholder="28. What point does the writer make in the first paragraph? | A&#10;29. What is the author's attitude towards AI? | C"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Создать полный IELTS тест (40 вопросов) 🎉</button>
+    </form>
+</div>
+
+</body>
+</html>

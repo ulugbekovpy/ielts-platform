@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ommaviy Oferta Shartnomasi - IELTSPro</title>
+    <style>
+        :root {
+            --brand-blue: #2563eb;       
+            --brand-dark: #0b1329;       
+            --card-bg: #ffffff;
+            --border-subtle: rgba(15, 23, 42, 0.06);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 4px 25px rgba(37, 99, 235, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2); }
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+            animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--brand-dark) 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 36px 30px;
+            border-radius: var(--radius-md);
+            margin-bottom: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -20%;
+            width: 250px; height: 250px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+        h1 span { color: var(--brand-blue); }
+
+        .subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: var(--brand-dark);
+            border-left: 4px solid var(--brand-blue);
+            padding-left: 14px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0 0 16px 0;
+            text-align: justify;
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Красный сочный блок для политики возврата средств */
+        .alert-box {
+            background-color: #fff5f5;
+            border-left: 5px solid #e03131;
+            padding: 24px;
+            margin: 32px 0;
+            border-radius: var(--radius-md);
+            border-top: 1px solid rgba(224, 49, 49, 0.05);
+            border-right: 1px solid rgba(224, 49, 49, 0.05);
+            border-bottom: 1px solid rgba(224, 49, 49, 0.05);
+        }
+
+        .alert-box h3 {
+            margin: 0 0 12px 0;
+            color: #c92a2a;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .alert-box p {
+            margin: 0 0 12px 0;
+            color: #c92a2a;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .alert-box p strong {
+            font-weight: 700;
+        }
+
+        .alert-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Стилизация чекбокса и согласия */
+        .accept-container {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition-smooth);
+        }
+        .checkbox-label:hover {
+            color: var(--brand-blue);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--brand-blue);
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        /* Премиум-кнопка принять */
+        .accept-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+            opacity: 0.5;
+            pointer-events: none; /* Заблокирована до галочки */
+        }
+
+        .accept-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .accept-btn.active:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 20px 12px; }
+            .container { padding: 24px 16px; }
+            .header-banner { padding: 24px 16px; }
+            h1 { font-size: 20px; }
+            h2 { font-size: 16px; }
+            p { font-size: 14px; }
+            .accept-btn { width: 100%; }
+        }
+    </style>
+    <script>
+        // Блокируем повторный просмотр (Раз и навсегда)
+        if (localStorage.getItem('oferta_accepted') === 'true') {
+            window.location.replace('/dashboard'); 
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-banner">
+        <h1>Ommaviy Oferta <span>Shartnomasi</span></h1>
+        <div class="subtitle">IELTSPro Onlayn Ta'lim Platformasi (Elektron Shartnoma)</div>
+    </div>
+
+    <p>Foydalanuvchi tomonidan platformada to‘lovni amalga oshirilishi ushbu Shartnomaning barcha shartlarini so‘zsiz qabul qilinganligini (Aksept) anglatadi.</p>
+
+    <h2>1. Umumiy qoidalar</h2>
+    <p>1.1. <strong>"IELTSPro"</strong> (keyingi o‘rinlarda — Ijrochi) ushbu shartnomada ko‘rsatilgan shartlar asosida istalgan jismoniy shaxsga (keyingi o‘rinlarda — Buyurtmachi) onlayn ta'lim xizmatlarini ko‘rsatishni taklif etadi.</p>
+    <p>1.2. Mazkur Shartnoma matni ommaviy oferta hisoblanib, uning shartlari Buyurtmachi tomonidan to‘lov o‘tkazilgan vaqtdan boshlab to‘liq kuchga kiradi va huquqiy oqibatlarni keltirib chiqaradi.</p>
+
+    <h2>2. Shartnoma predmeti</h2>
+    <p>2.1. Ijrochi Buyurtmachining to‘loviga asosan platformadagi video darslar, testlar, interaktiv materiallar va boshqa o‘quv kontentlariga cheklangan muddatga kirish huquqini (ruxsatnomani) taqdim etadi.</p>
+    <p>2.2. Xizmatlarning turi, dasturi, narxi va foydalanish muddatlari IELTSPro platformasining tegishli sahifalarida to‘lov oynasidan oldin aniq ko‘rsatiladi.</p>
+
+    <h2>3. To‘lov shartlari</h2>
+    <p>3.1. Kurslar va raqamli materiallar uchun to‘lov 100% oldindan to‘lov (prepayment) tizimi asosida, platformada integratsiya qilingan to‘lov tizimlari (Click, Payme, va b.) orqali amalga oshiriladi.</p>
+    <p>3.2. To‘lov amalga oshirilganidan so‘ng, tizim avtomatik ravishda Buyurtmachining shaxsiy kabinetida darslarni faollashtiradi.</p>
+
+    <div class="alert-box">
+        <h3>4. Pulni Qaytarish va Xizmatdan Voz Kechish Shartlari (Refund Policy)</h3>
+        <p>4.1.  Ushbu shartnoma bo‘yicha taqdim etiladigan xizmatlar raqamli kontent (intellektual mulk ob'ektlari) hisoblanadi. Buyurtmachi to‘lovni amalga oshirgan va unga materiallarga kirish huquqi (ruxsat) berilgan paytdan boshlab <strong>xizmat to‘liq va lozim darajada ko‘rsatilgan</strong> hisoblanadi.</p>
+        <p>4.2. Buyurtmachi to‘lovni amalga oshirgandan so‘ng, <strong>to‘langan mablag‘lar qaytarib berilmaydi (refund qilinmaydi)</strong>. Foydalanuvchining shaxsiy sabablari (vaqt yetishmasligi, rejalarning o‘zgarishi, kurs yoqmaganligi va h.k.) pulni qaytarishga asos bo‘la olmaydi.</p>
+        <p>4.3. Platformadagi barcha materiallar "qanday bo‘lsa, shunday" (as is) rejimida taqdim etiladi. Ijrochi Buyurtmachining IELTS imtihonidan ma'lum bir ball olishini kafolatlamaydi. Natijalardan norozilik to‘lovni qaytarishga asos bo‘lmaydi.</p>
+        <p>4.4. Faqatgina Ijrochining aybi bilan platformada global texnik nosozliklar yuzaga kelib, materiallardan foydalanish imkoniyati mutlaqo bo‘lmaganda va bu muammo 72 soat ichida hal etilmagan taqdirdagina, to‘lovni qisman qaytarish masalasi tomonlarning o‘zaro roziligi bilan ko‘rib chiqilishi mumkin.</p>
+    </div>
+
+    <h2>5. Intellektual mulk va Mualliflik huquqlari</h2>
+    <p>5.1. Platformadagi barcha video, audio, matn va test materiallari Ijrochining intellektual mulki hisoblanadi va qonun bilan himoya qilinadi.</p>
+    <p>5.2. Buyurtmachiga materiallarni yuklab olish, uchinchi shaxslarga tarqatish, sotish, birgalikda foydalanish yoki o‘z akkauntini boshqalarga berish qat'iyan man etiladi. Ushbu qoida buzilgan taqdirda, akkaunt pul qaytarilmasdan bloklanadi va qonunchilik doirasida chora ko‘riladi.</p>
+
+    <h2>6. Nizolarni hal qilish</h2>
+    <p>6.1. Shartnoma yuzasidan kelib chiqadigan har qanday kelishmovchiliklar o‘zaro muzokaralar yo‘li bilan hal etiladi.</p>
+
+    <!-- Интерактивный блок принятия оферты -->
+    <div class="accept-container">
+        <label class="checkbox-label">
+            <input type="checkbox" id="acceptCheckbox" onchange="toggleButton()">
+            <span>Men oferta shartnomasi shartlariga to'liq roziman</span>
+        </label>
+        
+        <button id="submitBtn" class="accept-btn" onclick="acceptAndProceed()">
+            Tasdiqlash va Davom etish →
+        </button>
+    </div>
+
+    <div class="footer-note">
+        IELTSPro © 2026. Barcha huquqlar himoyalangan. To‘lovni amalga oshirish orqali siz ushbu shartnoma shartlariga to‘liq rozilik bildirasiz.
+    </div>
+</div>
+
+<script>
+    // Активация кнопки при клике на чекбокс
+    function toggleButton() {
+        const checkbox = document.getElementById('acceptCheckbox');
+        const button = document.getElementById('submitBtn');
+        if (checkbox.checked) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    }
+
+    // Сохранение факта согласия и редирект в дашборд
+    function acceptAndProceed() {
+        const checkbox = document.getElementById('acceptCheckbox');
+        if (checkbox.checked) {
+            localStorage.setItem('oferta_accepted', 'true'); // Запоминаем выбор навсегда
+            window.location.href = '/dashboard'; // Перенаправление
+        }
+    }
+</script>
+
+</body>
+</html>

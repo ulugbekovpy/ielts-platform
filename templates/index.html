@@ -1,0 +1,525 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTSPro — Professional Onlayn Platforma</title>
+    <style>
+        /* CSS Reset & Global */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: #f8fafc; color: #0f172a; line-height: 1.6; }
+        a { text-decoration: none; transition: all 0.3s; }
+
+        /* Header & Nav */
+        header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 18px 8%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; color: #0f172a; }
+        .logo span { color: #2563eb; }
+        nav { display: flex; align-items: center; gap: 35px; }
+        nav a { position: relative; margin: 0; color: #475569; font-weight: 600; font-size: 15px; }
+        nav a.active { color: #2563eb!important; }
+        nav a::after {
+            content:"";
+            position:absolute;
+            left:50%;
+            bottom:-8px;
+            width:0;
+            height:3px;
+            background:#2563eb;
+            border-radius:999px;
+            transform:translateX(-50%);
+            transition:width .35s ease;
+        }
+        nav a:hover::after,
+        nav a.active::after { width:100%; }
+        
+        .nav-btn { background: #2563eb; color: white !important; padding: 10px 22px; border-radius: 50px; font-weight: 600; text-align: center; }
+        .nav-btn:hover { background: #3f4147; transform: translateY(-1px); }
+
+        /* Burger Menu Trigger */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 110;
+        }
+        .burger-menu span {
+            width: 100%;
+            height: 2px;
+            background-color: #0f172a;
+            border-radius: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Common Layout Sections */
+        section { padding: 80px 8%; text-align: center; }
+        .section-tag { display: inline-block; background: #dbeafe; color: #1e40af; padding: 6px 16px; border-radius: 50px; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; }
+        .section-title { font-size: 36px; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
+        .section-subtitle { color: #64748b; font-size: 18px; max-width: 600px; margin: 0 auto 50px; }
+
+        /* 1. Hero Section */
+        .hero { padding: 120px 8% 140px; background: radial-gradient(circle at top, #eff6ff 0%, #ffffff 100%); }
+        .hero h1 { font-size: 56px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 20px; }
+        .hero p { font-size: 20px; color: #475569; max-width: 700px; margin: 0 auto 35px; }
+        .cta-btn { background: #0f172a; color: white; padding: 16px 38px; border-radius: 8px; font-weight: 600; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(15,23,42,0.1); }
+        .cta-btn:hover { background: #1e293b; transform: translateY(-2px); }
+
+        /* 2. Stats Section */
+        .stats { background:#fff; display:flex; justify-content:center; align-items:center; padding:25px 8%; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .stat-card h2 { font-size: 48px; font-weight: 800; color: #38bdf8; }
+        .stat-card p { color: #94a3b8; font-weight: 500; margin-top: 5px; }
+
+        /* 3. Features Grid */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; background: white; }
+        .card { background: #f8fafc; padding: 40px 30px; border-radius: 16px; border: 1px solid #e2e8f0; text-align: left; }
+        .card:hover { transform: translateY(-5px); border-color: #fcfcfc; }
+        .icon-box { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
+        .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+        .card p { color: #64748b; font-size: 15px; }
+
+        /* 4. Course Syllabus Section */
+        .syllabus { background: #f8fafc; }
+        .syllabus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .syllabus-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: left; display: flex; gap: 15px; align-items: flex-start; }
+        .syllabus-num { background: #dbeafe; color: #2563eb; font-weight: 800; width: 35px; height: 35px; border-radius: 50px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .syllabus-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 5px; }
+        .syllabus-card p { color: #64748b; font-size: 14px; }
+
+        /* 5. Testimonials */
+        .reviews { background: white; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .review-card { background: #f8fafc; padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; text-align: left; position: relative; }
+        .stars { color: #fbbf24; margin-bottom: 15px; }
+        .review-text { font-style: italic; color: #334155; margin-bottom: 20px; font-size: 15px; }
+        .student { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; background: #cbd5e1; border-radius: 50px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #475569; }
+        .student-info h5 { font-size: 15px; font-weight: 700; }
+        .student-info p { color: #64748b; font-size: 13px; }
+
+        /* 6. FAQ Section */
+        .faq { background: #f8fafc; }
+        .faq-container { max-width: 700px; margin: 0 auto; text-align: left; }
+        .faq-item { background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+        .faq-question { padding: 18px 24px; font-weight: 600; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question::after { content: '+'; font-size: 20px; color: #64748b; transition: transform 0.2s; }
+        .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.3s ease; color: #475569; font-size: 15px; }
+        .faq-item.active .faq-question::after { content: '−'; }
+        .faq-item.active .faq-answer { padding: 0 24px 18px; max-height: 200px; }
+
+        /* DASHBOARD */
+        #dashboard-section { display: none; padding: 40px 8% 80px; }
+        .db-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: white; padding: 24px; border-radius: 16px; border: 1px solid #e2e8f0; }
+        .db-welcome h2 { font-size: 28px; font-weight: 800; color: #0f172a; }
+        .db-welcome p { color: #64748b; font-size: 15px; }
+        .logout-btn { background-color: #ef4444; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; }
+        .logout-btn:hover { background-color: #dc2626; }
+        .db-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .db-grid { grid-template-columns: 1fr; } }
+        .db-card { background: white; padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; }
+        .db-card h3 { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 20px; }
+        .plan-item { margin-bottom: 20px; }
+        .plan-info { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+        .progress-bar { width: 100%; height: 10px; background-color: #f1f5f9; border-radius: 50px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: #2563eb; border-radius: 50px; }
+        
+        /* To-do list */
+        .todo-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .todo-input-group input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; }
+        .todo-add-btn { background-color: #0f172a; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .todo-list { list-style: none; }
+        .todo-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8fafc; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #2563eb; font-size: 14px; }
+        .todo-item.completed { border-left-color: #10b981; opacity: 0.6; }
+        .todo-item.completed span { text-decoration: line-through; }
+        .todo-actions { display: flex; gap: 8px; }
+        .todo-btn { border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .done-btn { background-color: #d1fae5; color: #065f46; }
+        .del-btn { background-color: #fee2e2; color: #991b1b; }
+
+        /* Footer */
+        footer { background: #0f172a; color: #94a3b8; padding: 40px 8%; text-align: center; border-top: 1px solid #1e293b; font-size: 15px; }
+        footer a { color: #38bdf8; font-weight: 600; }
+
+        /* ANIMATSIYALAR */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        section, .card, .syllabus-card, .review-card, .faq-item { animation: fadeInUp 0.8s ease-out forwards; }
+        .cta-btn, .nav-btn, .todo-add-btn, .todo-btn { transition: transform 0.2s ease, background 0.3s ease; }
+        .cta-btn:active, .nav-btn:active, .todo-add-btn:active { transform: scale(0.95); }
+        .card, .syllabus-card, .review-card { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s; }
+        .logo-slider{overflow:hidden;width:100%}.logo-track{display:flex;gap:70px;align-items:center;width:max-content;animation:scroll 50s linear infinite}
+        .logo-track img{ width:130px; height:60px; object-fit:contain; }
+        .harvard-logo{ width:200px !important; height:70px !important; }
+        .cambridge-logo{ width:200px !important; height:90px !important; object-fit:contain; }
+        @keyframes scroll{to{transform:translateX(-50%)}}
+
+        /* RESPONSIVE & BURGER NAVIGATION */
+        @media (max-width: 1024px) {
+            header { padding: 18px 4%; }
+            section { padding: 60px 4%; }
+            #dashboard-section { padding: 30px 4% 60px; }
+            .hero h1 { font-size: 44px; }
+        }
+
+        @media (max-width: 820px) {
+            .burger-menu { display: flex; }
+            
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: white;
+                box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+                padding: 100px 40px;
+                gap: 25px;
+                transition: right 0.4s cubic-bezier(0.77,0.2,0.05,1.0);
+                z-index: 105;
+            }
+            
+            nav.active { right: 0; }
+            nav a { font-size: 18px; width: 100%; }
+            nav a::after { bottom: -4px; left: 0; transform: none; }
+            nav a:hover::after, nav a.active::after { width: 40px; }
+            
+            .nav-btn { width: 100%; max-width: none; margin-top: 15px; }
+            
+            /* Burger Animation to 'X' */
+            .burger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .burger-menu.active span:nth-child(2) { opacity: 0; }
+            .burger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+            .hero { padding: 80px 4% 100px; }
+            .hero h1 { font-size: 34px; letter-spacing: -0.5px; }
+            .hero p { font-size: 16px; }
+            .section-title { font-size: 28px; }
+            .section-subtitle { font-size: 16px; margin-bottom: 30px; }
+            
+            .db-header { flex-direction: column; text-align: center; gap: 20px; padding: 20px; }
+            .logout-btn { width: 100%; }
+            .todo-input-group { flex-direction: column; }
+            .todo-add-btn { padding: 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 28px; }
+            .cta-btn { width: 100%; padding: 14px 20px; }
+            .card { padding: 30px 20px; }
+            .syllabus-card { flex-direction: column; align-items: center; text-align: center; }
+            .review-card { padding: 20px; }
+            .faq-question { padding: 14px 16px; font-size: 14px; }
+            .faq-answer { padding: 0 16px; font-size: 14px; }
+            .faq-item.active .faq-answer { padding: 0 16px 14px; }
+        }
+    </style>
+
+    <style id="premium-extra">
+        body::before{content:"";position:fixed;inset:-20%;background:
+        radial-gradient(circle at 20% 20%,rgba(37,99,235,.12),transparent 30%),
+        radial-gradient(circle at 80% 30%,rgba(56,189,248,.12),transparent 30%),
+        radial-gradient(circle at 50% 80%,rgba(99,102,241,.10),transparent 35%);
+        animation:floatbg 16s ease-in-out infinite;pointer-events:none;z-index:-1}
+        @keyframes floatbg{50%{transform:translateY(-25px) scale(1.05)}}
+        .hero h1,.hero p,.section-title,.section-subtitle{opacity:0;transform:translateY(35px)}
+        .reveal{opacity:0;transform:translateY(35px);transition:.9s cubic-bezier(.22,1,.36,1)}
+        .reveal.show{opacity:1;transform:none}
+        .card,.review-card,.syllabus-card,.stat-card{transition:.35s}
+        .card:hover,.review-card:hover,.syllabus-card:hover{transform:translateY(-12px) rotateX(3deg);box-shadow:0 24px 50px rgba(0,0,0,.15)}
+        .cta-btn,.nav-btn{position:relative;overflow:hidden}
+        .cta-btn:before,.nav-btn:before{content:"";position:absolute;left:-120%;top:0;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg)}
+        .cta-btn:hover:before,.nav-btn:hover:before{left:160%;transition:.8s}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">IELTS<span>Pro</span></div>
+
+        <nav id="nav-links">
+            <a href="#features">Afzalliklar</a>
+            <a href="#syllabus">Dastur</a>
+            <a href="#reviews">Natijalar</a>
+            <a href="#faq">FAQ</a>
+            <!-- Кнопка "Kirish" динамически перемещается внутрь бургер-меню для мобилок -->
+            <a href="{% url 'login' %}" class="nav-btn">Kirish</a>
+        </nav>
+
+        <button class="burger-menu" id="burger-trigger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <div id="main-landing">
+        <section class="hero">
+            <span class="section-tag">Ekspertlar Tizimi</span>
+            <h1>IELTS tayyorgarligini tizimli va oson qiling</h1>
+            <p>IELTSPro o‘quvchilarga eng qisqa vaqt ichida maksimal natijaga erishish uchun eng samarali texnikalar va jonli topshiriqlarni taqdim etadi.</p>
+            <button class="cta-btn" onclick="window.location.href='{% url 'login' %}'">Bepul Boshlash</button>
+        </section>
+
+        <section class="stats">
+            <div class="logo-slider">
+                <div class="logo-track">
+                    <img src="{% static 'images/Harvard_University_logo.svg.png' %}" class="harvard-logo" alt="Harvard">
+                    <img src="{% static 'images/MIT_logo_2003-2023.svg.png' %}" alt="MIT">
+                    <img src="{% static 'images/stanford-university-logo.png' %}" alt="Stanford">
+                    <img src="{% static 'images/Oxford-University-Circlet.svg.png' %}" alt="Oxford">
+                    <img src="{% static 'images/university-of-cambridge-logo-0 (1).png' %}" class="cambridge-logo" alt="Cambridge">
+                    <img src="{% static 'images/ASU-logo.png' %}" alt="ASU">
+                    <img src="{% static 'images/1280px-Yale_University_Shield_1.svg.png' %}" alt="Yale">
+                    <img src="{% static 'images/UniversityofPennsylvania_Shield_RGB-2.png' %}" alt="UPenn">
+                    <img src="{% static 'images/University_of_Texas_at_Austin_seal.svg.png' %}" alt="UT Austin">
+                    <img src="{% static 'images/2708-universite-nationale-singapour-nus.png' %}" alt="NUS">
+                    <img src="{% static 'images/Seal_of_the_California_Institute_of_Technology.svg.png' %}" alt="Caltech">
+                    <img src="{% static 'images/University_of_Chicago_Coat_of_arms.png' %}" alt="UChicago">
+                    <img src="{% static 'images/Utoronto_coa.svg.png' %}" alt="UToronto">
+                    <img src="{% static 'images/Tokyo.png' %}" alt="Tokyo">
+                    
+                    <!-- Дублирование для бесконечного слайдера -->
+                    <img src="{% static 'images/Harvard_University_logo.svg.png' %}" class="harvard-logo" alt="Harvard">
+                    <img src="{% static 'images/MIT_logo_2003-2023.svg.png' %}" alt="MIT">
+                    <img src="{% static 'images/stanford-university-logo.png' %}" alt="Stanford">
+                    <img src="{% static 'images/Oxford-University-Circlet.svg.png' %}" alt="Oxford">
+                    <img src="{% static 'images/university-of-cambridge-logo-0 (1).png' %}" class="cambridge-logo" alt="Cambridge">
+                    <img src="{% static 'images/ASU-logo.png' %}" alt="ASU">
+                    <img src="{% static 'images/1280px-Yale_University_Shield_1.svg.png' %}" alt="Yale">
+                    <img src="{% static 'images/UniversityofPennsylvania_Shield_RGB-2.png' %}" alt="UPenn">
+                    <img src="{% static 'images/University_of_Texas_at_Austin_seal.svg.png' %}" alt="UT Austin">
+                    <img src="{% static 'images/2708-universite-nationale-singapour-nus.png' %}" alt="NUS">
+                    <img src="{% static 'images/Seal_of_the_California_Institute_of_Technology.svg.png' %}" alt="Caltech">
+                    <img src="{% static 'images/University_of_Chicago_Coat_of_arms.png' %}" alt="UChicago">
+                    <img src="{% static 'images/Utoronto_coa.svg.png' %}" alt="UToronto">
+                    <img src="{% static 'images/Tokyo.png' %}" alt="Tokyo">
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div style="grid-column: 1 / -1;">
+                <span class="section-tag">Imkoniyatlar</span>
+                <h2 class="section-title">Nega aynan IELTSPro?</h2>
+                <p class="section-subtitle">Biz an'anaviy darslardan voz kechib, faqat natijaga ishlaydigan tizimni yaratdik.</p>
+            </div>
+            <div class="card"><div class="icon-box">📊</div><h3>Real Mock Testlar</h3><p>Xuddi haqiqiy imtihonidek format. Reading va Listeningni aniq tekshiring.</p></div>
+            <div class="card"><div class="icon-box">📝</div><h3>Ekspert Materiallar</h3><p>Band 8+ darajali yozma ishlar (Essays) tahlili va aktual mavzular g'oyalari.</p></div>
+            <div class="card"><div class="icon-box">⚡</div><h3>Smart Strategiyalar</h3><p>Vaqtni to'g'ri taqsimlash va har bir bo'lim uchun maxsus "lifehack"lar.</p></div>
+            <div class="card"><div class="icon-box">🧭</div><h3>Tizimli yondashuv</h3><p>IELTSPro — bu shunchaki kurs emas, bu sizning yo'l xaritangiz. Biz sizga nima qilishni emas, uni qanday qidelib eng samarali usulda, vaqtni tejab bajarishni o'rgatamiz.</p></div>
+        </section>
+
+        <section class="syllabus" id="syllabus">
+            <span class="section-tag">Kurs Tarkibi</span>
+            <h2 class="section-title">O'quv Dasturi Rejasi</h2>
+            <div class="syllabus-grid">
+                <div class="syllabus-card"><div class="syllabus-num">01</div><div><h4>Listening Mastery</h4><p>Sarlavhalar va xaritalar bilan ishlash sirlari.</p></div></div>
+                <div class="syllabus-card"><div class="syllabus-num">02</div><div><h4>Reading Speed</h4><p>Skimming & Scanning texnikasi orqali tezkor tushunish.</p></div></div>
+                <div class="syllabus-card"><div class="syllabus-num">03</div><div><h4>Writing Task 1 & 2</h4><p>Insholarni mantiqiy bog'lash va akademik so'zlar lug'ati.</p></div></div>
+                <div class="syllabus-card"><div class="syllabus-num">04</div><div><h4>Speaking Confidence</h4><p>Imtihon topshiruvchi oldida hayajonni yo'qotish va ravon gapirish.</p></div></div>
+            </div>
+        </section>
+
+        <section class="reviews" id="reviews">
+            <span class="section-tag">Muvaffaqiyatlar</span>
+            <h2 class="section-title">O'quvchilarimiz Natijalari</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"Platformadagi interaktiv o'quv rejalari menga juda yoqdi. Ballim 5.5 dan 7.5 ga ko'tarildi."</p>
+                    <div class="student"><div class="avatar">AK</div><div class="student-info"><h5>Asadbek Karimov</h5><p>IELTS Band 7.5</p></div></div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"Writing bo'yicha berilgan strategiyalar haqiqiy mo'jiza! Vaqtni bemalol tejadim."</p>
+                    <div class="student"><div class="avatar">MD</div><div class="student-info"><h5>Madina Davronova</h5><p>IELTS Band 7.0</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq" id="faq">
+            <span class="section-tag">Savollar</span>
+            <h2 class="section-title">Ko'p Beriladigan Savollar</h2>
+            <div class="faq-container">
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Platformadan foydalanish bepulmi?</div><div class="faq-answer">Ha, boshlang'ich darslar va kundalik vazifalar paneli bepul.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Sayt mobil telefonlarda ham ishlaydimi?</div><div class="faq-answer">Albatta! Sayt smartfonlar ekraniga to'liq moslashuvchan.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Yangi materiallar qo'shib boriladimi?</div><div class="faq-answer">Ha. Har hafta yangi mock testlar, vocabulary ro'yxatlari va Writing mavzulari platformaga qo'shib boriladi.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Mock testlar haqiqiy IELTS formatidami?</div><div class="faq-answer">Ha. Barcha mock testlar haqiqiy IELTS imtihoni formatiga mos ravishda tayyorlangan va vaqt cheklovi bilan ishlaydi.</div></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="dashboard-section">
+        <div class="db-header">
+            <div class="db-welcome">
+                <h2>Xush kelibsiz, <span id="user-display-name">O'quvchi</span>! 👋</h2>
+                <p>Bugun maqsadlaringiz sari yana bir qadam tashlash uchun ajoyib kun.</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Chiqish</button>
+        </div>
+
+        <div class="db-grid">
+            <div class="db-card">
+                <h3>🎯 Sizning IELTS O'quv Rejalaringiz</h3>
+                <div class="plan-item"><div class="plan-info"><span>Listening</span><span>75%</span></div><div class="progress-bar"><div class="progress-fill" style="width: 75%; background-color: #10b981;"></div></div></div>
+                <div class="plan-item"><div class="plan-info"><span>Reading</span><span>45%</span></div><div class="progress-bar"><div class="progress-fill" style="width: 45%; background-color: #f59e0b;"></div></div></div>
+                <div class="plan-item"><div class="plan-info"><span>Writing Task 2</span><span>60%</span></div><div class="progress-bar"><div class="progress-fill" style="width: 60%; background-color: #2563eb;"></div></div></div>
+            </div>
+            <div class="db-card">
+                <h3>📋 Bugungi Vazifalar</h3>
+                <div class="todo-input-group">
+                    <input type="text" id="todo-input" placeholder="Yangi vazifa...">
+                    <button class="todo-add-btn" onclick="addTodo()">+</button>
+                </div>
+                <ul class="todo-list" id="todo-list-container"></ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 IELTSPro Platformasi. Barcha huquqlar himoyalangan.</p>
+        <p>Powered by IELTSPro Group</p>
+    </footer>
+
+    <script>
+        // Логика бургер-меню
+        const burgerTrigger = document.getElementById('burger-trigger');
+        const navLinksMenu = document.getElementById('nav-links');
+
+        if(burgerTrigger && navLinksMenu) {
+            burgerTrigger.addEventListener('click', () => {
+                burgerTrigger.classList.toggle('active');
+                navLinksMenu.classList.toggle('active');
+            });
+
+            // Закрывать меню при клике на ссылки
+            navLinksMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    burgerTrigger.classList.remove('active');
+                    navLinksMenu.classList.remove('active');
+                });
+            });
+        }
+
+        window.onload = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showDashboard(currentUser);
+            }
+            loadTodos();
+        }
+
+        function showDashboard(username) {
+            document.getElementById('user-display-name').innerText = username;
+            document.getElementById('main-landing').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+            document.getElementById('nav-links').style.display = 'none';
+            if(burgerTrigger) burgerTrigger.style.display = 'none';
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        }
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+            const allItems = document.querySelectorAll('.faq-item');
+            allItems.forEach(i => { if (i !== item) i.classList.remove('active'); });
+        }
+
+        function loadTodos() {
+            const container = document.getElementById('todo-list-container');
+            if(!container) return;
+            container.innerHTML = '';
+            const todos = JSON.parse(localStorage.getItem('todos')) || [
+                { text: "Listening Mock Test yechish", completed: false },
+                { text: "Writing uchun 10 ta yangi so'z", completed: false }
+            ];
+            
+            todos.forEach((todo, index) => {
+                const li = document.createElement('li');
+                li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                li.innerHTML = `
+                    <span>${todo.text}</span>
+                    <div class="todo-actions">
+                        <button class="todo-btn done-btn" onclick="toggleTodo(${index})">✓</button>
+                        <button class="todo-btn del-btn" onclick="deleteTodo(${index})">✕</button>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            if (input.value.trim() === '') return;
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            todos.push({ text: input.value.trim(), completed: false });
+            localStorage.setItem('todos', JSON.stringify(todos));
+            input.value = ''; loadTodos();
+        }
+
+        function toggleTodo(index) {
+            const todos = JSON.parse(localStorage.getItem('todos'));
+            todos[index].completed = !todos[index].completed;
+            localStorage.setItem('todos', JSON.stringify(todos)); loadTodos();
+        }
+
+        function deleteTodo(index) {
+            const todos = JSON.parse(localStorage.getItem('todos'));
+            todos.splice(index, 1);
+            localStorage.setItem('todos', JSON.stringify(todos)); loadTodos();
+        }
+    </script>
+    <script>
+        document.querySelectorAll('section,.card,.review-card,.syllabus-card,.faq-item,.db-card,.stat-card').forEach(e=>e.classList.add('reveal'));
+        const io=new IntersectionObserver(es=>es.forEach((x,i)=>{if(x.isIntersecting)setTimeout(()=>x.target.classList.add('show'),i*80)}),{threshold:.15});
+        document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+        ['.hero h1','.hero p','.section-title','.section-subtitle'].forEach((s,i)=>{const e=document.querySelector(s);if(e)setTimeout(()=>{e.style.transition='1s';e.style.opacity=1;e.style.transform='none';},300+i*150)});
+        document.querySelectorAll('.stat-card h2').forEach(el=>{let t=parseInt(el.textContent)||0;if(!t)return;let c=0;const step=Math.max(1,Math.floor(t/60));const id=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(id)};el.textContent=el.textContent.includes('%')?c+'%':c.toLocaleString()+'+'},20);});
+    </script>
+    <script>
+        const sections=document.querySelectorAll("section[id]");
+        const navLinks=document.querySelectorAll("#nav-links a");
+        function updateActiveMenu() {
+            let current = "";
+
+            sections.forEach(section => {
+                const top = section.offsetTop - 150;
+                const height = section.offsetHeight;
+
+                if (window.scrollY >= top) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
+                current = "faq";
+            }
+
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+                if (link.getAttribute("href") === "#" + current) {
+                    link.classList.add("active");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", updateActiveMenu);
+        window.addEventListener("load", updateActiveMenu);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTSPro - Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 80% 20%, #f0f4ff 0%, #f8fafc 50%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            color: #1e293b;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 320px;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid #e2e8f0;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .logo-area {
+            font-size: 24px;
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-area span {
+            color: #2563eb;
+        }
+
+        .steps-container {
+            margin-top: 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active {
+            opacity: 1;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 16px;
+            background: white;
+            color: #64748b;
+        }
+
+        .step-item.active .step-number {
+            border-color: #2563eb;
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .step-item.active .step-label {
+            color: #2563eb;
+        }
+
+        .sidebar-footer {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            width: 100%;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            color: #2563eb;
+        }
+
+        .center-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .center-logo span {
+            color: #2563eb;
+        }
+
+        .content-card {
+            width: 100%;
+            max-width: 680px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* EKRAN KO'RINISHI ANIMATSIYASI */
+        .question-container, .slider-container, .challenges-container, .plan-date-container, .study-time-container, .final-plan-container, .loader-container {
+            display: none;
+            width: 100%;
+            max-width: 540px;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .final-plan-container {
+            max-width: 680px;
+        }
+
+        .question-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #111827;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .option-card:hover {
+            border-color: #2563eb;
+            background-color: #f8fafc;
+        }
+
+        .option-card.selected {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .option-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .option-card.selected .option-circle {
+            border-color: #2563eb;
+            background: #2563eb;
+        }
+
+        .option-card.selected .option-circle::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* EKRAN 1: OTZIVLAR */
+        .testimonials-container {
+            width: 100%;
+            margin-bottom: 35px;
+        }
+
+        .review-card {
+            background: transparent;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #111827;
+        }
+
+        .user-badge {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 2px;
+        }
+
+        .stars {
+            color: #f59e0b;
+            font-size: 14px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .main-headline {
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .main-subheadline {
+            font-size: 15px;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        /* EKRAN 3: SLIDER */
+        .score-display-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 30px;
+            margin-bottom: 35px;
+        }
+
+        .big-score-box {
+            text-align: left;
+            flex-shrink: 0;
+        }
+
+        .big-score {
+            font-size: 72px;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .route-info {
+            flex: 1;
+        }
+
+        .route-badge {
+            font-size: 11px;
+            font-weight: 800;
+            color: #2563eb;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .route-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .route-desc {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .slider-wrapper {
+            width: 100%;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 4px solid #2563eb;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+            transition: transform 0.1s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .range-limits {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 700;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        .route-steps {
+            width: 100%;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .route-step-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .mini-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-main-text {
+            font-weight: 700;
+            font-size: 15px;
+            color: #111827;
+            width: 150px;
+            flex-shrink: 0;
+        }
+
+        .step-sub-text {
+            font-size: 14px;
+            color: #64748b;
+            flex: 1;
+        }
+
+        /* EKRAN 4: CHALLENGES */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 35px;
+        }
+
+        .challenge-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .challenge-card:hover {
+            border-color: #2563eb;
+            background-color: #f8fafc;
+        }
+
+        .challenge-card.selected {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .challenge-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .challenge-icon {
+            font-size: 22px;
+        }
+
+        .challenge-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .challenge-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .challenge-card.selected .challenge-checkbox {
+            border-color: #2563eb;
+            background-color: #2563eb;
+        }
+
+        .challenge-card.selected .challenge-checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* EKRAN 5 & 6: KARTALAR */
+        .plan-date-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .plan-date-card:hover {
+            border-color: #2563eb;
+            background-color: #f8fafc;
+        }
+
+        .plan-date-card.selected {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .card-content-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .card-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-main-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .plan-date-card.selected .card-main-title {
+            color: #2563eb;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .radio-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .plan-date-card.selected .radio-circle {
+            border-color: #2563eb;
+            background: #2563eb;
+        }
+
+        .plan-date-card.selected .radio-circle::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* EKRAN 7: YAKUNIY REJA HULOSASI */
+        .summary-box {
+            background: linear-gradient(135deg, #ffffff 0%, #fdfeff 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+            margin-top: 25px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .summary-badge-top {
+            position: absolute;
+            top: -12px;
+            left: 30px;
+            background: #ffffff;
+            color: #2563eb;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .summary-card-inner {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 16px 20px;
+        }
+
+        .summary-card-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .summary-card-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        /* NOAH TESTIMONIAL */
+        .noah-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+
+        .avatar-circle {
+            width: 44px;
+            height: 44px;
+            background-color: #111827;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .noah-content {
+            flex: 1;
+        }
+
+        .noah-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .noah-name-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noah-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #111827;
+        }
+
+        .noah-badge {
+            font-size: 12px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        /* TUGMALAR VARIANTLARI */
+        .continue-btn {
+            width: 100%;
+            max-width: 540px;
+            background-color: #111827;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-align: center;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .continue-btn:hover {
+            background-color: #1f2937;
+        }
+
+        .blue-btn {
+            background-color: #2563eb; 
+        }
+        .blue-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .coral-btn {
+            background-color: #2563eb;
+            max-width: 100%;
+        }
+        .coral-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .footer-help {
+            margin-top: 35px;
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .footer-help a {
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        /* СТИЛИ АНИМАЦИИ ГЕНЕРАЦИИ ПЛАНА (НОВОЕ) */
+        .loader-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .loader-spinner-box {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 40px auto;
+        }
+
+        .radar-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(37, 99, 235, 0.08);
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        .radar-inner {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 90px;
+            height: 90px;
+            border: 3px solid rgba(37, 99, 235, 0.03);
+            border-bottom-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite reverse;
+        }
+
+        .radar-center-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            animation: pulse-icon 1.5s ease-in-out infinite;
+        }
+
+        .analysis-steps {
+            max-width: 380px;
+            margin: 0 auto;
+            text-align: left;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+        }
+
+        .analysis-step {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            opacity: 0.25;
+            transition: all 0.4s ease;
+        }
+
+        .analysis-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .analysis-step.active {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        .analysis-step.completed {
+            opacity: 0.8;
+        }
+
+        .analysis-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-step.active .analysis-indicator {
+            border-color: #2563eb;
+            background-color: white;
+        }
+
+        .analysis-step.completed .analysis-indicator {
+            border-color: #10b981;
+            background-color: #10b981;
+            color: white;
+        }
+
+        .analysis-step.completed .analysis-indicator::after {
+            content: '✓';
+        }
+
+        .analysis-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            transition: color 0.3s;
+        }
+
+        .analysis-step.active .analysis-text {
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* RESPONSIVE DESIGN (MOSLASHUVCHANLIK) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 260px;
+                padding: 30px 20px;
+            }
+            .main-content {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body { 
+                flex-direction: column; 
+            }
+            .sidebar { 
+                width: 100%; 
+                border-right: none; 
+                border-bottom: 1px solid #e2e8f0; 
+                padding: 20px; 
+                backdrop-filter: none;
+                background-color: #ffffff;
+            }
+            .steps-container, .sidebar-footer { 
+                display: none; 
+            }
+            .main-content { 
+                padding: 40px 20px; 
+            }
+            .back-btn { 
+                position: static; 
+                margin-bottom: 20px; 
+                align-self: flex-start; 
+            }
+            .score-display-wrapper {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 20px;
+            }
+            .big-score-box {
+                text-align: center;
+            }
+            .summary-grid { 
+                grid-template-columns: 1fr; 
+                gap: 15px; 
+            }
+            .challenges-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .step-main-text {
+                width: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo-area">
+            IELTS<span>Pro</span>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-item active" id="step1-indicator">
+                <div class="step-number">1</div>
+                <div class="step-label">Get started</div>
+            </div>
+            <div class="step-item" id="step2-indicator">
+                <div class="step-number">2</div>
+                <div class="step-label">Your background</div>
+            </div>
+            <div class="step-item" id="step3-indicator">
+                <div class="step-number">3</div>
+                <div class="step-label">Your goal</div>
+            </div>
+            <div class="step-item" id="step4-indicator">
+                <div class="step-number">4</div>
+                <div class="step-label">Challenges</div>
+            </div>
+            <div class="step-item" id="step5-indicator">
+                <div class="step-number">5</div>
+                <div class="step-label">Your plan</div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            Your data is private and secure. We attach your plan and results to your account.
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <button class="back-btn" id="backBtn" onclick="goBack()" style="display: none;">← Orqaga</button>
+
+        <div class="center-logo">
+            IELTS<span>Pro</span>
+        </div>
+
+        <!-- 1-EKRAN: OTZIVLAR -->
+        <div class="content-card" id="screen1">
+            <div class="testimonials-container">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <span class="user-name">Samira</span>
+                            <span class="user-badge">Band 6.5 → 7.5</span>
+                        </div>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                    <p class="review-text">What I like most is the clean design and realistic mock tests. It feels like taking the actual IELTS exam. Great platform for self-study.</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <span class="user-name">Diyor</span>
+                            <span class="user-badge">Speaking +1.0</span>
+                        </div>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                    <p class="review-text">IELTSPro helped me stay consistent with my preparation. The progress tracking and well-structured lessons kept me motivated every day.</p>
+                </div>
+            </div>
+
+            <h1 class="main-headline">Students need a plan, not another random worksheet</h1>
+            <p class="main-subheadline">IELTSPro turns practice results into focused next steps.</p>
+
+            <button class="continue-btn blue-btn" onclick="showScreen2()">Continue</button>
+        </div>
+
+        <!-- 2-EKRAN: SAVOL -->
+        <div class="question-container" id="screen2">
+            <h2 class="question-title">Oldin haqiqiy IELTS imtihonini topshirganmisiz?</h2>
+            
+            <div class="option-card" onclick="selectOption(this)">
+                <div class="option-circle"></div>
+                <span class="option-text">Ha, topshirganman (Sertifikatga egaman)</span>
+            </div>
+
+            <div class="option-card" onclick="selectOption(this)">
+                <div class="option-circle"></div>
+                <span class="option-text">Yo'q, topshirmaganman (Bu birinchisi bo'ladi)</span>
+            </div>
+
+            <div class="option-card" onclick="selectOption(this)">
+                <div class="option-circle"></div>
+                <span class="option-text">Faqat "Mock Exam" (Pre-IELTS) topshirganman</span>
+            </div>
+
+            <button class="continue-btn blue-btn" style="margin-top: 25px;" onclick="showScreen3()">Continue</button>
+        </div>
+
+        <!-- 3-EKRAN: MAQSADLI BALL (SLIDER) -->
+        <div class="slider-container" id="screen3">
+            <h2 class="question-title" style="text-align: left; margin-bottom: 10px;">Set your target band</h2>
+            <p style="font-size: 15px; color:#64748b; margin-bottom: 25px;">Choose the band you want. We'll tune the route around it.</p>
+
+            <div class="score-display-wrapper">
+                <div class="big-score-box">
+                    <div class="big-score" id="scoreVal">7.5</div>
+                    <div class="score-label">Target Band</div>
+                </div>
+                <div class="route-info">
+                    <div class="route-badge">Band-Jump Route</div>
+                    <div class="route-title">Turn practice into band points you can keep.</div>
+                    <div class="route-desc">We start with a real-timed mock, then send you into the skills still costing band points.</div>
+                </div>
+            </div>
+
+            <div class="slider-wrapper">
+                <input type="range" min="4.0" max="9.0" step="0.5" value="7.5" class="range-slider" id="ieltsSlider" oninput="updateSlider(this.value)">
+                <div class="range-limits">
+                    <span>4.0</span>
+                    <span>9.0</span>
+                </div>
+            </div>
+
+            <div class="route-steps">
+                <div class="route-step-item">
+                    <div class="mini-num">1</div>
+                    <div class="step-main-text">Baseline</div>
+                    <div class="step-sub-text">Take the test flow</div>
+                </div>
+                <div class="route-step-item">
+                    <div class="mini-num">2</div>
+                    <div class="step-main-text">Weak skills</div>
+                    <div class="step-sub-text">Rank band loss</div>
+                </div>
+                <div class="route-step-item">
+                    <div class="mini-num">3</div>
+                    <div class="step-main-text">Next task</div>
+                    <div class="step-sub-text">Practice the fix</div>
+                </div>
+            </div>
+
+            <button class="continue-btn blue-btn" onclick="showScreen4()">Continue</button>
+        </div>
+
+        <!-- 4-EKRAN: CHALLENGES -->
+        <div class="challenges-container" id="screen4">
+            <h2 class="question-title" style="text-align: left; margin-bottom: 10px;">What’s your biggest challenge?</h2>
+            <p style="font-size: 15px; color:#64748b; margin-bottom: 15px;">Pick a few — we’ll prioritize them.</p>
+
+            <div class="challenges-grid">
+                <div class="challenge-card" onclick="toggleChallenge(this)">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">🎧</span>
+                        <span class="challenge-label">Listening</span>
+                    </div>
+                    <div class="challenge-checkbox"></div>
+                </div>
+
+                <div class="challenge-card" onclick="toggleChallenge(this)">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">📚</span>
+                        <span class="challenge-label">Reading</span>
+                    </div>
+                    <div class="challenge-checkbox"></div>
+                </div>
+
+                <div class="challenge-card" onclick="toggleChallenge(this)">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">📝</span>
+                        <span class="challenge-label">Writing</span>
+                    </div>
+                    <div class="challenge-checkbox"></div>
+                </div>
+
+                <div class="challenge-card" onclick="toggleChallenge(this)">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">🎙️</span>
+                        <span class="challenge-label">Speaking</span>
+                    </div>
+                    <div class="challenge-checkbox"></div>
+                </div>
+
+                <div class="challenge-card" onclick="toggleChallenge(this)">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">⏳</span>
+                        <span class="challenge-label">Timing</span>
+                    </div>
+                    <div class="challenge-checkbox"></div>
+                </div>
+
+                <div class="challenge-card" onclick="toggleChallenge(this)">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">🗂️</span>
+                        <span class="challenge-label">Vocabulary</span>
+                    </div>
+                    <div class="challenge-checkbox"></div>
+                </div>
+            </div>
+
+            <button class="continue-btn blue-btn" onclick="showScreen5()">Continue</button>
+        </div>
+
+        <!-- 5-EKRAN: IMTIHON VAQTI -->
+        <div class="plan-date-container" id="screen5">
+            <h2 class="question-title" style="text-align: left; margin-bottom: 10px;">When is your IELTS test?</h2>
+            <p style="font-size: 15px; color:#64748b; margin-bottom: 25px;">This helps us pace your plan.</p>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">📅</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">Less than a month</span>
+                        <span class="card-subtitle">Focus on full mocks and high-impact fixes.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">🎏</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">1–3 months</span>
+                        <span class="card-subtitle">Build accuracy, timing, and review habits.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">🧱</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">3–6 months</span>
+                        <span class="card-subtitle">Grow your band with steady practice.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">🧭</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">No date yet</span>
+                        <span class="card-subtitle">Keep the plan flexible.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <button class="continue-btn blue-btn" style="margin-top: 25px;" onclick="showScreen6()">Continue</button>
+        </div>
+
+        <!-- 6-EKRAN: KUNLIK O'QISH VAQTI -->
+        <div class="study-time-container" id="screen6">
+            <h2 class="question-title" style="text-align: left; margin-bottom: 10px;">How much time can you study daily?</h2>
+            <p style="font-size: 15px; color:#64748b; margin-bottom: 25px;">We'll adapt the plan to fit.</p>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">⏱️</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">15 mins</span>
+                        <span class="card-subtitle">Quick exercises.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">📕</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">30 mins</span>
+                        <span class="card-subtitle">One section at a time.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+            {% csrf_token %}
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">💻</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">1 hour</span>
+                        <span class="card-subtitle">Full practice block.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <div class="plan-date-card" onclick="selectCardOption(this)">
+                <div class="card-content-area">
+                    <span class="card-icon">🎒</span>
+                    <div class="card-text-block">
+                        <span class="card-main-title">2+ hours</span>
+                        <span class="card-subtitle">Intensive prep.</span>
+                    </div>
+                </div>
+                <div class="radio-circle"></div>
+            </div>
+
+            <button class="continue-btn blue-btn" style="margin-top: 25px;" onclick="buildFinalPlan()">Continue</button>
+        </div>
+
+        <!-- 7-EKRAN: YAKUNIY SHAXSIY REJA HULOSASI -->
+        <div class="final-plan-container" id="screen7">
+            <h2 class="question-title" style="text-align: left; margin-bottom: 6px;" id="finalTitle">Protect your Band 7.5 target</h2>
+            <p style="font-size: 15px; color:#64748b; margin-bottom: 25px;" id="finalSub">You are aiming for Band 7.5. We will protect that goal by ranking the misses most likely to cost band points.</p>
+
+            <div class="summary-box">
+                <div class="summary-badge-top">Built from your answers</div>
+                <p style="font-weight: 700; font-size: 14px; color: #111827; margin-bottom: 16px;">Find repeat misses from your last attempt</p>
+                
+                <div class="summary-grid">
+                    <div class="summary-card-inner">
+                        <div class="summary-card-label">Target</div>
+                        <div class="summary-card-value" id="boxTarget">Band 7.5</div>
+                    </div>
+                    <div class="summary-card-inner">
+                        <div class="summary-card-label">Focus</div>
+                        <div class="summary-card-value" id="boxFocus">Listening, Reading</div>
+                    </div>
+                    <div class="summary-card-inner">
+                        <div class="summary-card-label">Risk Map</div>
+                        <div class="summary-card-value">6 signals found</div>
+                    </div>
+                    <div class="summary-card-inner">
+                        <div class="summary-card-label">Time</div>
+                        <div class="summary-card-value" id="boxTime">1 hour daily</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Noah Guvohligi -->
+            <div class="noah-card">
+                <div class="avatar-circle">J</div>
+                <div class="noah-content">
+                    <div class="noah-meta">
+                        <div class="noah-name-box">
+                            <span class="noah-name">Jasur K.</span>
+                            <span class="noah-badge">Band 8.0</span>
+                        </div>
+                        <div style="color: #f59e0b; font-size: 13px;">★★★★★</div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.5;">The vocabulary section is amazing! Learning new words with examples made it much easier to remember them. I wish I had found IELTSPro earlier.</p>
+                    <span style="font-size: 12px; color: #94a3b8; display: block; margin-top: 6px;">1–3 months track</span>
+                </div>
+            </div>
+
+            <button class="continue-btn coral-btn" onclick="finishOnboarding()">Save this plan</button>
+        </div>
+
+        <!-- НОВЫЙ ЭКРАН: СТИЛЬНАЯ АНИМАЦИЯ ГЕНЕРАЦИИ ПЛАНА -->
+        <div class="loader-container" id="loaderScreen">
+            <h2 class="question-title" style="margin-bottom: 10px;">Creating your personal IELTS map</h2>
+            <p style="font-size: 15px; color:#64748b; margin-bottom: 40px;">Please wait while we adapt our AI and practice tools to your profile.</p>
+            
+            <div class="loader-spinner-box">
+                <div class="radar-circle"></div>
+                <div class="radar-inner"></div>
+                <span class="radar-center-icon">⚡</span>
+            </div>
+
+            <div class="analysis-steps">
+                <div class="analysis-step" id="load-step1">
+                    <div class="analysis-indicator"></div>
+                    <span class="analysis-text" id="load-text1">Analyzing your challenges...</span>
+                </div>
+                <div class="analysis-step" id="load-step2">
+                    <div class="analysis-indicator"></div>
+                    <span class="analysis-text" id="load-text2">Structuring your target band route...</span>
+                </div>
+                <div class="analysis-step" id="load-step3">
+                    <div class="analysis-indicator"></div>
+                    <span class="analysis-text" id="load-text3">Setting up practice schedules...</span>
+                </div>
+                <div class="analysis-step" id="load-step4">
+                    <div class="analysis-indicator"></div>
+                    <span class="analysis-text">Configuring AI writing environment...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-help">
+            Need help? Email <a href="mailto:support@ielts-pro.uz">support@ielts-pro.uz</a>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        let currentScreen = 1;
+
+        function showScreen2() {
+            currentScreen = 2;
+            document.getElementById('screen1').style.display = 'none';
+            document.getElementById('screen2').style.display = 'block';
+            document.getElementById('backBtn').style.display = 'flex';
+            
+            updateIndicators(2);
+        }
+
+        function showScreen3() {
+            const selected = document.querySelector('#screen2 .option-card.selected');
+            if (!selected) {
+                alert("Iltimos, davom etish uchun variantlardan birini tanlang!");
+                return;
+            }
+            currentScreen = 3;
+            document.getElementById('screen2').style.display = 'none';
+            document.getElementById('screen3').style.display = 'block';
+            
+            updateIndicators(3);
+            updateSlider(document.getElementById('ieltsSlider').value);
+        }
+
+        function showScreen4() {
+            currentScreen = 4;
+            document.getElementById('screen3').style.display = 'none';
+            document.getElementById('screen4').style.display = 'block';
+            
+            updateIndicators(4);
+        }
+
+        function showScreen5() {
+            const selectedChallenges = document.querySelectorAll('.challenge-card.selected');
+            if (selectedChallenges.length === 0) {
+                alert("Iltimos, kamida bitta muammoni tanlang!");
+                return;
+            }
+            currentScreen = 5;
+            document.getElementById('screen4').style.display = 'none';
+            document.getElementById('screen5').style.display = 'block';
+            
+            updateIndicators(5);
+        }
+
+        function showScreen6() {
+            const selectedDate = document.querySelector('#screen5 .plan-date-card.selected');
+            if (!selectedDate) {
+                alert("Iltimos, imtihon vaqtingizni tanlang!");
+                return;
+            }
+            currentScreen = 6;
+            document.getElementById('screen5').style.display = 'none';
+            document.getElementById('screen6').style.display = 'block';
+        }
+
+        function buildFinalPlan() {
+            const selectedTime = document.querySelector('#screen6 .plan-date-card.selected');
+            if (!selectedTime) {
+                alert("Iltimos, kunlik o'qish vaqtingizni tanlang!");
+                return;
+            }
+
+            currentScreen = 7;
+            document.getElementById('screen6').style.display = 'none';
+            document.getElementById('screen7').style.display = 'block';
+
+            const bandScore = parseFloat(document.getElementById('ieltsSlider').value).toFixed(1);
+            
+            document.getElementById('finalTitle').innerText = `Protect your Band ${bandScore} target`;
+            document.getElementById('finalSub').innerText = `You are aiming for Band ${bandScore}. We will protect that goal by ranking the misses most likely to cost band points.`;
+            document.getElementById('boxTarget').innerText = `Band ${bandScore}`;
+
+            const challenges = document.querySelectorAll('.challenge-card.selected .challenge-label');
+            let focusSkills = [];
+            challenges.forEach(skill => focusSkills.push(skill.innerText));
+            document.getElementById('boxFocus').innerText = focusSkills.length > 0 ? focusSkills.join(', ') : 'General Prep';
+
+            const timeTitle = selectedTime.querySelector('.card-main-title').innerText;
+            document.getElementById('boxTime').innerText = `${timeTitle} daily`;
+        }
+
+        function goBack() {
+            if (currentScreen === 2) {
+                currentScreen = 1;
+                document.getElementById('screen2').style.display = 'none';
+                document.getElementById('screen1').style.display = 'flex';
+                document.getElementById('backBtn').style.display = 'none';
+                updateIndicators(1);
+            } else if (currentScreen === 3) {
+                currentScreen = 2;
+                document.getElementById('screen3').style.display = 'none';
+                document.getElementById('screen2').style.display = 'block';
+                updateIndicators(2);
+            } else if (currentScreen === 4) {
+                currentScreen = 3;
+                document.getElementById('screen4').style.display = 'none';
+                document.getElementById('screen3').style.display = 'block';
+                updateIndicators(3);
+            } else if (currentScreen === 5) {
+                currentScreen = 4;
+                document.getElementById('screen5').style.display = 'none';
+                document.getElementById('screen4').style.display = 'block';
+                updateIndicators(4);
+            } else if (currentScreen === 6) {
+                currentScreen = 5;
+                document.getElementById('screen6').style.display = 'none';
+                document.getElementById('screen5').style.display = 'block';
+                updateIndicators(5);
+            } else if (currentScreen === 7) {
+                currentScreen = 6;
+                document.getElementById('screen7').style.display = 'none';
+                document.getElementById('screen6').style.display = 'block';
+            }
+        }
+
+        function updateIndicators(stepNumber) {
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                if (index + 1 === stepNumber || (stepNumber > 5 && index + 1 === 5)) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function selectOption(element) {
+            const options = document.querySelectorAll('#screen2 .option-card');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function toggleChallenge(element) {
+            element.classList.toggle('selected');
+        }
+
+        function selectCardOption(element) {
+            const parent = element.parentElement;
+            const options = parent.querySelectorAll('.plan-date-card');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function updateSlider(val) {
+            let formattedVal = parseFloat(val).toFixed(1);
+            document.getElementById('scoreVal').innerText = formattedVal;
+            
+            const slider = document.getElementById('ieltsSlider');
+            const percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.background = `linear-gradient(to right, #2563eb 0%, #2563eb ${percentage}%, #e2e8f0 ${percentage}%, #e2e8f0 100%)`;
+        }
+
+        // КРАСИВАЯ АНИМАЦИЯ ПОДГОТОВКИ ПЛАНА ПЕРЕД ОТПРАВКОЙ (НОВОЕ!)
+        function finishOnboarding() {
+            // Скрываем итоговый экран и кнопку "Назад"
+            document.getElementById('screen7').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+            
+            // Показываем экран анимации
+            const loader = document.getElementById('loaderScreen');
+            loader.style.display = 'block';
+
+            // Динамический проброс значений в строки статуса загрузки
+            const bandScore = parseFloat(document.getElementById('ieltsSlider').value).toFixed(1);
+            const timeCard = document.querySelector('#screen6 .plan-date-card.selected');
+            const timeText = timeCard ? timeCard.querySelector('.card-main-title').innerText : '1 hour';
+            
+            document.getElementById('load-text2').innerText = `Structuring your Band ${bandScore} route...`;
+            document.getElementById('load-text3').innerText = `Creating daily ${timeText} practice blocks...`;
+
+            const steps = [
+                document.getElementById('load-step1'),
+                document.getElementById('load-step2'),
+                document.getElementById('load-step3'),
+                document.getElementById('load-step4')
+            ];
+
+            // Последовательный запуск микро-анимаций для шагов
+            setTimeout(() => {
+                steps[0].classList.add('active');
+            }, 200);
+
+            setTimeout(() => {
+                steps[0].classList.remove('active');
+                steps[0].classList.add('completed');
+                steps[1].classList.add('active');
+            }, 1000);
+
+            setTimeout(() => {
+                steps[1].classList.remove('active');
+                steps[1].classList.add('completed');
+                steps[2].classList.add('active');
+            }, 1900);
+
+            setTimeout(() => {
+                steps[2].classList.remove('active');
+                steps[2].classList.add('completed');
+                steps[3].classList.add('active');
+            }, 2700);
+
+            // Финал всей анимации: отмечаем последний шаг выполненным и делаем сабмит данных
+            setTimeout(() => {
+                steps[3].classList.remove('active');
+                steps[3].classList.add('completed');
+                
+                // Бесшовный переход к отправке на бэкенд
+                sendDataToBackend();
+            }, 3500);
+        }
+
+        // ОТПРАВКА ДАННЫХ НА DJANGO БЭКЕНД
+        function sendDataToBackend() {
+            const backgroundCard = document.querySelector('#screen2 .option-card.selected');
+            const backgroundText = backgroundCard ? backgroundCard.querySelector('.option-text').innerText : '';
+            
+            let backgroundKey = 'never';
+            if (backgroundText.includes('Ha, topshirganman')) backgroundKey = 'passed';
+            if (backgroundText.includes('Mock Exam')) backgroundKey = 'mock';
+
+            const wantResult = document.getElementById('ieltsSlider').value;
+
+            const challengeElements = document.querySelectorAll('.challenge-card.selected .challenge-label');
+            let challengesList = [];
+            challengeElements.forEach(el => challengesList.push(el.innerText));
+
+            const dateCard = document.querySelector('#screen5 .plan-date-card.selected');
+            const dateText = dateCard ? dateCard.querySelector('.card-main-title').innerText : '';
+            let dateKey = 'no_date';
+            if (dateText.includes('Less than a month')) dateKey = 'under_month';
+            if (dateText.includes('1–3 months')) dateKey = '1_3_months';
+            if (dateText.includes('3–6 months')) dateKey = '3_6_months';
+
+            const timeCard = document.querySelector('#screen6 .plan-date-card.selected');
+            const timeText = timeCard ? timeCard.querySelector('.card-main-title').innerText : '';
+            let timeKey = '1h';
+            if (timeText.includes('15 mins')) timeKey = '15m';
+            if (timeText.includes('30 mins')) timeKey = '30m';
+            if (timeText.includes('2+ hours')) timeKey = '2h_plus';
+
+            const payload = {
+                ielts_background: backgroundKey,
+                want_result: wantResult,
+                challenges: challengesList,
+                exam_timeline: dateKey,
+                daily_study_time: timeKey
+            };
+
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("{% url 'plans' %}", { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Проблема с ответом от сервера');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = "{% url 'oferta' %}"; 
+                } else {
+                    alert("Ошибка: " + data.message);
+                    // Возвращаем итоговый экран, если что-то пошло не так
+                    document.getElementById('loaderScreen').style.display = 'none';
+                    document.getElementById('screen7').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Не удалось связаться с сервером.");
+                document.getElementById('loaderScreen').style.display = 'none';
+                document.getElementById('screen7').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

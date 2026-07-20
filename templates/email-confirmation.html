@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Emailni tasdiqlash | IELTSPro{% endblock %}
+
+{% block extra_head %}
+<style>
+    body { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .auth-container { background-color: var(--card-bg); border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.04); width: 100%; max-width: 440px; padding: 40px; }
+    .auth-header { text-align: center; margin-bottom: 32px; }
+    .auth-header .logo { justify-content: center; margin-bottom: 16px; }
+    .auth-header h2 { font-size: 22px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+    .auth-header p { color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+    .otp-wrapper { display: flex; gap: 12px; justify-content: center; margin: 32px 0; }
+    .otp-input { width: 60px; height: 60px; border: 2px solid var(--border); border-radius: 16px; text-align: center; font-size: 24px; font-weight: 700; color: var(--text-main); background-color: #f8fafc; transition: all 0.2s; }
+    .otp-input:focus { outline: none; border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 4px var(--primary-light); }
+    .btn-auth { width: 100%; background-color: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-auth:hover { background-color: #1d4ed8; }
+    .switch-link { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted); }
+    .switch-link a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
+    .switch-link a.disabled { color: var(--text-muted); cursor: not-allowed; font-weight: 500; }
+    .error-msg { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 20px; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <div class="logo">IELTS<span>Pro</span></div>
+        <h2>Kod yuborildi 📩</h2>
+        <p>Biz siz ko'rsatgan <b>{{ email }}</b> elektron pochta manziliga tasdiqlash kodini yubordik.</p>
+    </div>
+
+    {% if error %}
+    <div class="error-msg">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="otp-wrapper">
+            <input type="text" name="otp_1" class="otp-input" maxlength="1" required autocomplete="off">
+            <input type="text" name="otp_2" class="otp-input" maxlength="1" required autocomplete="off">
+            <input type="text" name="otp_3" class="otp-input" maxlength="1" required autocomplete="off">
+            <input type="text" name="otp_4" class="otp-input" maxlength="1" required autocomplete="off">
+        </div>
+        <button type="submit" class="btn-auth">Tasdiqlash</button>
+    </form>
+
+    <div class="switch-link">
+        Kod kelmadimi? <a id="resendBtn" class="disabled">Kodni qayta yuborish (59s)</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (e.target.value.length > 1) {
+                e.target.value = e.target.value.slice(0, 1);
+            }
+            if (e.target.value && index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+
+    let timeLeft = 59;
+    const resendBtn = document.getElementById('resendBtn');
+    const timer = setInterval(() => {
+        if(timeLeft <= 0) {
+            clearInterval(timer);
+            resendBtn.innerText = "Kodni qayta yuborish";
+            resendBtn.classList.remove('disabled');
+        } else {
+            resendBtn.innerText = `Kodni qayta yuborish (${timeLeft}s)`;
+            timeLeft--;
+        }
+    }, 1000);
+</script>
+{% endblock %}

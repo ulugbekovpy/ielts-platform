@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /
+
+
+AddHandler wsgi-script .py
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ ieltspro/wsgi.py/$1 [QSA,L]

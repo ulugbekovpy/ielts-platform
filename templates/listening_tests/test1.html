@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTSPro CD-IELTS Listening Test</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --brand-blue: #2563eb;       
+            --brand-dark: #0f172a;       
+            --ielts-gray: #f1f5f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition-smooth: all 0.2s ease;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            overflow: hidden;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .test-wrapper { display: flex; flex-direction: column; height: 100vh; }
+        
+        /* 1. TOP NAV - CD-IELTS STYLE */
+        .top-nav {
+            background-color: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 65px;
+            z-index: 100;
+        }
+
+        .ielts-test-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ielts-test-title span {
+            color: var(--brand-blue);
+        }
+
+        /* CENTERED AUDIO PLAYER */
+        .cd-audio-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--ielts-gray);
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            min-width: 320px;
+        }
+        .play-btn {
+            background: var(--brand-blue);
+            border: none;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: var(--transition-smooth);
+        }
+        .play-btn:hover { background: #1d4ed8; }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: #cbd5e1;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--brand-blue);
+            border-radius: 3px;
+        }
+        .track-time {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .header-timer {
+            font-size: 18px;
+            font-weight: 700;
+            color: #dc2626;
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        /* 2. MAIN WORKSPACE (FULL WIDTH) */
+        .workspace {
+            flex: 1;
+            padding: 40px 10%;
+            overflow-y: auto;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .workspace-inner {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* CD-IELTS Instructions Card */
+        .instruction-card {
+            background: #f8fafc;
+            border-left: 4px solid var(--brand-blue);
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+            color: #334155;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .question-section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            margin-bottom: 16px;
+        }
+
+        .notes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .note-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            color: #334155;
+            flex-wrap: wrap;
+            line-height: 1.6;
+        }
+
+        .q-num-badge {
+            background: var(--ielts-gray);
+            border: 1px solid #cbd5e1;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--brand-dark);
+        }
+
+        .blank-input {
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 6px 12px;
+            outline: none;
+            font-size: 15px;
+            width: 170px;
+            color: var(--brand-dark);
+            background: #f8fafc;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+
+        .blank-input:focus {
+            border-color: var(--brand-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Highlighter */
+        .hl-active-text {
+            background-color: #fde047;
+            color: #000000;
+        }
+
+        /* Highlight Popover */
+        .highlight-tooltip {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            padding: 5px 8px;
+            display: none;
+            gap: 8px;
+            z-index: 1000;
+            align-items: center;
+        }
+        .tool-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        .tool-btn:hover { background: #f1f5f9; }
+
+        /* 3. BOTTOM CD-IELTS NAVIGATION STRIP */
+        .bottom-nav {
+            background-color: #ffffff;
+            border-top: 2px solid #e2e8f0;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 75px;
+            z-index: 100;
+        }
+
+        .navigation-grid {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .q-nav-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            width: 32px;
+            height: 32px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+
+        .q-nav-btn:hover {
+            border-color: var(--brand-blue);
+            color: var(--brand-blue);
+        }
+
+        .q-nav-btn.filled {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: var(--brand-blue);
+        }
+
+        .q-nav-btn.active-focus {
+            background: var(--brand-blue);
+            border-color: var(--brand-blue);
+            color: #ffffff;
+        }
+
+        .btn-submit {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 10px rgba(22, 163, 74, 0.15);
+        }
+
+        .btn-submit:hover {
+            background-color: #15803d;
+            transform: translateY(-1px);
+        }
+
+        /* Modal Analytics Box */
+        .modal {
+            display: none; position: fixed; z-index: 3000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4); align-items: center;
+            justify-content: center; backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background: #ffffff; border-radius: 16px; padding: 2.5rem;
+            max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ТЕГ НАСТОЯЩЕГО АУДИО (Сюда передаем динамический URL из Django) -->
+    <audio id="listening-audio" src="https://ia601905.us.archive.org/28/items/test-1_20260715/test%201.mp3"></audio>
+
+    <div class="test-wrapper">
+        
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="ielts-test-title">
+                IELTS<span>Pro</span> &middot; Daily Listening Practice
+            </div>
+
+            <!-- CD-IELTS AUDIO CONTROLLER -->
+            <div class="cd-audio-player">
+                <button class="play-btn" id="audio-play-btn">▶</button>
+                <div class="progress-bar" id="audio-progress-bar">
+                    <div class="progress-fill" id="audio-progress-fill"></div>
+                </div>
+                <div class="track-time" id="audio-time-lbl">0:00 / 0:00</div>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="header-timer" id="timer">30:00</div>
+        </div>
+
+        <!-- Main Test Workspace -->
+        <main class="workspace" id="test-workspace">
+            <div class="workspace-inner">
+                
+                <div class="question-section">
+                    <h2 class="section-title">Questions 1-10</h2>
+                    
+                    <div class="instruction-card">
+                        Complete the notes below.<br>
+                        Write <strong>ONE WORD ONLY</strong> for each answer.
+                    </div>
+
+                    <ul class="notes-list">
+                        <li class="note-item">• Participants must be at least 16 years old.</li>
+                        
+                        <li class="note-item">
+                            • Bring suitable clothing, a 
+                            <span class="q-num-badge">1</span> 
+                            <input type="text" class="blank-input" data-q="1" placeholder="Answer 1"> 
+                            and toiletries.
+                        </li>
+                        
+                        <li class="note-item">
+                            • There is a 
+                            <span class="q-num-badge">2</span> 
+                            <input type="text" class="blank-input" data-q="2" placeholder="Answer 2"> 
+                            available at the club.
+                        </li>
+                        
+                        <li class="note-item">
+                            • Online training 
+                            <span class="q-num-badge">3</span> 
+                            <input type="text" class="blank-input" data-q="3" placeholder="Answer 3"> 
+                            are highly recommended.
+                        </li>
+                        
+                        <li class="note-item">
+                            • 
+                            <span class="q-num-badge">4</span> 
+                            <input type="text" class="blank-input" data-q="4" placeholder="Answer 4"> 
+                            are available for course participants.
+                        </li>
+                        
+                        <li class="note-item">
+                            • Final seminar date is scheduled on 
+                            <span class="q-num-badge">5</span> 
+                            <input type="text" class="blank-input" data-q="5" placeholder="Answer 5"> 
+                            afternoon.
+                        </li>
+
+                        <li class="note-item">
+                            • The main conference hall is located next to the 
+                            <span class="q-num-badge">6</span> 
+                            <input type="text" class="blank-input" data-q="6" placeholder="Answer 6">.
+                        </li>
+
+                        <li class="note-item">
+                            • Make sure to register before the end of 
+                            <span class="q-num-badge">7</span> 
+                            <input type="text" class="blank-input" data-q="7" placeholder="Answer 7">.
+                        </li>
+
+                        <li class="note-item">
+                            • Please notify the manager if you need a special 
+                            <span class="q-num-badge">8</span> 
+                            <input type="text" class="blank-input" data-q="8" placeholder="Answer 8">.
+                        </li>
+
+                        <li class="note-item">
+                            • The total price includes access to the private 
+                            <span class="q-num-badge">9</span> 
+                            <input type="text" class="blank-input" data-q="9" placeholder="Answer 9">.
+                        </li>
+
+                        <li class="note-item">
+                            • All graduates will receive an official 
+                            <span class="q-num-badge">10</span> 
+                            <input type="text" class="blank-input" data-q="10" placeholder="Answer 10"> 
+                            by mail.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Popover Highlight Tool -->
+            <div class="highlight-tooltip" id="hl-tooltip">
+                <button class="tool-btn" id="hl-apply-btn" title="Highlight">🖌️</button>
+                <button class="tool-btn" id="hl-clear-btn" title="Clear">❌</button>
+            </div>
+        </main>
+
+        <!-- Bottom CD-IELTS Navigation Strip -->
+        <footer class="bottom-nav">
+            <div class="navigation-grid">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Questions:</span>
+                <button class="q-nav-btn" id="nav-btn-1" onclick="focusInput(1)">1</button>
+                <button class="q-nav-btn" id="nav-btn-2" onclick="focusInput(2)">2</button>
+                <button class="q-nav-btn" id="nav-btn-3" onclick="focusInput(3)">3</button>
+                <button class="q-nav-btn" id="nav-btn-4" onclick="focusInput(4)">4</button>
+                <button class="q-nav-btn" id="nav-btn-5" onclick="focusInput(5)">5</button>
+                <button class="q-nav-btn" id="nav-btn-6" onclick="focusInput(6)">6</button>
+                <button class="q-nav-btn" id="nav-btn-7" onclick="focusInput(7)">7</button>
+                <button class="q-nav-btn" id="nav-btn-8" onclick="focusInput(8)">8</button>
+                <button class="q-nav-btn" id="nav-btn-9" onclick="focusInput(9)">9</button>
+                <button class="q-nav-btn" id="nav-btn-10" onclick="focusInput(10)">10</button>
+            </div>
+
+            <button onclick="submitAnswers()" class="btn-submit" id="submitBtn">
+                <span>Submit Test</span> <i class="fas fa-paper-plane"></i>
+            </button>
+        </footer>
+
+    </div>
+
+    <!-- IELTSPro Submission Analytics Modal -->
+    <div class="modal" id="submissionModal">
+        <div class="modal-content !max-w-2xl !p-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                <h2 class="text-xl font-bold text-slate-900 !margin-0 !text-left">Listening Test Results</h2>
+                <div class="flex items-center gap-2 text-sm text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                    <i class="far fa-clock text-blue-500"></i>
+                    <span id="feedbackMessage" class="font-medium !margin-0">00:00</span>
+                </div>
+            </div>
+          
+            <!-- Performance Dashboard -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-50 border border-slate-200/60 rounded-xl p-4 text-center">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Total Score</span>
+                    <div id="scoreDisplay" class="text-3xl font-extrabold text-slate-800">0 / 10</div>
+                </div>
+                <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 text-center">
+                    <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider block mb-1">IELTS Band Indicator</span>
+                    <div id="bandDisplay" class="text-4xl font-black text-blue-600 leading-none">4.0</div>
+                </div>
+            </div>
+
+            <!-- Detailed feedback list -->
+            <div class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3" id="detailedResults">
+                <!-- Renders dynamically -->
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 mt-6 flex gap-3">
+                <button onclick="document.getElementById('submissionModal').style.display='none'" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl transition text-sm">
+                    Review Answers
+                </button>
+                <a href="{% url 'dashboard' %}" class="flex-1">
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition text-sm !margin-0">
+                        Finish & Return
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /*** OFFICIAL LISTENING KEY (Questions 1-10) ***/
+        const ANSWER_KEY = {
+            1: 'backpack', 
+            2: 'pool', 
+            3: 'lessons', 
+            4: 'discounts', 
+            5: 'friday',
+            6: 'library',
+            7: 'august',
+            8: 'diet',
+            9: 'garden',
+            10: 'certificate'
+        };
+
+        const Q_NUMS = [1,2,3,4,5,6,7,8,9,10];
+        const TOTAL_QUESTIONS = Q_NUMS.length;
+
+        // REAL AUDIO ENGINE INTEGRATION
+        const audio = document.getElementById('listening-audio');
+        const playBtn = document.getElementById('audio-play-btn');
+        const progressFill = document.getElementById('audio-progress-fill');
+        const progressBar = document.getElementById('audio-progress-bar');
+        const timeLbl = document.getElementById('audio-time-lbl');
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' + s : s}`;
+        }
+
+        // Play / Pause Toggle
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = "⏸";
+            } else {
+                audio.pause();
+                playBtn.innerHTML = "▶";
+            }
+        });
+
+        // Update Progress Bar & Timer Labels
+        audio.addEventListener('timeupdate', () => {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = `${pct}%`;
+            timeLbl.innerHTML = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration || 0)}`;
+        });
+
+        // Seek Audio on Progress Bar Click
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const pct = clickX / rect.width;
+            audio.currentTime = pct * audio.duration;
+        });
+
+        // Countdown Timer simulation (CD-IELTS 30-minute standard limit)
+        let secondsLeft = 1800; // 30 minutes
+        let testSubmitted = false;
+        const timerEl = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            if (testSubmitted) {
+                clearInterval(countdown);
+                return;
+            }
+            secondsLeft--;
+            const m = Math.floor(secondsLeft / 60);
+            const s = secondsLeft % 60;
+            timerEl.innerHTML = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            
+            if (secondsLeft <= 0) {
+                clearInterval(countdown);
+                submitAnswers();
+            }
+        }, 1000);
+
+        // UI Helpers
+        function focusInput(qNum) {
+            const input = document.querySelector(`.blank-input[data-q="${qNum}"]`);
+            if (input) {
+                input.focus();
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function getVal(i) {
+            const el = document.querySelector(`.blank-input[data-q="${i}"]`);
+            return el ? el.value.trim() : '';
+        }
+
+        // Monitoring user input & highlighted states
+        document.querySelectorAll('.blank-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const qNum = input.getAttribute('data-q');
+                const btn = document.getElementById(`nav-btn-${qNum}`);
+                if (btn) {
+                    btn.classList.toggle('filled', input.value.trim() !== "");
+                }
+            });
+
+            input.addEventListener('focus', () => {
+                const qNum = input.getAttribute('data-q');
+                document.querySelectorAll('.q-nav-btn').forEach(b => b.classList.remove('active-focus'));
+                const activeBtn = document.getElementById(`nav-btn-${qNum}`);
+                if (activeBtn) activeBtn.classList.add('active-focus');
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const qNum = parseInt(input.getAttribute('data-q'));
+                    focusInput(qNum + 1);
+                }
+            });
+        });
+
+        // IELTS Band Scoring Matrix (Out of 10)
+        function getIELTSBand(score) {
+            if (score >= 9) return 9.0;
+            if (score === 8) return 8.0;
+            if (score === 7) return 7.0;
+            if (score === 6) return 6.5;
+            if (score === 5) return 6.0;
+            if (score === 4) return 5.5;
+            if (score === 3) return 5.0;
+            if (score === 2) return 4.5;
+            return 4.0;
+        }
+
+        // Submit Logic & Django REST Fetch Integration
+        function submitAnswers() {
+            if (testSubmitted) return;
+            testSubmitted = true;
+            audio.pause(); // Stop listening player
+
+            let correct = 0;
+            const results = {};
+
+            Q_NUMS.forEach(i => {
+                const userAns = getVal(i).toLowerCase().trim();
+                const correctAns = ANSWER_KEY[i].toLowerCase().trim();
+                const isCorrect = userAns === correctAns;
+                
+                if (isCorrect) correct++;
+                results[i] = { answer: getVal(i), isCorrect };
+            });
+
+            const calculatedBand = getIELTSBand(correct);
+            const timeSpentSec = 1800 - secondsLeft;
+            const elapsed = `${String(Math.floor(timeSpentSec/60)).padStart(2,'0')}:${String(timeSpentSec%60).padStart(2,'0')}`;
+
+            // Django AJAX POST Submission
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    score: correct,
+                    band: calculatedBand,
+                    time_spent: elapsed
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Success backend payload transfer:", data.message))
+            .catch(err => console.error("Database communication failure:", err));
+
+            // Populate modern CD-IELTS feedback modal
+            document.getElementById('scoreDisplay').innerHTML = `<span class="text-slate-800">${correct}</span><span class="text-slate-400 text-lg font-normal"> / ${TOTAL_QUESTIONS}</span>`;
+            document.getElementById('bandDisplay').textContent = calculatedBand.toFixed(1);
+            document.getElementById('feedbackMessage').textContent = elapsed;
+
+            let html = '';
+            Q_NUMS.forEach(i => {
+                const r = results[i];
+                const userAns = r.answer ? r.answer : 'No Answer';
+                
+                if (r.isCorrect) {
+                    html += `
+                    <div class="flex items-start justify-between bg-emerald-50/40 border border-emerald-100 rounded-xl p-3.5 transition-all">
+                        <div class="flex gap-3">
+                            <span class="flex items-center justify-center w-6 h-6 bg-emerald-500 text-white rounded-md text-xs font-bold shrink-0">${i}</span>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-800">Correct</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Perfect match with actual audiotape audio script.</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-md">${userAns}</span>
+                        </div>
+                    </div>`;
+                } else {
+                    html += `
+                    <div class="flex flex-col gap-2.5 bg-rose-50/30 border border-rose-100 rounded-xl p-3.5 transition-all">
+                        <div class="flex items-start justify-between">
+                            <div class="flex gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 bg-rose-500 text-white rounded-md text-xs font-bold shrink-0">${i}</span>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800">Incorrect</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Please check word spelling rules or grammar errors.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 border-t border-rose-100/60 pt-2 mt-0.5 text-xs">
+                            <div>
+                                <span class="text-slate-400 block mb-0.5">Your Submission:</span>
+                                <span class="font-bold text-rose-600 line-through bg-rose-50 px-2 py-0.5 rounded border border-rose-100">${userAns}</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block mb-0.5">Correct Answer Key:</span>
+                                <span class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">${ANSWER_KEY[i]}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            document.getElementById('detailedResults').innerHTML = html;
+            document.getElementById('submissionModal').style.display = 'flex';
+        }
+
+        // TEXT HIGHLIGHT TOOL
+        const workspace = document.getElementById('test-workspace');
+        const tooltip = document.getElementById('hl-tooltip');
+
+        workspace.addEventListener('mouseup', () => {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0 && !selection.isCollapsed && selection.toString().trim().length > 0) {
+                const rect = selection.getRangeAt(0).getBoundingClientRect();
+                const workspaceRect = workspace.getBoundingClientRect();
+                
+                tooltip.style.left = `${rect.left - workspaceRect.left + workspace.scrollLeft}px`;
+                tooltip.style.top = `${rect.top - workspaceRect.top + workspace.scrollTop - 40}px`;
+                tooltip.style.display = 'flex';
+            } else {
+                tooltip.style.display = 'none';
+            }
+        });
+
+        document.getElementById('hl-apply-btn').addEventListener('click', () => {
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) return;
+
+            const range = selection.getRangeAt(0);
+            const span = document.createElement('span');
+            span.className = 'hl-active-text';
+            range.surroundContents(span);
+            selection.removeAllRanges();
+            tooltip.style.display = 'none';
+        });
+
+        document.getElementById('hl-clear-btn').addEventListener('click', () => {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const parent = selection.anchorNode.parentNode;
+            if (parent && parent.classList.contains('hl-active-text')) {
+                const textNode = document.createTextNode(parent.textContent);
+                parent.parentNode.replaceChild(textNode, parent);
+            }
+            tooltip.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Maqsadlarni belgilash | IELTSPro{% endblock %}
+
+{% block extra_head %}
+<style>
+    body { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .plans-container { background-color: var(--card-bg); border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.04); width: 100%; max-width: 520px; padding: 40px; }
+    .plans-header { text-align: center; margin-bottom: 32px; }
+    .plans-header .logo { justify-content: center; margin-bottom: 16px; }
+    .step-indicator { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 24px; }
+    .step-dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--border); transition: all 0.3s; }
+    .step-dot.active { background-color: var(--primary); width: 24px; border-radius: 5px; }
+    .step-content { display: none; }
+    .step-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .step-title-block h3 { font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; text-align: center;}
+    .step-title-block p { color: var(--text-muted); font-size: 14px; margin-bottom: 32px; text-align: center;}
+    .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 32px; }
+    .option-card { border: 2px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s; background: #f8fafc;}
+    .option-card:hover { border-color: #cbd5e1; background: #f1f5f9;}
+    .option-card.selected { border-color: var(--primary); background-color: var(--primary-light); }
+    .option-title { font-weight: 600; font-size: 15px; color: var(--text-main); }
+    .option-radio { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .option-card.selected .option-radio { border-color: var(--primary); background-color: var(--primary); }
+    .option-card.selected .option-radio::after { content: ''; width: 8px; height: 8px; background-color: #fff; border-radius: 50%; }
+    .btn-row { display: flex; gap: 12px; }
+    .btn-next, .btn-submit { flex: 1; background-color: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; text-align: center;}
+    .btn-next:hover, .btn-submit:hover { background-color: #1d4ed8; }
+    .btn-back { background-color: #f1f5f9; color: var(--text-muted); border: none; padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-back:hover { background-color: #e2e8f0; color: var(--text-main); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="plans-container">
+    <div class="plans-header">
+        <div class="logo">IELTS<span>Pro</span></div>
+    </div>
+
+    <div class="step-indicator">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+    </div>
+
+    <div class="step-title-block">
+        <h3 id="step-title">Hozirgi darajangiz</h3>
+        <p id="step-desc">O'quv rejasini tuzish uchun ma'lumot</p>
+    </div>
+
+    <form id="multiStepForm" method="POST" action="{% url 'plans' %}">
+        {% csrf_token %}
+        <input type="hidden" name="has_result" id="has_result_input">
+        <input type="hidden" name="want_result" id="want_result_input">
+
+        <div class="step-content active" id="step1">
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption('has_result', 'Ha, topshirganman', this)">
+                    <span class="option-title">Ha, topshirganman</span>
+                    <div class="option-radio"></div>
+                </div>
+                <div class="option-card" onclick="selectOption('has_result', 'Yo'q, birinchi marta', this)">
+                    <span class="option-title">Yo'q, birinchi marta</span>
+                    <div class="option-radio"></div>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn-next" onclick="nextStep(2)">Davom etish</button>
+            </div>
+        </div>
+
+        <div class="step-content" id="step2">
+            <div class="options-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="option-card" onclick="selectOption('has_result_val', '5.0', this)"><span class="option-title">5.0</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('has_result_val', '5.5', this)"><span class="option-title">5.5</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('has_result_val', '6.0', this)"><span class="option-title">6.0</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('has_result_val', '6.5', this)"><span class="option-title">6.5</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('has_result_val', '7.0', this)"><span class="option-title">7.0</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('has_result_val', '7.5+', this)"><span class="option-title">7.5+</span><div class="option-radio"></div></div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn-back" onclick="nextStep(-2)">Orqaga</button>
+                <button type="button" class="btn-next" onclick="nextStep(3)">Davom etish</button>
+            </div>
+        </div>
+
+        <div class="step-content" id="step3">
+            <div class="options-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="option-card" onclick="selectOption('want_result', '6.0', this)"><span class="option-title">6.0</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('want_result', '6.5', this)"><span class="option-title">6.5</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('want_result', '7.0', this)"><span class="option-title">7.0</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('want_result', '7.5', this)"><span class="option-title">7.5</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('want_result', '8.0', this)"><span class="option-title">8.0</span><div class="option-radio"></div></div>
+                <div class="option-card" onclick="selectOption('want_result', '8.5+', this)"><span class="option-title">8.5+</span><div class="option-radio"></div></div>
+            </div>
+            <div class="btn-row">
+                <button type="button" class="btn-back" onclick="nextStep(-3)">Orqaga</button>
+                <button type="submit" class="btn-submit">Boshlash 🎉</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectOption(type, value, element) {
+        const siblings = element.parentNode.querySelectorAll('.option-card');
+        siblings.forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        
+        if (type === 'has_result' || type === 'has_result_val') {
+            document.getElementById('has_result_input').value = value;
+        } else if (type === 'want_result') {
+            document.getElementById('want_result_input').value = value;
+        }
+    }
+
+    function nextStep(step) {
+        if (step === 2) {
+            const hasResult = document.getElementById('has_result_input').value;
+            if (!hasResult) { alert("Iltimos, variantlardan birini tanlang!"); return; }
+            if (hasResult === "Yo'q, birinchi marta") {
+                document.getElementById('has_result_input').value = "Birinchi marta";
+                switchActiveStep('step1', 'step3', 'dot1', 'dot3', "Maqsadli ballingiz", "Orzungizdagi natijani belgilang");
+            } else {
+                switchActiveStep('step1', 'step2', 'dot1', 'dot2', "Hozirgi darajangiz", "Oxirgi marta olgan balingizni belgilang");
+            }
+        } 
+        else if (step === -2) {
+            switchActiveStep('step2', 'step1', 'dot2', 'dot1', "Hozirgi darajangiz", "O'quv rejasini tuzish uchun ma'lumot");
+        } 
+        else if (step === 3) {
+            const hasResult = document.getElementById('has_result_input').value;
+            if (!hasResult) { alert("Iltimos, darajangizni tanlang!"); return; }
+            switchActiveStep('step2', 'step3', 'dot2', 'dot3', "Maqsadli ballingiz", "Orzungizdagi natijani belgilang");
+        } 
+        else if (step === -3) {
+            const hasResult = document.getElementById('has_result_input').value;
+            if (hasResult === "Birinchi marta") {
+                switchActiveStep('step3', 'step1', 'dot3', 'dot1', "Hozirgi darajangiz", "O'quv rejasini tuzish uchun ma'lumot");
+            } else {
+                switchActiveStep('step3', 'step2', 'dot3', 'dot2', "Hozirgi darajangiz", "Oxirgi marta olgan balingizni belgilang");
+            }
+        }
+    }
+
+    function switchActiveStep(hideId, showId, hideDot, showDot, title, desc) {
+        document.getElementById(hideId).classList.remove('active');
+        document.getElementById(showId).classList.add('active');
+        document.getElementById(hideDot).classList.remove('active');
+        document.getElementById(showDot).classList.add('active');
+        document.getElementById('step-title').innerText = title;
+        document.getElementById('step-desc').innerText = desc;
+    }
+</script>
+{% endblock %}

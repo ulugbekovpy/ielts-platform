@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IELTS Reading Test – The Early History of Olive Oil (Q1–13) | IeltsPro</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      overflow: hidden;
+      color: #0f172a;
+    }
+    .test-wrapper { display:flex; flex-direction:column; height:100vh; }
+    .test-container { display:flex; flex:1; overflow:hidden; }
+
+    /* Header IeltsPro Style */
+    .header{
+      background:#ffffff; border-bottom:1px solid #e2e8f0;
+      padding:0.75rem 2rem; display:flex;
+      justify-content:space-between; align-items:center;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      gap:1rem; flex-wrap:wrap;
+    }
+    .header__logo { display:flex; align-items:center; gap:.5rem; font-weight: 800; font-size: 1.3rem; color: #2563eb; letter-spacing: -0.025em;}
+    .header__title { font-size:1rem; font-weight:500; color:#475569; border-left: 1px solid #e2e8f0; padding-left: 1rem; flex:1; min-width:300px; }
+    .header__timer{
+      font-size:1.1rem; font-weight:600; color:#2563eb;
+      background:#eff6ff; padding:.4rem 1.2rem;
+      border-radius:8px; border:1px solid #bfdbfe;
+      transition:all .3s ease; white-space:nowrap;
+    }
+    .header__icons { display:flex; gap:1rem; align-items:center; }
+    .header__icon{ font-size:1.25rem; color:#94a3b8; cursor:pointer; transition:all .2s ease; }
+    .header__icon:hover { color:#2563eb; }
+
+    /* Modern Progress Indicators */
+    .answer-indicators{
+      display:flex; gap:0.4rem; flex-wrap:wrap;
+      padding:0.75rem 2rem; background:#ffffff;
+      border-bottom:1px solid #e2e8f0; align-items:center; font-size:0.8rem;
+    }
+    .indicator-label { font-weight:600; color:#64748b; margin-right:0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem;}
+    .answer-circle{
+      width:2rem; height:2rem; border-radius:6px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:600; cursor:default; transition:all .2s ease;
+      border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; font-size:0.8rem;
+    }
+    .answer-circle.answered{ background:#2563eb; border-color:#2563eb; color:#fff; }
+    .answer-circle.unanswered{ background:#fef2f2; border-color:#fee2e2; color:#ef4444; }
+
+    /* Rubric IeltsPro */
+    .sectionRubric{
+      margin:1.25rem; padding:1.25rem; background:#ffffff;
+      border:1px solid #e2e8f0; border-radius:12px;
+    }
+    .sectionRubric h2 { font-size:1.1rem; color:#0f172a; margin-bottom:.5rem; font-weight:700; }
+    .sectionRubric p { margin:0.4rem 0; color:#475569; font-size:0.9rem; line-height: 1.5; }
+
+    /* Panels Layout */
+    .passage-container{
+      width:45%; height:100%; overflow-y:auto;
+      padding:2rem; box-sizing:border-box;
+      background:#ffffff; border-right:1px solid #e2e8f0;
+      position:relative; user-select:text; -webkit-user-select:text;
+    }
+    .questions-container{
+      flex:1; height:100%; overflow-y:auto;
+      padding:2rem; box-sizing:border-box;
+      background:#f8fafc; position:relative;
+      user-select:text; -webkit-user-select:text;
+    }
+    .passage-container::-webkit-scrollbar,
+    .questions-container::-webkit-scrollbar { width:6px; }
+    .passage-container::-webkit-scrollbar-track,
+    .questions-container::-webkit-scrollbar-track { background:#f1f5f9; }
+    .passage-container::-webkit-scrollbar-thumb,
+    .questions-container::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:10px; }
+
+    /* Minimalist Divider */
+    .divider { width:10px; background:#e2e8f0; cursor:col-resize; position:relative; transition: background 0.2s; }
+    .divider:hover { background: #cbd5e1; }
+    .divider-handle{
+      width:4px; height:40px; background:#94a3b8; border-radius:4px;
+      position:absolute; top:50%; left:3px; transform:translateY(-50%);
+    }
+
+    /* Highlight Tool */
+    .highlight { border-radius:2px; padding:0 1px; }
+    .highlight.yellow { background: rgba(254, 240, 138, 0.85); }
+    .highlight.green  { background: rgba(187, 247, 208, 0.85); }
+    .highlight.pink   { background: rgba(251, 207, 232, 0.85); }
+    .highlight.blue   { background: rgba(191, 219, 254, 0.85); }
+    .highlight.purple { background: rgba(233, 213, 255, 0.85); }
+    .highlight.red    { background: rgba(254, 226, 226, 0.85); }
+
+    .highlight-toolbar{
+      position:fixed; background:#ffffff;
+      border:1px solid #e2e8f0; border-radius:8px;
+      box-shadow:0 10px 25px -5px rgba(0,0,0,0.1);
+      display:none; z-index:2000; padding:.4rem;
+      transform:translate(-50%,-100%); margin-top:-.5rem;
+      gap:.35rem; align-items:center; flex-direction:row;
+    }
+    .highlight-toolbar button{
+      background:none; border:none; width:1.75rem; height:1.75rem;
+      cursor:pointer; border-radius:4px; transition:all .2s ease;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .highlight-toolbar button:hover { background:#f1f5f9; }
+    .highlight-toolbar button.remove { color:#ef4444; width:auto; padding:0 .4rem; gap:.25rem; font-weight: 500;}
+    .highlight-color { width:1.2rem; height:1.2rem; border-radius:50%; border:1px solid rgba(0,0,0,0.1); }
+    .highlight-color.yellow { background:#fef08a; }
+    .highlight-color.green  { background:#bbf7d0; }
+    .highlight-color.pink   { background:#fbcfe8; }
+    .highlight-color.blue   { background:#bfdbfe; }
+    .highlight-color.purple { background:#e9d5ff; }
+    .highlight-color.red    { background:#fee2e2; }
+
+    /* Typography & Passage Design */
+    #passageContent { line-height:1.75; font-size:1.05rem; color:#334155; }
+    #passageContent h2 { margin:0 0 0.5rem; line-height:1.2; color:#0f172a; font-size:1.5rem; font-weight:800; letter-spacing: -0.02em; }
+    #passageContent p { margin:1rem 0; text-align:justify; }
+    .para-label { font-weight:700; color:#2563eb; background: #eff6ff; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; margin-right: 0.25rem;}
+
+    /* Modern Question Cards */
+    .questionCard{
+      background:#ffffff; border:1px solid #e2e8f0;
+      border-radius:12px; padding:1.25rem; margin-bottom:1rem;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02); transition:all .2s ease;
+    }
+    .questionCard:hover { border-color: #cbd5e1; }
+    .questionCard h3 { font-size:0.95rem; color:#64748b; margin-bottom:.5rem; font-weight:600; text-transform: uppercase; letter-spacing: 0.05em;}
+    .questionCard p { margin:0 0 .75rem; color:#0f172a; font-weight: 500; font-size: 1rem; line-height: 1.5; }
+
+    /* Unified Options */
+    .tfng-options { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.5rem; }
+    .tfng-btn{
+      padding:0.4rem 1rem; border:1px solid #e2e8f0; border-radius:8px;
+      font-size:0.85rem; font-weight:500; cursor:pointer; background:#fff;
+      transition:all .15s ease; color:#475569;
+    }
+    .tfng-btn:hover { border-color:#cbd5e1; background: #f8fafc; color:#0f172a; }
+    .tfng-btn.active-choice { background:#2563eb !important; border-color:#2563eb !important; color:#ffffff !important; font-weight: 600; }
+
+    /* Note Completion Structure */
+    .notes-group { margin-bottom:0.5rem; }
+    .notes-group-label {
+      font-weight:600; color:#0f172a; font-size:0.95rem; margin-bottom:0.5rem;
+      padding-bottom: 0.25rem; border-bottom: 2px solid #e2e8f0; display:block;
+    }
+    .notes-group ul { margin:0.5rem 0 0 0; padding-left:0; list-style: none; }
+    .notes-group li { margin:0.75rem 0; line-height:1.7; font-size:0.95rem; display:flex; align-items:center; flex-wrap:wrap; gap:0.4rem; color: #334155;}
+
+    /* Flat Modern Inputs */
+    .q-input {
+      width:140px; padding:.25rem .5rem;
+      border:1px solid #e2e8f0; border-radius: 6px;
+      font-size:0.9rem; background:#f8fafc; transition:all .15s;
+      color: #0f172a; font-weight: 600;
+    }
+    .q-input:focus { outline:none; border-color:#2563eb; background: #fff; box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
+    .blank-num{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:1.4rem; height:1.4rem; background:#e2e8f0; color:#475569;
+      border-radius:4px; font-size:0.75rem; font-weight:700; flex-shrink:0;
+    }
+
+    /* Submit IeltsPro Button */
+    .submit-container { padding:2rem 1.5rem 3rem; text-align:center; }
+    #submitBtn{
+      background:#2563eb;
+      color:#fff; padding:0.8rem 2.5rem; border:none; border-radius:10px;
+      font-size:1rem; font-weight:600; cursor:pointer; transition:all .2s ease;
+    }
+    #submitBtn:hover { background: #1d4ed8; }
+
+    /* Modal Layout Base */
+    .modal{
+      display:none; position:fixed; z-index:3000;
+      left:0; top:0; width:100%; height:100%;
+      background:rgba(15, 23, 42, 0.4); align-items:center;
+      justify-content:center; backdrop-filter:blur(8px);
+    }
+    .modal-content{
+      background:#ffffff; border-radius:16px; padding:2.5rem;
+      max-width:560px; width:90%; max-height:85vh; overflow-y:auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* High contrast configuration */
+    body.high-contrast { background:#0a0a0a; color:#f8fafc; }
+    body.high-contrast .passage-container,
+    body.high-contrast .questions-container { background:#121212; color:#f8fafc; }
+    body.high-contrast .questionCard,
+    body.high-contrast .sectionRubric,
+    body.high-contrast .header,
+    body.high-contrast .answer-indicators { background:#1e1e1e; border-color:#2d2d2d; color:#f8fafc; }
+    body.high-contrast #passageContent, body.high-contrast .questionCard p { color:#e2e8f0; }
+    body.high-contrast .tfng-btn { background:#2d2d2d; color:#e2e8f0; border-color: #404040; }
+    body.high-contrast .notes-group-label { border-color:#404040; color: #fff;}
+    body.high-contrast .q-input { background: #2d2d2d; border-color: #404040; color: #fff; }
+    .logo { font-size: 24px; font-weight: 800; color: #000000; }
+    .logo span { color: #2563eb; }
+  </style>
+</head>
+<body>
+<div class="test-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header__logo">
+      <div class="logo">IELTS<span>Pro</span></div>
+      <span class="header__title">Reading Practice — The Early History of Olive Oil</span>
+    </div>
+    <div class="header__timer" id="timer">00:00</div>
+    <div class="header__icons">
+      <i class="fas fa-adjust header__icon" id="contrastToggle" title="Toggle High Contrast"></i>
+      <i class="fas fa-text-height header__icon" id="textSizeToggle" title="Change Text Size"></i>
+    </div>
+  </div>
+
+  <!-- Progress Indicators -->
+  <div class="answer-indicators">
+    <span class="indicator-label">Progress Dashboard:</span>
+    <div class="answer-circle" data-question="1">1</div>
+    <div class="answer-circle" data-question="2">2</div>
+    <div class="answer-circle" data-question="3">3</div>
+    <div class="answer-circle" data-question="4">4</div>
+    <div class="answer-circle" data-question="5">5</div>
+    <div class="answer-circle" data-question="6">6</div>
+    <div class="answer-circle" data-question="7">7</div>
+    <div class="answer-circle" data-question="8">8</div>
+    <div class="answer-circle" data-question="9">9</div>
+    <div class="answer-circle" data-question="10">10</div>
+    <div class="answer-circle" data-question="11">11</div>
+    <div class="answer-circle" data-question="12">12</div>
+    <div class="answer-circle" data-question="13">13</div>
+  </div>
+
+  <!-- Main Grid System -->
+  <div class="test-container">
+
+    <!-- Passage Panel -->
+    <div class="passage-container">
+      <div id="passageContent">
+        <h2>The Early History of Olive Oil</h2>
+        <p style="font-style:italic;color:#64748b; font-size: 0.9rem; margin-top: -0.25rem;">Reading Passage 1 — Questions 1–13</p>
+
+        <p><span class="para-label">A</span> Olive oil is produced from the fruit of the olive tree, which is a member of the Oleaceae plant family. The trees require some cold weather during the year, but also tolerate hot, dry conditions, and do not like moisture when they are flowering. They actually produce better when subjected to these stressful conditions, and as a result, olive trees have traditionally been grown on land where little else will survive.</p>
+
+        <p><span class="para-label">B</span> Archaeologists today are divided over exactly where the first domestication of the olive occurred: some say it was in the area which is now Iran, Syria, Jordan and Egypt, while others contend it was in mainland Greece or on the island of Crete. The one thing that can be said with certainty is that cultivation began at least 6,000 years ago and spread slowly westward across the lands bordering on the Mediterranean Sea. Olive oil was used for a variety of purposes during these early times, including as a pharmacological ointment and in rituals for anointing royalty.</p>
+
+        <p><span class="para-label">C</span> The ancient Greeks believed the olive tree was a priceless gift from the goddess Athena and used its oil in sacred religious rituals. In fact, the Greek poet Homer called olive oil 'liquid gold', and during the 6th and 7th centuries BC Greek law forbade the cutting down of olive trees and made it punishable by death. The ancient Middle Eastern ruler King David valued his groves of olive trees and his olive oil warehouses so much that he posted guards around the clock to protect them.</p>
+
+        <p><span class="para-label">D</span> Over the years, olive oil developed other uses. Its employment in cooking dates at least as far back as the 5th century BC, as described by the Greek philosopher Plato. Its use as an aid to beauty and health later became ingrained in many Mediterranean cultures. The Romans, for example, are said to have used generous amounts on their bodies to moisturise their skin after bathing. With the spread of the Roman Empire, olive oil became a major commodity and its trade promoted commerce throughout the ancient world. It is generally believed that in the 1st-2nd century BC, olive trees were taken to North Africa and then to Spain, which was later to become the world's largest producer of olive oil. Artefacts found at various Mediterranean archaeological sites include olive oil storage vessels with olive plant residue still in them. Historical evidence still in existence in the form of wall paintings and ancient manuscripts (including the works of the Roman naturalist and philosopher, Pliny the Elder) all record production techniques and the various uses of olive oil.</p>
+
+        <p><span class="para-label">E</span> Making olive oil in those early days was a laborious process accomplished without mechanisation. Processing or milling the fruit involved several distinct stages to extract the liquid. The olives were harvested from the trees by hand or by beating the fruit from the trees with long sticks. The olives were then rinsed and crushed to separate out the large seed found in the centre of each. The remaining seedless flesh was put in woven bags and pressed. Hot water was then poured over the bags to separate the oil from the solid bits of olive. The liquid produced in this process, consisting of oil and water, was drained into stone basins or tanks, where it was allowed to settle and separate. In cold weather a bit of salt was added to speed up the process. As much oil as possible was drawn off the water, but the result was still not pure oil. Therefore, this impure mixture was allowed once more to settle in vats and then separated in order to refine the product.</p>
+
+        <p><span class="para-label">F</span> The waste water from the milling process, which is called amurca, is a bitter-tasting and foul-smelling liquid. In many ancient civilisations it was often simply discarded, causing serious pollution because of its acidity and high salt content. However, in the Roman period it was regarded as a very useful substance. When spread on surfaces, amurca forms a hard finish and therefore it was often applied to the floors of grain storage buildings where it hardened, keeping out water, mud and pests. When boiled down amurca was applied to leather to soften it so that it was easier to shape into articles of clothing and shoes. It could also be eaten by farm animals and was, in fact, fed to livestock suffering from malnutrition. According to ancient texts, amurca was also utilised in moderate amounts by farmers as a fertiliser or as a pesticide helping them to protect their crops from insects and even small rodents.</p>
+      </div>
+    </div>
+
+    <!-- Divider Splitter -->
+    <div class="divider" id="divider"><div class="divider-handle"></div></div>
+
+    <!-- Questions Panel -->
+    <div class="questions-container">
+      <div id="questionsContent">
+
+        <!-- Q1–6: TRUE / FALSE / NOT GIVEN -->
+        <div class="sectionRubric">
+          <h2>Questions 1–6</h2>
+          <p>Do the following statements agree with the information given in <strong>Reading Passage 1</strong>?</p>
+          <p>In boxes 1–6 on your answer sheet, write:</p>
+          <p><strong>TRUE</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement agrees with the information</p>
+          <p><strong>FALSE</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if the statement contradicts the information</p>
+          <p><strong>NOT GIVEN</strong> &nbsp; if there is no information on this</p>
+        </div>
+
+        <!-- Q1 -->
+        <div class="questionCard">
+          <h3>Question 1</h3>
+          <p>In the cultivation of olives, a period without rain is advantageous.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="1" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="1" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="1" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q1" value="">
+        </div>
+
+        <!-- Q2 -->
+        <div class="questionCard">
+          <h3>Question 2</h3>
+          <p>The most fertile fields are usually chosen for growing olives.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="2" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="2" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="2" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q2" value="">
+        </div>
+
+        <!-- Q3 -->
+        <div class="questionCard">
+          <h3>Question 3</h3>
+          <p>In ancient Greece, the olive tree was said to have divine origins.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="3" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="3" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="3" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q3" value="">
+        </div>
+
+        <!-- Q4 -->
+        <div class="questionCard">
+          <h3>Question 4</h3>
+          <p>Olive oil was more costly to buy in Greece than gold.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="4" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="4" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="4" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q4" value="">
+        </div>
+
+        <!-- Q5 -->
+        <div class="questionCard">
+          <h3>Question 5</h3>
+          <p>Plato mentions the use of olive oil in the preparation of food.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="5" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="5" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="5" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q5" value="">
+        </div>
+
+        <!-- Q6 -->
+        <div class="questionCard">
+          <h3>Question 6</h3>
+          <p>North African farmers initially resisted the introduction of olive trees.</p>
+          <div class="tfng-options">
+            <button class="tfng-btn" data-q="6" data-val="TRUE">TRUE</button>
+            <button class="tfng-btn" data-q="6" data-val="FALSE">FALSE</button>
+            <button class="tfng-btn" data-q="6" data-val="NOT GIVEN">NOT GIVEN</button>
+          </div>
+          <input type="hidden" name="q6" value="">
+        </div>
+
+        <!-- Q7–9: Note Completion -->
+        <div class="sectionRubric">
+          <h2>Questions 7–9</h2>
+          <p>Write <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+        </div>
+
+        <div class="questionCard">
+          <h3>Questions 7–9 — Olive oil production process</h3>
+          <div class="notes-group">
+            <span class="notes-group-label">How olives are processed</span>
+            <ul>
+              <li>
+                Olives are harvested by picking them or
+                <span class="blank-num">7</span>
+                <input class="q-input" type="text" name="q7" placeholder="one word" maxlength="20">
+              </li>
+              <li>
+                Olive flesh is placed in
+                <span class="blank-num">8</span>
+                <input class="q-input" type="text" name="q8" placeholder="one word" maxlength="20">
+                and pressed
+              </li>
+              <li>
+                Resulting liquid is given time to settle and
+                <span class="blank-num">9</span>
+                <input class="q-input" type="text" name="q9" placeholder="one word" maxlength="20">
+                is used to aid the process
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Q10–13: Note Completion -->
+        <div class="sectionRubric">
+          <h2>Questions 10–13</h2>
+          <p>Write <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+        </div>
+
+        <div class="questionCard">
+          <h3>Questions 10–13 — Uses of amurca (waste water)</h3>
+          <div class="notes-group">
+            <span class="notes-group-label">Uses of amurca in ancient times</span>
+            <ul>
+              <li>
+                In ancient times this waste liquid was usually thrown away, which led to
+                <span class="blank-num">10</span>
+                <input class="q-input" type="text" name="q10" placeholder="one word" maxlength="20">
+              </li>
+              <li>
+                When dried, created hard surface, so used on
+                <span class="blank-num">11</span>
+                <input class="q-input" type="text" name="q11" placeholder="one word" maxlength="20">
+                of certain buildings
+              </li>
+              <li>
+                When boiled down, applied to
+                <span class="blank-num">12</span>
+                <input class="q-input" type="text" name="q12" placeholder="one word" maxlength="20">
+              </li>
+              <li>
+                Used on farms as a
+                <span class="blank-num">13</span>
+                <input class="q-input" type="text" name="q13" placeholder="one word" maxlength="20">
+                to stop insects or animals damaging crops
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="submit-container">
+          <button onclick="submitAnswers()" id="submitBtn">Submit Test</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Text Selection Highlighter Tool -->
+<div class="highlight-toolbar" id="highlightToolbar">
+  <button data-color="yellow"><span class="highlight-color yellow"></span></button>
+  <button data-color="green"><span class="highlight-color green"></span></button>
+  <button data-color="pink"><span class="highlight-color pink"></span></button>
+  <button data-color="blue"><span class="highlight-color blue"></span></button>
+  <button data-color="purple"><span class="highlight-color purple"></span></button>
+  <button data-color="red"><span class="highlight-color red"></span></button>
+  <button class="remove" id="removeHighlight">
+    <i class="fas fa-times"></i>
+    <span>Clear</span>
+  </button>
+</div>
+
+<!-- IeltsPro Modern Dashboard Modal -->
+<div class="modal" id="submissionModal">
+  <div class="modal-content !max-w-2xl !p-6">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+      <h2 class="text-xl font-bold text-slate-900 !margin-0 !text-left">Test Results Analysis</h2>
+      <div class="flex items-center gap-2 text-sm text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+        <i class="far fa-clock text-blue-500"></i>
+        <span id="feedbackMessage" class="font-medium !margin-0"></span>
+      </div>
+    </div>
+    
+    <!-- Elegant Performance Dashboard Grid -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="bg-slate-50 border border-slate-200/60 rounded-xl p-4 text-center">
+        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Score Breakdown</span>
+        <div id="scoreDisplay" class="text-3xl font-extrabold text-slate-800">0 / 13</div>
+      </div>
+      <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 text-center">
+        <span class="text-xs font-semibold text-blue-500 uppercase tracking-wider block mb-1">IELTS Band Indicator</span>
+        <div id="bandDisplay" class="text-4xl font-black text-blue-600 leading-none">4.0</div>
+      </div>
+    </div>
+
+    <!-- Scrollable detailed list -->
+    <div class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3" id="detailedResults">
+      <!-- Dynamic list renders here -->
+    </div>
+
+    <div class="border-t border-slate-100 pt-4 mt-6 flex gap-3">
+      <button onclick="document.getElementById('submissionModal').style.display='none'" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl transition text-sm">
+        Review Answers
+      </button>
+      <a href="{% url 'dashboard' %}" class="flex-1">
+        <button id="closeResultsBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition text-sm !margin-0">
+          Finish & Return
+        </button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  /*** INTERNAL CONFIG & KEY ***/
+  const ANSWER_KEY = {
+    1: 'TRUE', 2: 'FALSE', 3: 'TRUE', 4: 'NOT GIVEN', 5: 'TRUE', 6: 'NOT GIVEN',
+    7: 'beating', 8: 'bags', 9: 'salt',
+    10: 'pollution', 11: 'floors', 12: 'leather', 13: 'pesticide'
+  };
+
+  const ALTERNATES = {};
+  const Q_NUMS = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+  const TOTAL = Q_NUMS.length;
+
+  /*** TIMER LOOPER ***/
+  let timeElapsed = 0, testSubmitted = false;
+  setInterval(() => {
+    if (!testSubmitted) {
+      timeElapsed++;
+      const m = Math.floor(timeElapsed / 60), s = timeElapsed % 60;
+      document.getElementById('timer').textContent =
+        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+  }, 1000);
+
+  /*** Choice Listeners ***/
+  document.querySelectorAll('.tfng-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (testSubmitted) return;
+      const q = btn.dataset.q;
+      const val = btn.dataset.val;
+      document.querySelectorAll(`.tfng-btn[data-q="${q}"]`).forEach(b =>
+        b.classList.remove('active-choice'));
+      
+      btn.classList.add('active-choice');
+      document.querySelector(`input[name="q${q}"]`).value = val;
+      updateIndicators();
+    });
+  });
+
+  function getVal(i) {
+    const el = document.querySelector(`input[name="q${i}"]`);
+    return el ? el.value.trim() : '';
+  }
+
+  function updateIndicators() {
+    Q_NUMS.forEach(i => {
+      const circle = document.querySelector(`.answer-circle[data-question="${i}"]`);
+      if (!circle) return;
+      const answered = getVal(i) !== '';
+      circle.classList.toggle('answered', answered);
+      circle.classList.toggle('unanswered', !answered);
+    });
+  }
+  document.querySelectorAll('input[type="text"]').forEach(el => {
+    el.addEventListener('input', updateIndicators);
+  });
+
+  function checkAnswer(i) {
+    const user = getVal(i).toLowerCase().trim();
+    const correct = String(ANSWER_KEY[i]).toLowerCase().trim();
+    if (user === correct) return true;
+    if (ALTERNATES[i]) return ALTERNATES[i].some(a => a.toLowerCase() === user);
+    return false;
+  }
+
+  /*** OFFICIAL READING BAND FORMULA ***/
+  function getIELTSBand(score) {
+    if (score >= 12) return 9.0;
+    if (score === 11) return 8.5;
+    if (score === 10) return 8.0;
+    if (score === 9) return 7.5;
+    if (score === 8) return 7.0;
+    if (score === 7) return 6.5;
+    if (score === 6) return 6.0;
+    if (score === 5) return 5.5;
+    if (score === 4) return 5.0;
+    if (score === 3) return 4.5;
+    return 4.0;
+  }
+
+  /*** MAIN ACTION SUBMIT ***/
+  function submitAnswers() {
+    if (testSubmitted) return;
+    testSubmitted = true;
+    let correct = 0;
+    const results = {};
+
+    Q_NUMS.forEach(i => {
+      const isCorrect = checkAnswer(i);
+      if (isCorrect) correct++;
+      results[i] = { answer: getVal(i), isCorrect };
+    });
+
+    const calculatedBand = getIELTSBand(correct);
+    const elapsed = `${String(Math.floor(timeElapsed/60)).padStart(2,'0')}:${String(timeElapsed%60).padStart(2,'0')}`;
+
+    // POST Payload to backend django endpoint
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            score: correct,
+            band: calculatedBand,
+            time_spent: elapsed
+        })
+    })
+    .then(response => response.json())
+    .then(data => console.log("IeltsPro Secure Core Saved:", data.message))
+    .catch(err => console.error("Network/DB Error:", err));
+
+    // Fill modern interface analytics cards
+    document.getElementById('scoreDisplay').innerHTML = `<span class="text-slate-800">${correct}</span><span class="text-slate-400 text-lg font-normal"> / ${TOTAL}</span>`;
+    document.getElementById('bandDisplay').textContent = calculatedBand.toFixed(1);
+    document.getElementById('feedbackMessage').textContent = elapsed;
+
+    let html = '';
+    Q_NUMS.forEach(i => {
+      const r = results[i];
+      const userAns = r.answer ? r.answer : 'No Answer';
+      
+      if (r.isCorrect) {
+        html += `
+          <div class="flex items-start justify-between bg-emerald-50/40 border border-emerald-100 rounded-xl p-3.5 transition-all">
+            <div class="flex gap-3">
+              <span class="flex items-center justify-center w-6 h-6 bg-emerald-500 text-white rounded-md text-xs font-bold shrink-0">${i}</span>
+              <div>
+                <p class="text-sm font-semibold text-slate-800">Correct</p>
+                <p class="text-xs text-slate-500 mt-0.5">Your answer matches the official key.</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-md">${userAns}</span>
+            </div>
+          </div>`;
+      } else {
+        html += `
+          <div class="flex flex-col gap-2.5 bg-rose-50/30 border border-rose-100 rounded-xl p-3.5 transition-all">
+            <div class="flex items-start justify-between">
+              <div class="flex gap-3">
+                <span class="flex items-center justify-center w-6 h-6 bg-rose-500 text-white rounded-md text-xs font-bold shrink-0">${i}</span>
+                <div>
+                  <p class="text-sm font-semibold text-slate-800">Incorrect</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Review this section in the reading passage.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-4 border-t border-rose-100/60 pt-2 mt-0.5 text-xs">
+              <div>
+                <span class="text-slate-400 block mb-0.5">Your Submission:</span>
+                <span class="font-bold text-rose-600 line-through bg-rose-50 px-2 py-0.5 rounded border border-rose-100">${userAns}</span>
+              </div>
+              <div>
+                <span class="text-slate-400 block mb-0.5">Correct Key:</span>
+                <span class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">${ANSWER_KEY[i]}</span>
+              </div>
+            </div>
+          </div>`;
+      }
+    });
+
+    document.getElementById('detailedResults').innerHTML = html;
+    document.getElementById('submissionModal').style.display = 'flex';
+  }
+
+  /*** RESIZER GRID PANEL ***/
+  const divider = document.getElementById('divider');
+  const passagePanel = document.querySelector('.passage-container');
+  const testContainer = document.querySelector('.test-container');
+  let isResizing = false;
+  divider.addEventListener('mousedown', () => { isResizing = true; });
+  document.addEventListener('mouseup', () => { isResizing = false; });
+  document.addEventListener('mousemove', e => {
+    if (!isResizing) return;
+    const box = testContainer.getBoundingClientRect();
+    const w = e.clientX - box.left;
+    if (w > 300 && w < box.width - 300) passagePanel.style.width = w + 'px';
+  });
+
+  /*** CORE AESTHETIC TOGGLES ***/
+  document.getElementById('contrastToggle').addEventListener('click', () => {
+    document.body.classList.toggle('high-contrast');
+  });
+  let textSizeIndex = 0;
+  const textSizes = ['1.05rem','1.15rem','1.25rem'];
+  document.getElementById('textSizeToggle').addEventListener('click', () => {
+    textSizeIndex = (textSizeIndex + 1) % textSizes.length;
+    document.getElementById('passageContent').style.fontSize = textSizes[textSizeIndex];
+    document.getElementById('questionsContent').style.fontSize = textSizes[textSizeIndex];
+  });
+
+  /*** СТАБИЛЬНЫЙ ДВИЖОК ВЫДЕЛЕНИЯ ТЕКСТА ***/
+  const ROOTS = [document.getElementById('passageContent'), document.getElementById('questionsContent')];
+  const toolbar = document.getElementById('highlightToolbar');
+
+  document.addEventListener('mouseup', e => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) { toolbar.style.display='none'; return; }
+    const range = sel.getRangeAt(0);
+    if (!ROOTS.some(r => r.contains(range.commonAncestorContainer))) { toolbar.style.display='none'; return; }
+    
+    const rect = range.getBoundingClientRect();
+    toolbar.style.left = rect.left + rect.width/2 + 'px';
+    toolbar.style.top  = (rect.top + window.scrollY - 10) + 'px';
+    toolbar.style.display = 'flex';
+  });
+
+  toolbar.querySelectorAll('button[data-color]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      applyHighlight(btn.getAttribute('data-color'));
+      toolbar.style.display = 'none';
+      window.getSelection().removeAllRanges();
+    });
+  });
+
+  document.getElementById('removeHighlight').addEventListener('click', (e) => {
+    e.stopPropagation();
+    removeHighlights();
+    toolbar.style.display = 'none';
+    window.getSelection().removeAllRanges();
+  });
+
+  function applyHighlight(color) {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+    
+    const span = document.createElement('span');
+    span.className = `highlight ${color}`;
+    
+    try {
+      span.appendChild(range.extractContents());
+      range.insertNode(span);
+    } catch (err) {
+      console.error("Highlight wrap failed:", err);
+    }
+  }
+
+  function removeHighlights() {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+    const container = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer;
+    
+    const highlights = container.querySelectorAll ? container.querySelectorAll('span.highlight') : [];
+    highlights.forEach(sp => {
+      const r = document.createRange();
+      r.selectNodeContents(sp);
+      if (range.compareBoundaryPoints(Range.END_TO_START, r) < 0 && range.compareBoundaryPoints(Range.START_TO_END, r) > 0) {
+        const p = sp.parentNode;
+        while (sp.firstChild) p.insertBefore(sp.firstChild, sp);
+        sp.remove();
+      }
+    });
+    document.normalize();
+  }
+</script>
+</body>
+</html>
