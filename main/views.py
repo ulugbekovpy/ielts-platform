@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 import json 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from ieltspro.utils import send_email as se
 
 def homepage(request):
     return render(request, 'index.html')
@@ -57,13 +58,10 @@ def register_view(request):
         html_message = render_to_string('otp_email.html', context)
         plain_message = f"Sizning tasdiqlash kodingiz: {otp}"
 
-        send_mail(
+        se(
             subject="Tasdiqlash kodi | IELTSPRO",
-            message=plain_message,
-            from_email="bekovic09@gmail.com",
-            recipient_list=[email],
-            html_message=html_message,
-            fail_silently=False,
+            to=email,
+            html_content=html_message,
         )
 
         return redirect("email_confirmation")

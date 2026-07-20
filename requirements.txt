@@ -13,3 +13,4 @@ six
 sqlparse
 tzdata
 whitenoise
+resend

@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-utfoqf7ikhm6e%%8zpr1d34b2a&xd11vtu0f7k#5u3pl3!z3)9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ielts-pro.uz.swtest.ru', 'ielts-pro.uz']
+ALLOWED_HOSTS = ['ielts-pro.uz.swtest.ru', 'ielts-pro.uz', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ["https://ielts.cloudpub.ru"]
 
@@ -108,13 +108,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'bekovic09@gmail.com'  
-EMAIL_HOST_PASSWORD = 'pluz ekli oopf wwsy'  
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+RESEND_API_KEY = "re_9Nfo4GyR_AqBMNMTsEa8iHxjMRFb4WXJS"
+DEFAULT_FROM_EMAIL = 'noreply@ielts-pro.uz'
+
+
 
 
 
@@ -141,7 +138,8 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/home/b/bekovic09g/ulugbekov_uz/public_html/django_errors.log',
+            # Теперь лог будет создаваться в папке проекта, а не в системных путях
+            'filename': os.path.join(BASE_DIR, 'django_errors.log'),
         },
     },
     'loggers': {
