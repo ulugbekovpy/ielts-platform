@@ -1,246 +1,241 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ommaviy Oferta Shartnomasi - IELTSPro</title>
-    <style>
-        :root {
-            --brand-blue: #2563eb;       
-            --brand-dark: #0b1329;       
-            --card-bg: #ffffff;
-            --border-subtle: rgba(15, 23, 42, 0.06);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --radius-lg: 20px;
-            --radius-md: 12px;
-            --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+{% extends 'base.html' %}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+{% block title %}Ommaviy Oferta Shartnomasi - IELTSPro{% endblock %}
 
-        body {
-            background-color: #f8fafc;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
+{% block extra_head %}
+<style>
+    :root {
+        --brand-blue: #2563eb;       
+        --brand-dark: #0b1329;       
+        --card-bg: #ffffff;
+        --border-subtle: rgba(15, 23, 42, 0.06);
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --radius-lg: 20px;
+        --radius-md: 12px;
+        --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
 
-        @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2); }
-            50% { transform: scale(1.02); box-shadow: 0 4px 25px rgba(37, 99, 235, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2); }
-        }
+    body {
+        background-color: #f8fafc;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-subtle);
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
-            animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        .header-banner {
-            background: linear-gradient(135deg, var(--brand-dark) 0%, #1e293b 100%);
-            color: #ffffff;
-            padding: 36px 30px;
-            border-radius: var(--radius-md);
-            margin-bottom: 32px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
+    @keyframes pulseGlow {
+        0% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2); }
+        50% { transform: scale(1.02); box-shadow: 0 4px 25px rgba(37, 99, 235, 0.4); }
+        100% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2); }
+    }
 
-        .header-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%; right: -20%;
-            width: 250px; height: 250px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-        }
+    .container {
+        max-width: 800px;
+        width: 100%;
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-subtle);
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+        animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-        h1 {
-            font-size: 26px;
-            font-weight: 800;
-            margin: 0 0 8px 0;
-            letter-spacing: -0.5px;
-        }
-        h1 span { color: var(--brand-blue); }
+    .header-banner {
+        background: linear-gradient(135deg, var(--brand-dark) 0%, #1e293b 100%);
+        color: #ffffff;
+        padding: 36px 30px;
+        border-radius: var(--radius-md);
+        margin-bottom: 32px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
 
-        .subtitle {
-            font-size: 13px;
-            color: #94a3b8;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
+    .header-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -20%;
+        width: 250px; height: 250px;
+        background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0,0,0,0) 70%);
+        pointer-events: none;
+    }
 
-        h2 {
-            font-size: 18px;
-            color: var(--brand-dark);
-            border-left: 4px solid var(--brand-blue);
-            padding-left: 14px;
-            margin-top: 32px;
-            margin-bottom: 16px;
-            font-weight: 700;
-        }
+    h1 {
+        font-size: 26px;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+        letter-spacing: -0.5px;
+    }
+    h1 span { color: var(--brand-blue); }
 
-        p {
-            margin: 0 0 16px 0;
-            text-align: justify;
-            color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.6;
-        }
+    .subtitle {
+        font-size: 13px;
+        color: #94a3b8;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
 
-        /* Красный сочный блок для политики возврата средств */
-        .alert-box {
-            background-color: #fff5f5;
-            border-left: 5px solid #e03131;
-            padding: 24px;
-            margin: 32px 0;
-            border-radius: var(--radius-md);
-            border-top: 1px solid rgba(224, 49, 49, 0.05);
-            border-right: 1px solid rgba(224, 49, 49, 0.05);
-            border-bottom: 1px solid rgba(224, 49, 49, 0.05);
-        }
+    h2 {
+        font-size: 18px;
+        color: var(--brand-dark);
+        border-left: 4px solid var(--brand-blue);
+        padding-left: 14px;
+        margin-top: 32px;
+        margin-bottom: 16px;
+        font-weight: 700;
+    }
 
-        .alert-box h3 {
-            margin: 0 0 12px 0;
-            color: #c92a2a;
-            font-size: 17px;
-            font-weight: 700;
-        }
+    p {
+        margin: 0 0 16px 0;
+        text-align: justify;
+        color: var(--text-muted);
+        font-size: 15px;
+        line-height: 1.6;
+    }
 
-        .alert-box p {
-            margin: 0 0 12px 0;
-            color: #c92a2a;
-            font-size: 14px;
-            font-weight: 500;
-        }
+    .alert-box {
+        background-color: #fff5f5;
+        border-left: 5px solid #e03131;
+        padding: 24px;
+        margin: 32px 0;
+        border-radius: var(--radius-md);
+        border-top: 1px solid rgba(224, 49, 49, 0.05);
+        border-right: 1px solid rgba(224, 49, 49, 0.05);
+        border-bottom: 1px solid rgba(224, 49, 49, 0.05);
+    }
 
-        .alert-box p strong {
-            font-weight: 700;
-        }
+    .alert-box h3 {
+        margin: 0 0 12px 0;
+        color: #c92a2a;
+        font-size: 17px;
+        font-weight: 700;
+    }
 
-        .alert-box p:last-child {
-            margin-bottom: 0;
-        }
+    .alert-box p {
+        margin: 0 0 12px 0;
+        color: #c92a2a;
+        font-size: 14px;
+        font-weight: 500;
+    }
 
-        /* Стилизация чекбокса и согласия */
-        .accept-container {
-            margin-top: 40px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border-subtle);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
+    .alert-box p strong {
+        font-weight: 700;
+    }
 
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            user-select: none;
-            transition: var(--transition-smooth);
-        }
-        .checkbox-label:hover {
-            color: var(--brand-blue);
-        }
+    .alert-box p:last-child {
+        margin-bottom: 0;
+    }
 
-        .checkbox-label input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--brand-blue);
-            cursor: pointer;
-            border-radius: 6px;
-        }
+    .accept-container {
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border-subtle);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
 
-        /* Премиум-кнопка принять */
-        .accept-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 380px;
-            background: linear-gradient(135deg, var(--brand-blue) 0%, #1d4ed8 100%);
-            color: #ffffff;
-            border: none;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            text-decoration: none;
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
-            opacity: 0.5;
-            pointer-events: none; /* Заблокирована до галочки */
-        }
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        user-select: none;
+        transition: var(--transition-smooth);
+    }
+    .checkbox-label:hover {
+        color: var(--brand-blue);
+    }
 
-        .accept-btn.active {
-            opacity: 1;
-            pointer-events: auto;
-            animation: pulseGlow 2s infinite;
-        }
+    .checkbox-label input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--brand-blue);
+        cursor: pointer;
+        border-radius: 6px;
+    }
 
-        .accept-btn.active:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-        }
+    .accept-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 380px;
+        background: linear-gradient(135deg, var(--brand-blue) 0%, #1d4ed8 100%);
+        color: #ffffff;
+        border: none;
+        padding: 16px 32px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+        opacity: 0.5;
+        pointer-events: none;
+    }
 
-        .footer-note {
-            margin-top: 40px;
-            border-top: 1px solid var(--border-subtle);
-            padding-top: 20px;
-            font-size: 12px;
-            color: var(--text-muted);
-            text-align: center;
-            font-weight: 500;
-        }
+    .accept-btn.active {
+        opacity: 1;
+        pointer-events: auto;
+        animation: pulseGlow 2s infinite;
+    }
 
-        @media (max-width: 768px) {
-            body { padding: 20px 12px; }
-            .container { padding: 24px 16px; }
-            .header-banner { padding: 24px 16px; }
-            h1 { font-size: 20px; }
-            h2 { font-size: 16px; }
-            p { font-size: 14px; }
-            .accept-btn { width: 100%; }
-        }
-    </style>
-    <script>
-        // Блокируем повторный просмотр (Раз и навсегда)
-        if (localStorage.getItem('oferta_accepted') === 'true') {
-            window.location.replace('/dashboard'); 
-        }
-    </script>
-</head>
-<body>
+    .accept-btn.active:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    }
 
+    .footer-note {
+        margin-top: 40px;
+        border-top: 1px solid var(--border-subtle);
+        padding-top: 20px;
+        font-size: 12px;
+        color: var(--text-muted);
+        text-align: center;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        body { padding: 20px 12px; }
+        .container { padding: 24px 16px; }
+        .header-banner { padding: 24px 16px; }
+        h1 { font-size: 20px; }
+        h2 { font-size: 16px; }
+        p { font-size: 14px; }
+        .accept-btn { width: 100%; }
+    }
+</style>
+<script>
+    if (localStorage.getItem('oferta_accepted') === 'true') {
+        window.location.replace('/dashboard'); 
+    }
+</script>
+{% endblock %}
+
+{% block content %}
 <div class="container">
     <div class="header-banner">
         <h1>Ommaviy Oferta <span>Shartnomasi</span></h1>
@@ -276,7 +271,6 @@
     <h2>6. Nizolarni hal qilish</h2>
     <p>6.1. Shartnoma yuzasidan kelib chiqadigan har qanday kelishmovchiliklar o‘zaro muzokaralar yo‘li bilan hal etiladi.</p>
 
-    <!-- Интерактивный блок принятия оферты -->
     <div class="accept-container">
         <label class="checkbox-label">
             <input type="checkbox" id="acceptCheckbox" onchange="toggleButton()">
@@ -292,9 +286,10 @@
         IELTSPro © 2026. Barcha huquqlar himoyalangan. To‘lovni amalga oshirish orqali siz ushbu shartnoma shartlariga to‘liq rozilik bildirasiz.
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
-    // Активация кнопки при клике на чекбокс
     function toggleButton() {
         const checkbox = document.getElementById('acceptCheckbox');
         const button = document.getElementById('submitBtn');
@@ -305,15 +300,12 @@
         }
     }
 
-    // Сохранение факта согласия и редирект в дашборд
     function acceptAndProceed() {
         const checkbox = document.getElementById('acceptCheckbox');
         if (checkbox.checked) {
-            localStorage.setItem('oferta_accepted', 'true'); // Запоминаем выбор навсегда
-            window.location.href = '/dashboard'; // Перенаправление
+            localStorage.setItem('oferta_accepted', 'true');
+            window.location.href = '/dashboard';
         }
     }
 </script>
-
-</body>
-</html>
+{% endblock %}

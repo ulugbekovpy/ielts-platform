@@ -217,10 +217,12 @@ def daily_listening_view(request):
     tomorrow = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
     seconds_left = int((tomorrow - now).total_seconds())
 
+    streak = UserStreak.objects.get(user=user)
+
     context = {
         'user': user,
         'is_premium': is_premium,
-        'current_streak': getattr(user.userstreak, 'current_streak', 0) if hasattr(user, 'userstreak') else 0,
+        'current_streak': streak.current_streak,
         'tests': tests_data,
         'seconds_left': seconds_left,
     }

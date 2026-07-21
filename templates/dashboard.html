@@ -1,943 +1,371 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IELTSPro - Dashboard</title>
-    <style>
-        :root {
-            --brand-blue: #2563eb;       
-            --brand-dark: #0b1329;       
-            --card-bg: #ffffff;
-            --border-subtle: rgba(15, 23, 42, 0.06);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --streak-bg: #fff5f5;        
-            --streak-text: #e03131;      
-            --radius-lg: 20px;
-            --radius-md: 12px;
-            --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+{% extends 'dashboard_base.html' %}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+{% block title %}IELTSPro - Dashboard{% endblock %}
 
-        body {
-            background-color: #f8fafc;
-            color: var(--text-main);
-            display: flex;
-            min-height: 100vh;
-        }
+{% block nav_dashboard %}active{% endblock %}
 
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+{% block page_style %}
+.ss-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+}
+.screenshot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+.ss-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.ss-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 700; }
+.ss-title { font-size: 20px; font-weight: 700; color: #0f172a; }
 
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border-subtle);
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; bottom: 0; left: 0;
-            z-index: 200;
-            padding: 32px 20px;
-            transition: var(--transition-smooth);
-        }
+.big-score { font-size: 52px; font-weight: 800; color: #0f172a; margin-top: 8px; line-height: 1; }
+.score-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
 
-        .sidebar-brand {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--brand-dark);
-            margin-bottom: 40px;
-            padding-left: 12px;
-            letter-spacing: -1px;
-        }
-        .sidebar-brand span { color: var(--brand-blue); font-weight: 800; }
+.mock-promo-box {
+    background: #eff6ff; 
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--brand-blue);
+    font-weight: 500;
+    line-height: 1.5;
+    border: 1px dashed rgba(37, 99, 235, 0.25);
+}
 
-        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-muted);
-            text-decoration: none;
-            padding: 12px 14px;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            font-size: 14px;
-            transition: var(--transition-smooth);
-        }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            color: var(--brand-dark);
-            background: #f1f5f9;
-        }
-        .sidebar-menu a.active {
-            background: var(--brand-dark);
-            color: #ffffff;
-            font-weight: 600;
-        }
-        .sidebar-menu a.soon-link {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .sidebar-menu a.soon-link:hover {
-            background: transparent;
-            color: var(--text-muted);
-        }
+.score-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+.stat-mini-box { background: #f8fafc; padding: 12px; border-radius: 10px; }
+.stat-mini-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+.stat-mini-val { font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 4px; }
 
-        /* Mobile Navigation */
-        .mobile-top-bar {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 60px;
-            background: #ffffff;
-            border-bottom: 1px solid var(--border-subtle);
-            z-index: 150;
-            padding: 0 20px;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .menu-toggle-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--brand-dark);
-        }
+.daily-plan-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+.plan-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1px solid rgba(15, 23, 42, 0.03);
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    transition: var(--transition-smooth);
+}
+.plan-item-card:hover {
+    background: #f1f5f9;
+    transform: translateX(2px);
+}
+.plan-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.plan-icon-box {
+    width: 36px; height: 36px;
+    background: #ffffff;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+.plan-btn {
+    background: var(--brand-dark);
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+}
+.plan-btn:hover { background: var(--brand-blue); }
+.plan-btn.completed {
+    background: #e2e8f0;
+    color: #64748b;
+    cursor: default;
+}
 
-        /* Main Content */
-        .main-wrapper {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px;
-            max-width: 1400px;
-            animation: slideInUp 0.6s ease-out forwards;
-        }
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr;
+    gap: 24px;
+}
+.dashboard-block {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    padding: 24px;
+}
+.block-header { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
 
-        /* Header */
-        .header-grid {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            gap: 20px;
-        }
-        .welcome-title h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+.leaderboard { display: flex; flex-direction: column; gap: 8px; }
+.leader-row { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 12px; 
+    border-radius: var(--radius-md); 
+    transition: var(--transition-smooth); 
+}
+.leader-row.highlight-user { 
+    background: #eff6ff !important; 
+    border: 1px solid rgba(37, 99, 235, 0.15);
+}
+.leader-profile { display: flex; align-items: center; gap: 10px; }
+.leader-avatar { 
+    width: 32px; 
+    height: 32px; 
+    background: #e2e8f0; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 12px; 
+    font-weight: 600; 
+}
+.leaderboard-separator {
+    margin: 8px 0;
+    border: none;
+    border-top: 1px dashed #cbd5e1;
+}
 
-        .user-action-group { display: flex; align-items: center; gap: 16px; position: relative; }
+@media (max-width: 1100px) {
+    .screenshot-grid, .grid-2-col { grid-template-columns: 1fr; }
+}
+{% endblock %}
+
+{% block page_content %}
+<header class="header-grid">
+    <div class="welcome-title">
+        <p style="font-size: 11px; text-transform: uppercase; color: var(--brand-blue); font-weight: 700; letter-spacing: 0.5px;">Today Route</p>
+        <h1 style="margin-top: 2px;">{{ user.first_name|default:user.email|default:"User" }}, here is today's route.</h1>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Target Band {{ user.want_result }} · IELTS date {{ user.get_exam_timeline_display|default:"Not set" }}</p>
+    </div>
+    
+    <div class="user-action-group">
+        <div class="streak-badge">🔥 {{ current_streak }} kunlik</div>
         
-        .streak-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background-color: var(--streak-bg);
-            border: 1px solid rgba(224, 49, 49, 0.15);
-            padding: 10px 18px;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--streak-text);
-            white-space: nowrap;
-        }
+        <div class="premium-user-box" id="profileBox">
+            <div class="box-avatar">{{ user.first_name|default:user.email|slice:":1"|upper }}</div>
+            <div class="box-info">
+                <span class="user-name">{{ user.first_name|default:user.email }}</span>
+                <span class="status-text">
+                    {% if is_premium %}👑 Premium{% else %}Free Account{% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="profile-dropdown" id="profileDropdown">
+            <button onclick="openModal('profileModal')">👤 Mening profilim</button>
+            {% if not is_premium %}
+            <button onclick="openModal('premiumModal')" style="color: var(--brand-blue); font-weight: 700;">✨ Premium sotib olish</button>
+            {% endif %}
+            <button onclick="openModal('settingsModal')">⚙️ Sozlamalar</button>
+            <form action="/logout/" method="POST" style="width:100%;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">🚪 Tizimdan chiqish</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<section class="screenshot-grid">
+    <div class="ss-card">
+        <div class="ss-card-header">
+            <span class="ss-label">Band History</span>
+            <span style="font-size: 16px;">🎯</span>
+        </div>
+        <div class="big-score">{{ latest_score }}</div>
+        <div class="score-sub">Goal Band {{ user.want_result }} · {{ bands_to_close }} bands to close</div>
         
-        .premium-user-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #e2e8f0;
-            padding: 6px 16px 6px 6px;
-            border-radius: 14px;
-            cursor: pointer;
-            user-select: none;
-            transition: var(--transition-smooth);
-        }
-        .premium-user-box:hover { background: #cbd5e1; }
-        
-        .box-avatar {
-            width: 40px;
-            height: 40px;
-            background: var(--brand-blue);
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .box-info .user-name { font-size: 14px; font-weight: 700; display: block; }
-        .box-info .status-text { font-size: 11px; color: var(--text-muted); display: block; }
+        {% if latest_score == "—" %}
+        <div class="mock-promo-box">
+            Complete a full mock to see your band history.
+        </div>
+        {% endif %}
 
-        .profile-dropdown {
-            position: absolute;
-            top: 55px;
-            right: 0;
-            width: 200px;
-            background: #ffffff;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 300;
-        }
-        .profile-dropdown.show { display: flex; }
-        
-        .profile-dropdown button {
-            background: none;
-            border: none;
-            text-align: left;
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 14px;
-            color: var(--text-main);
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .profile-dropdown button:hover { background: #f1f5f9; }
-        .profile-dropdown .logout-btn { color: #ef4444; border-top: 1px solid #f1f5f9; }
-
-        /* Модальные окна */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.3);
-            backdrop-filter: blur(16px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-overlay.active { display: flex; }
-        
-        .modal-card {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 36px;
-            width: 92%;
-            max-width: 500px;
-            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.04);
-            position: relative;
-            animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-        }
-        .modal-title { font-size: 22px; font-weight: 700; color: var(--brand-dark); letter-spacing: -0.5px; }
-        
-        .modal-close-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-smooth);
-        }
-        .modal-close-btn:hover { background: #e2e8f0; transform: rotate(90deg); }
-        
-        .modal-profile-badge {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #f1f5f9;
-            margin-bottom: 20px;
-        }
-        .modal-avatar-large {
-            width: 56px; height: 56px;
-            background: var(--brand-dark);
-            color: #fff;
-            font-size: 24px; font-weight: 700;
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .profile-meta-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .meta-item {
-            background: #f8fafc;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(15, 23, 42, 0.02);
-        }
-        .meta-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
-        .meta-value { font-size: 14px; font-weight: 700; color: var(--brand-dark); }
-
-        .settings-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 16px;
-            background: #f8fafc;
-            border-radius: var(--radius-md);
-            margin-bottom: 12px;
-            cursor: pointer;
-        }
-        .settings-row input[type="checkbox"] {
-            width: 18px; height: 18px;
-            accent-color: var(--brand-blue);
-            margin-top: 2px;
-        }
-
-        /* -------------------------------------------------------------------- */
-        /* СТИЛИ ФИРМЕННОЙ ПЛАСТИКОВОЙ КАРТЫ И КНОПОК ОПЛАТЫ */
-        /* -------------------------------------------------------------------- */
-        .payment-card-visual {
-            width: 100%;
-            height: 220px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #090d16 100%);
-            border-radius: 16px;
-            padding: 24px;
-            color: #ffffff;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-        .payment-card-visual::before {
-            content: '';
-            position: absolute;
-            top: -50%; right: -20%;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-        }
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .card-brand {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-        .card-brand span { color: var(--brand-blue); }
-        .card-chip {
-            width: 40px; height: 30px;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            border-radius: 6px;
-            position: relative;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-        .card-number {
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            font-family: 'Courier New', Courier, monospace;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            margin: 12px 0;
-            user-select: all;
-            cursor: pointer;
-        }
-        .card-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .card-holder {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #94a3b8;
-        }
-        .card-holder-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-            margin-top: 4px;
-        }
-        .card-system {
-            font-size: 18px;
-            font-weight: 800;
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .payment-instructions {
-            background: #f8fafc;
-            border: 1px solid rgba(15, 23, 42, 0.04);
-            border-radius: 12px;
-            padding: 18px;
-        }
-        .instruction-step {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-            font-size: 13.5px;
-            line-height: 1.5;
-        }
-        .instruction-step:last-child { margin-bottom: 0; }
-        .step-num {
-            width: 24px; height: 24px;
-            background: #eff6ff;
-            color: var(--brand-blue);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-        .tg-bot-link {
-            color: var(--brand-blue);
-            text-decoration: none;
-            font-weight: 700;
-        }
-        .tg-bot-link:hover { text-decoration: underline; }
-
-        /* Layout карт */
-        .screenshot-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-        .ss-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 28px;
-        }
-        .ss-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        /* Модальное окно "Скоро" */
-.modal-overlay#soonModal { z-index: 2000; }
-.soon-icon { font-size: 48px; margin-bottom: 16px; display: block; }
-        .ss-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 700; }
-        .ss-title { font-size: 20px; font-weight: 700; color: #0f172a; }
-
-        .big-score { font-size: 52px; font-weight: 800; color: #0f172a; margin-top: 8px; line-height: 1; }
-        .score-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
-        
-        .mock-promo-box {
-            background: #eff6ff; 
-            border-radius: var(--radius-md);
-            padding: 20px;
-            text-align: center;
-            margin-top: 24px;
-            font-size: 13px;
-            color: var(--brand-blue);
-            font-weight: 500;
-            line-height: 1.5;
-            border: 1px dashed rgba(37, 99, 235, 0.25);
-        }
-
-        .score-stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .stat-mini-box { background: #f8fafc; padding: 12px; border-radius: 10px; }
-        .stat-mini-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
-        .stat-mini-val { font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 4px; }
-
-        /* Маршрут плана на день */
-        .daily-plan-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 14px;
-        }
-        .plan-item-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f8fafc;
-            border: 1px solid rgba(15, 23, 42, 0.03);
-            padding: 14px 18px;
-            border-radius: var(--radius-md);
-            transition: var(--transition-smooth);
-        }
-        .plan-item-card:hover {
-            background: #f1f5f9;
-            transform: translateX(2px);
-        }
-        .plan-item-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .plan-icon-box {
-            width: 36px; height: 36px;
-            background: #ffffff;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-        }
-        .plan-btn {
-            background: var(--brand-dark);
-            color: #ffffff;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-        }
-        .plan-btn:hover { background: var(--brand-blue); }
-        .plan-btn.completed {
-            background: #e2e8f0;
-            color: #64748b;
-            cursor: default;
-        }
-
-        /* Lower Grid Layout */
-        .grid-2-col {
-            display: grid;
-            grid-template-columns: 1.2fr 1.2fr;
-            gap: 24px;
-        }
-        .dashboard-block {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-subtle);
-            padding: 24px;
-        }
-        .block-header { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
-
-        /* Leaderboard */
-        .leaderboard { display: flex; flex-direction: column; gap: 8px; }
-        .leader-row { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 12px; 
-            border-radius: var(--radius-md); 
-            transition: var(--transition-smooth); 
-        }
-        .leader-row.highlight-user { 
-            background: #eff6ff !important; 
-            border: 1px solid rgba(37, 99, 235, 0.15);
-        }
-        .leader-profile { display: flex; align-items: center; gap: 10px; }
-        .leader-avatar { 
-            width: 32px; 
-            height: 32px; 
-            background: #e2e8f0; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 12px; 
-            font-weight: 600; 
-        }
-        .leaderboard-separator {
-            margin: 8px 0;
-            border: none;
-            border-top: 1px dashed #cbd5e1;
-        }
-
-        @media (max-width: 1100px) {
-            .screenshot-grid, .grid-2-col { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .mobile-top-bar { display: flex; }
-            .sidebar { transform: translateX(-100%); top: 60px; box-shadow: 10px 0 30px rgba(0,0,0,0.05); }
-            .sidebar.open { transform: translateX(0); }
-            .main-wrapper { margin-left: 0; padding: 80px 16px 40px 16px; }
-            .header-grid { flex-direction: column; align-items: flex-start; gap: 16px; }
-            .user-action-group { width: 100%; justify-content: space-between; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Mobile Top Bar -->
-    <div class="mobile-top-bar">
-        <button class="menu-toggle-btn" id="menuToggle">☰</button>
-        <div style="font-size: 18px; font-weight: 700; color: var(--brand-dark);">IELTS<span style="color: var(--brand-blue);">Pro</span></div>
-        <div style="width: 24px;"></div> 
+        <div class="score-stats-row">
+            <div class="stat-mini-box">
+                <div class="stat-mini-label">Latest</div>
+                <div class="stat-mini-val">{{ latest_score }}</div>
+            </div>
+            <div class="stat-mini-box">
+                <div class="stat-mini-label">Best</div>
+                <div class="stat-mini-val">{{ best_score }}</div>
+            </div>
+            <div class="stat-mini-box">
+                <div class="stat-mini-label">Target</div>
+                <div class="stat-mini-val" style="color: var(--brand-blue);">{{ user.want_result }}</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebarMenu">
-        <div class="sidebar-brand">IELTS<span>Pro</span></div>
-        <ul class="sidebar-menu">
-            <li><a href="{% url 'dashboard' %}" class="active">🏠 <span>Home</span></a></li>
-            <li><a href="{% url 'listening' %}">🎧 <span>Listening</span></a></li>
-            <li><a href="{% url 'reading' %}">📕 <span>Reading</span></a></li>
-            <li><a href="#" class="soon-link" onclick="event.preventDefault(); showSoonAlert('Writing xizmati', 'Writing AI xizmati ustida ishlayapmiz, u tez orada faollashadi!');">📝 <span>Writing (AI) <span style="font-size:10px; background:#eff6ff; color:#2563eb; padding:2px 6px; border-radius:10px; margin-left:4px;">Soon</span></span></a></li>
-            <li><a href="{% url 'vocabulary' %}">📖 <span>Vocabulary</span></a></li>
-            <li><a href="#" class="soon-link" onclick="event.preventDefault(); showSoonAlert('Mock test', 'Mock test topshirish xizmati tez orada faollashadi!');">🖥 <span>Mock <span style="font-size:10px; background:#eff6ff; color:#2563eb; padding:2px 6px; border-radius:10px; margin-left:4px;">Closed</span></span></a></li>
-        </ul>
-    </aside>
-
-    <!-- Main Wrapper -->
-    <main class="main-wrapper">
+    <div class="ss-card" style="padding: 24px;">
+        <div class="ss-card-header" style="margin-bottom: 12px;">
+            <span class="ss-label">Mock Practice</span>
+            <div class="ss-title">{{ daily_plan.title|default:"Bugungi dars rejasi" }}</div>
+        </div>
         
-        <!-- Header -->
-        <header class="header-grid">
-            <div class="welcome-title">
-                <p style="font-size: 11px; text-transform: uppercase; color: var(--brand-blue); font-weight: 700; letter-spacing: 0.5px;">Today Route</p>
-                <h1 style="margin-top: 2px;">{{ user.first_name|default:user.email|default:"User" }}, here is today's route.</h1>
-                <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Target Band {{ user.want_result }} · IELTS date {{ user.get_exam_timeline_display|default:"Not set" }}</p>
-            </div>
-            
-            <div class="user-action-group">
-                <div class="streak-badge">🔥 {{ current_streak }} kunlik</div>
-                
-                <div class="premium-user-box" id="profileBox">
-                    <div class="box-avatar">{{ user.first_name|default:user.email|slice:":1"|upper }}</div>
-                    <div class="box-info">
-                        <span class="user-name">{{ user.first_name|default:user.email }}</span>
-                        <span class="status-text">
-                            {% if is_premium %}👑 Premium{% else %}Free Account{% endif %}
-                        </span>
+        <div class="daily-plan-container">
+            {% for module in daily_plan.modules %}
+            <div class="plan-item-card">
+                <div class="plan-item-meta">
+                    <div class="plan-icon-box">{{ module.icon }}</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 700; color: var(--brand-dark);">{{ module.name }}</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 1px;">Daily Focus Practice</div>
                     </div>
                 </div>
-
-                <!-- Dropdown -->
-                <div class="profile-dropdown" id="profileDropdown">
-                    <button onclick="openModal('profileModal')">👤 Mening profilim</button>
-                    {% if not is_premium %}
-                    <button onclick="openModal('premiumModal')" style="color: var(--brand-blue); font-weight: 700;">✨ Premium sotib olish</button>
-                    {% endif %}
-                    <button onclick="openModal('settingsModal')">⚙️ Sozlamalar</button>
-                    <form action="/logout/" method="POST" style="width:100%;">
-                        {% csrf_token %}
-                        <button type="submit" class="logout-btn">🚪 Tizimdan chiqish</button>
-                    </form>
-                </div>
-            </div>
-        </header>
-
-        <section class="screenshot-grid">
-            <!-- Band History -->
-            <div class="ss-card">
-                <div class="ss-card-header">
-                    <span class="ss-label">Band History</span>
-                    <span style="font-size: 16px;">🎯</span>
-                </div>
-                <div class="big-score">{{ latest_score }}</div>
-                <div class="score-sub">Goal Band {{ user.want_result }} · {{ bands_to_close }} bands to close</div>
-                
-                {% if latest_score == "—" %}
-                <div class="mock-promo-box">
-                    Complete a full mock to see your band history.
-                </div>
+                {% if module.status == "completed" %}
+                    <span class="plan-btn completed">Bajarildi ✓</span>
+                {% else %}
+                    <a href="{{ module.url }}" class="plan-btn">Boshlash</a>
                 {% endif %}
-
-                <div class="score-stats-row">
-                    <div class="stat-mini-box">
-                        <div class="stat-mini-label">Latest</div>
-                        <div class="stat-mini-val">{{ latest_score }}</div>
-                    </div>
-                    <div class="stat-mini-box">
-                        <div class="stat-mini-label">Best</div>
-                        <div class="stat-mini-val">{{ best_score }}</div>
-                    </div>
-                    <div class="stat-mini-box">
-                        <div class="stat-mini-label">Target</div>
-                        <div class="stat-mini-val" style="color: var(--brand-blue);">{{ user.want_result }}</div>
-                    </div>
-                </div>
             </div>
-
-            <!-- Instant Target Practice Route (Bugungi Reja) -->
-            <div class="ss-card" style="padding: 24px;">
-                <div class="ss-card-header" style="margin-bottom: 12px;">
-                    <span class="ss-label">Mock Practice</span>
-                    <div class="ss-title">{{ daily_plan.title|default:"Bugungi dars rejasi" }}</div>
-                </div>
-                
-                <div class="daily-plan-container">
-                    {% for module in daily_plan.modules %}
-                    <div class="plan-item-card">
-                        <div class="plan-item-meta">
-                            <div class="plan-icon-box">{{ module.icon }}</div>
-                            <div>
-                                <div style="font-size: 14px; font-weight: 700; color: var(--brand-dark);">{{ module.name }}</div>
-                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 1px;">Daily Focus Practice</div>
-                            </div>
-                        </div>
-                        {% if module.status == "completed" %}
-                            <span class="plan-btn completed">Bajarildi ✓</span>
-                        {% else %}
-                            <a href="{{ module.url }}" class="plan-btn">Boshlash</a>
-                        {% endif %}
-                    </div>
-                    {% empty %}
-                    <div class="plan-item-card">
-                        <p style="font-size: 13px; color: var(--text-muted);">Bugungi reja muvaffaqiyatli yakunlandi!</p>
-                    </div>
-                    {% endfor %}
-                </div>
+            {% empty %}
+            <div class="plan-item-card">
+                <p style="font-size: 13px; color: var(--text-muted);">Bugungi reja muvaffaqiyatli yakunlandi!</p>
             </div>
-        </section>
-
-        <!-- Lower Layout Grid -->
-        <div class="grid-2-col">
-            <!-- Dynamic Skill Matrix Widget -->
-            <div class="dashboard-block">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <div class="block-header" style="margin-bottom: 0;">📊 Skill Matrix</div>
-                    <span style="font-size: 11px; font-weight: 700; color: var(--brand-blue); background: #eff6ff; padding: 4px 10px; border-radius: 20px;">Live Update</span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 18px;">
-                    {% for skill in skill_matrix %}
-                    <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(15, 23, 42, 0.02);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 16px;">{{ skill.icon }}</span>
-                                <span style="font-size: 14px; font-weight: 700; color: var(--brand-dark);">{{ skill.name }}</span>
-                            </div>
-                            <div style="font-size: 13px; font-weight: 800; color: var(--brand-dark);">
-                                Band <span style="color: {{ skill.color }};">{{ skill.score }}</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Dynamic Progress Bar -->
-                        <div style="height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden; position: relative;">
-                            <div style="width: {{ skill.percentage }}%; height: 100%; background: {{ skill.color }}; border-radius: 10px; transition: var(--transition-smooth);"></div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Weekly Leaderboard Widget -->
-            <div class="dashboard-block">
-                <div class="block-header" style="margin-bottom: 16px;">🏆 Haftalik Peshqadamlar</div>
-                <div class="leaderboard">
-                    {% for row in leaderboard %}
-                    <div class="leader-row {% if row.is_current_user %}highlight-user{% endif %}">
-                        <div class="leader-profile">
-                            <span style="font-size: 12px; font-weight: 700; color: {% if row.is_current_user %}var(--brand-blue){% else %}#94a3b8{% endif %}; width: 15px;">{{ row.rank }}</span>
-                            <div class="leader-avatar" style="{% if row.rank == 1 %}background: #fef3c7; color: #d97706;{% elif row.is_current_user %}background: var(--brand-blue); color: white;{% endif %}">
-                                {% if row.rank == 1 %}🥇{% else %}{{ row.avatar_letter }}{% endif %}
-                            </div>
-                            <span style="font-size: 14px; font-weight: 600;">{{ row.name }}</span>
-                        </div>
-                        <span style="font-size: 13px; font-weight: 700; color: {% if row.is_current_user %}var(--brand-blue){% else %}#0f172a{% endif %};">Band {{ row.band }}</span>
-                    </div>
-                    {% endfor %}
-
-                    {% if show_footer_user %}
-                        <hr class="leaderboard-separator">
-                        <div class="leader-row highlight-user">
-                            <div class="leader-profile">
-                                <span style="font-size: 12px; font-weight: 700; color: var(--brand-blue); width: 15px;">—</span>
-                                <div class="leader-avatar" style="background: var(--brand-blue); color: white;">
-                                    {{ footer_user.avatar_letter }}
-                                </div>
-                                <span style="font-size: 14px; font-weight: 600;">{{ footer_user.name }}</span>
-                            </div>
-                            <span style="font-size: 13px; font-weight: 700; color: var(--brand-blue);">Band {{ footer_user.band }}</span>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
+            {% endfor %}
         </div>
-    </main>
+    </div>
+</section>
 
-    <!-- Modal Profile Box -->
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-title">Foydalanuvchi profili</div>
-                <button class="modal-close-btn" onclick="closeModal('profileModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-profile-badge">
-                    <div class="modal-avatar-large">{{ user.first_name|default:user.email|slice:":1"|upper }}</div>
-                    <div>
-                        <h3 style="font-size: 18px; font-weight: 700;">{{ user.first_name|default:user.email }}</h3>
-                        <p style="font-size: 13px; color: var(--text-muted);">{{ user.email }}</p>
+<div class="grid-2-col">
+    <div class="dashboard-block">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div class="block-header" style="margin-bottom: 0;">📊 Skill Matrix</div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--brand-blue); background: #eff6ff; padding: 4px 10px; border-radius: 20px;">Live Update</span>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+            {% for skill in skill_matrix %}
+            <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(15, 23, 42, 0.02);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 16px;">{{ skill.icon }}</span>
+                        <span style="font-size: 14px; font-weight: 700; color: var(--brand-dark);">{{ skill.name }}</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 800; color: var(--brand-dark);">
+                        Band <span style="color: {{ skill.color }};">{{ skill.score }}</span>
                     </div>
                 </div>
-                <div class="profile-meta-grid">
-                    <div class="meta-item">
-                        <div class="meta-label">Maqsad (Target)</div>
-                        <div class="meta-value" style="color: var(--brand-blue);">Band {{ user.want_result }}</div>
-                    </div>
-                    <div class="meta-item">
-                        <div class="meta-label">Hisob Maqomi</div>
-                        <div class="meta-value">{% if is_premium %}Premium 👑{% else %}Standart{% endif %}</div>
-                    </div>
+                
+                <div style="height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden; position: relative;">
+                    <div style="width: {{ skill.percentage }}%; height: 100%; background: {{ skill.color }}; border-radius: 10px; transition: var(--transition-smooth);"></div>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- Модальное окно покупки премиума с фирменной картой -->
-    <div class="modal-overlay" id="premiumModal">
-        <div class="modal-card" style="max-width: 540px;">
-            <div class="modal-header" style="margin-bottom: 20px;">
-                <div class="modal-title">✨ IELTSPro Premium faollashtirish</div>
-                <button class="modal-close-btn" onclick="closeModal('premiumModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="payment-card-visual">
-                    <div class="card-top">
-                        <div class="card-brand">IELTS<span>Pro</span></div>
-                        <div class="card-chip"></div>
+    <div class="dashboard-block">
+        <div class="block-header" style="margin-bottom: 16px;">🏆 Haftalik Peshqadamlar</div>
+        <div class="leaderboard">
+            {% for row in leaderboard %}
+            <div class="leader-row {% if row.is_current_user %}highlight-user{% endif %}">
+                <div class="leader-profile">
+                    <span style="font-size: 12px; font-weight: 700; color: {% if row.is_current_user %}var(--brand-blue){% else %}#94a3b8{% endif %}; width: 15px;">{{ row.rank }}</span>
+                    <div class="leader-avatar" style="{% if row.rank == 1 %}background: #fef3c7; color: #d97706;{% elif row.is_current_user %}background: var(--brand-blue); color: white;{% endif %}">
+                        {% if row.rank == 1 %}🥇{% else %}{{ row.avatar_letter }}{% endif %}
                     </div>
-                    <div class="card-number" title="Nusxa olish uchun bosing" onclick="copyCardNumber(this)">
-                        5614 6821 1137 5095
-                    </div>
-                    <div class="card-bottom">
-                        <div>
-                            <div class="card-holder">Card Holder</div>
-                            <div class="card-holder-name">IELTSPro Jamoasi</div>
-                        </div>
-                        <div class="card-system">Uzcard</div>
-                    </div>
+                    <span style="font-size: 14px; font-weight: 600;">{{ row.name }}</span>
                 </div>
+                <span style="font-size: 13px; font-weight: 700; color: {% if row.is_current_user %}var(--brand-blue){% else %}#0f172a{% endif %};">Band {{ row.band }}</span>
+            </div>
+            {% endfor %}
 
-                <div class="payment-instructions">
-                    <div class="instruction-step">
-                        <div class="step-num">1</div>
-                        <div>Yuqoridagi <strong>Uzcard</strong> kartasiga to'lovni amalga oshiring (Nusxa olish uchun raqam ustiga bosing).</div>
-                    </div>
-                    <div class="instruction-step">
-                        <div class="step-num">2</div>
-                        <div>To'lov muvaffaqiyatli amalga oshirilganligi haqidagi chekni (skrinshotni) saqlab oling.</div>
-                    </div>
-                    <div class="instruction-step">
-                        <div class="step-num">3</div>
-                        <div>Chekni bizning maxsus Telegram botimizga yuboring: 
-                            <a href="https://t.me/ieltspropayment" target="_blank" class="tg-bot-link">@ieltspropayment</a>. Administrator hisobingizni 5 daqiqa ichida Premiumga o'tkazadi.
+            {% if show_footer_user %}
+                <hr class="leaderboard-separator">
+                <div class="leader-row highlight-user">
+                    <div class="leader-profile">
+                        <span style="font-size: 12px; font-weight: 700; color: var(--brand-blue); width: 15px;">—</span>
+                        <div class="leader-avatar" style="background: var(--brand-blue); color: white;">
+                            {{ footer_user.avatar_letter }}
                         </div>
+                        <span style="font-size: 14px; font-weight: 600;">{{ footer_user.name }}</span>
                     </div>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--brand-blue);">Band {{ footer_user.band }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_modals %}
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div class="modal-title">Foydalanuvchi profili</div>
+            <button class="modal-close-btn" onclick="closeModal('profileModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-profile-badge">
+                <div class="modal-avatar-large">{{ user.first_name|default:user.email|slice:":1"|upper }}</div>
+                <div>
+                    <h3 style="font-size: 18px; font-weight: 700;">{{ user.first_name|default:user.email }}</h3>
+                    <p style="font-size: 13px; color: var(--text-muted);">{{ user.email }}</p>
+                </div>
+            </div>
+            <div class="profile-meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Maqsad (Target)</div>
+                    <div class="meta-value" style="color: var(--brand-blue);">Band {{ user.want_result }}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Hisob Maqomi</div>
+                    <div class="meta-value">{% if is_premium %}Premium 👑{% else %}Standart{% endif %}</div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Modal Settings Box -->
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-title">Platforma sozlamalari</div>
-                <button class="modal-close-btn" onclick="closeModal('settingsModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Tizim bildirishnomalari hamda interfeys parametrlarini boshqaring.</p>
-                
-                <label class="settings-row">
-                    <input type="checkbox" checked>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 600;">Telegram Notification</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Kunlik darslarni bot orqali eslatish.</div>
-                    </div>
-                </label>
-
-                <label class="settings-row">
-                    <input type="checkbox" checked>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 600;">Haftalik statistika</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Mock imtihonlari tahlilini emailga yuborish.</div>
-                    </div>
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="soonModal">
-    <div class="modal-card" style="text-align: center; max-width: 400px;">
-        <span class="soon-icon">🚀</span>
-        <div class="modal-title" id="soonModalTitle" style="margin-bottom: 16px;">Tez orada...</div>
-        <p style="color: var(--text-muted); margin-bottom: 24px;" id="soonModalText">Bu funksiya ustida ishlayapmiz, u tez orada siz uchun ochiq bo'ladi!</p>
-        <button class="plan-btn" style="width: 100%; padding: 12px;" onclick="closeModal('soonModal')">Tushunarli</button>
     </div>
 </div>
 
-    <script>
-        // Функция для красивых уведомлений
-function showSoonAlert(title, text) {
-    document.getElementById('soonModalTitle').innerText = title;
-    document.getElementById('soonModalText').innerText = text;
-    openModal('soonModal');
-}
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            document.getElementById('profileDropdown').classList.remove('show');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div class="modal-title">Platforma sozlamalari</div>
+            <button class="modal-close-btn" onclick="closeModal('settingsModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Tizim bildirishnomalari hamda interfeys parametrlarini boshqaring.</p>
+            
+            <label class="settings-row">
+                <input type="checkbox" checked>
+                <div>
+                    <div style="font-size: 14px; font-weight: 600;">Telegram Notification</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Kunlik darslarni bot orqali eslatish.</div>
+                </div>
+            </label>
 
-        function copyCardNumber(element) {
-            const cleanNumber = element.innerText.replace(/\s+/g, '');
-            navigator.clipboard.writeText(cleanNumber).then(() => {
-                const originalText = element.innerText;
-                element.innerText = "Nusxa olindi! ✅";
-                element.style.color = "#10b981";
-                setTimeout(() => {
-                    element.innerText = originalText;
-                    element.style.color = "#ffffff";
-                }, 1500);
-            }).catch(err => {
-                console.error("Xatolik:", err);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebarMenu = document.getElementById('sidebarMenu');
-            if (menuToggle && sidebarMenu) {
-                menuToggle.addEventListener('click', (e) => {
-                    sidebarMenu.classList.toggle('open');
-                    e.stopPropagation();
-                });
-                document.addEventListener('click', () => sidebarMenu.classList.remove('open'));
-            }
-
-            const profileBox = document.getElementById('profileBox');
-            const profileDropdown = document.getElementById('profileDropdown');
-            if (profileBox && profileDropdown) {
-                profileBox.addEventListener('click', (e) => {
-                    profileDropdown.classList.toggle('show');
-                    e.stopPropagation();
-                });
-                document.addEventListener('click', () => profileDropdown.classList.remove('show'));
-            }
-
-            const statusText = document.querySelector('.premium-user-box .status-text');
-            if (statusText && statusText.innerText.includes('Free Account')) {
-                document.getElementById('profileBox').addEventListener('click', (e) => {
-                    if (e.target.classList.contains('status-text')) {
-                        openModal('premiumModal');
-                        e.stopPropagation();
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+            <label class="settings-row">
+                <input type="checkbox" checked>
+                <div>
+                    <div style="font-size: 14px; font-weight: 600;">Haftalik statistika</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Mock imtihonlari tahlilini emailga yuborish.</div>
+                </div>
+            </label>
+        </div>
+    </div>
+</div>
+{% endblock %}
