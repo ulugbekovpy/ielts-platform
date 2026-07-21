@@ -4,23 +4,57 @@
 
 {% block extra_head %}
 <style>
-    body { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .login-container { background-color: var(--card-bg); border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.04); width: 100%; max-width: 440px; padding: 40px; }
-    .login-header { text-align: center; margin-bottom: 32px; }
-    .login-header .logo { justify-content: center; margin-bottom: 16px; }
-    .login-header h2 { font-size: 22px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
-    .login-header p { color: var(--text-muted); font-size: 14px; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
-    .form-group input { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text-main); background-color: #f8fafc; transition: all 0.2s; font-weight: 500; }
-    .form-group input:focus { outline: none; border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 4px var(--primary-light); }
-    .btn-submit { w-full; display: block; width: 100%; background-color: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 24px; }
-    .btn-submit:hover { background-color: #1d4ed8; }
-    .login-footer { text-align: center; margin-top: 28px; font-size: 14px; color: var(--text-muted); }
-    .login-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    body { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 40%); }
+    .login-container { background-color: var(--card-bg); border-radius: 28px; border: 1px solid #e2e8f0; box-shadow: 0 20px 40px rgba(37, 99, 235, 0.08); width: 100%; max-width: 460px; padding: 40px; overflow: hidden; position: relative; }
+    
+    .login-header { text-align: center; margin-bottom: 24px; }
+    .login-header .logo { justify-content: center; margin-bottom: 12px; }
+    .login-header h2 { font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; letter-spacing: -0.5px; }
+    .login-header p { color: var(--text-muted); font-size: 14px; font-weight: 500; }
+    
+    /* Индикатор шагов */
+    .step-indicators { display: flex; justify-content: space-between; margin-bottom: 32px; position: relative; max-width: 200px; margin-left: auto; margin-right: auto; }
+    .step-indicators::before { content: ''; position: absolute; top: 14px; left: 20px; right: 20px; height: 2px; background: #e2e8f0; z-index: 1; }
+    .step-indicator-item { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--card-bg); padding: 0 6px; }
+    .step-circle { width: 30px; height: 30px; border-radius: 50%; background: #f1f5f9; color: var(--text-muted); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .step-indicator-item.active .step-circle { background: var(--primary); color: #fff; box-shadow: 0 0 0 4px var(--primary-light); }
+    .step-indicator-item.completed .step-circle { background: #10b981; color: #fff; }
+    .step-label { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+    .step-indicator-item.active .step-label { color: var(--primary); }
+
+    /* Шаги формы */
+    .form-step { display: none; opacity: 0; transform: scale(0.97) translateY(10px); transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .form-step.active { display: block; opacity: 1; transform: scale(1) translateY(0); }
+
+    .form-group { margin-bottom: 20px; position: relative; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+    .input-wrapper { position: relative; }
+    .form-group input { width: 100%; padding: 14px 18px; padding-right: 45px; border: 2px solid #e2e8f0; border-radius: 14px; font-size: 15px; color: var(--text-main); background-color: #f8fafc; transition: all 0.25s ease; font-weight: 600; }
+    .form-group input:focus { outline: none; border-color: var(--primary); background-color: #fff; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08); }
+    
+    .input-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; pointer-events: none; opacity: 0.5; transition: opacity 0.2s; }
+    .form-group input:focus ~ .input-icon { opacity: 1; }
+
+    /* Кнопки */
+    .btn-container { display: flex; gap: 12px; margin-top: 28px; }
+    .btn-submit, .btn-secondary { width: 100%; border: none; padding: 15px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit { background-color: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); }
+    .btn-submit:hover { background-color: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+    .btn-secondary { background-color: #f1f5f9; color: var(--text-main); }
+    .btn-secondary:hover { background-color: #e2e8f0; }
+
+    .login-footer { text-align: center; margin-top: 28px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
+    .login-footer a { color: var(--primary); text-decoration: none; font-weight: 700; }
     .login-footer a:hover { text-decoration: underline; }
-    .alert-messages { list-style: none; padding: 0; margin-bottom: 20px; }
-    .alert-item { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center; }
+
+    .alert-messages { list-style: none; padding: 0; margin-bottom: 24px; }
+    .alert-item { background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; text-align: center; border: 1px solid #fecaca; animation: shake 0.4s ease; }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        75% { transform: translateX(6px); }
+    }
 </style>
 {% endblock %}
 
@@ -28,33 +62,133 @@
 <div class="login-container">
     <div class="login-header">
         <div class="logo">IELTS<span>Pro</span></div>
-        <h2>Tizimga kirish 🚀</h2>
-        <p>Platformadagi o'qishni davom ettiring</p>
+        <h2 id="step-title">Xush kelibsiz! 👋</h2>
+        <p id="step-desc">Davom etish uchun emailingizni kiriting</p>
+    </div>
+
+    <!-- Индикаторы шагов (2 шага: Почта и Пароль) -->
+    <div class="step-indicators">
+        <div class="step-indicator-item active" id="ind-0">
+            <div class="step-circle">1</div>
+            <span class="step-label">Email</span>
+        </div>
+        <div class="step-indicator-item" id="ind-1">
+            <div class="step-circle">2</div>
+            <span class="step-label">Parol</span>
+        </div>
     </div>
 
     {% if messages %}
     <ul class="alert-messages">
         {% for message in messages %}
-        <li class="alert-item">{{ message }}</li>
+        <li class="alert-item">⚠️ {{ message }}</li>
         {% endfor %}
     </ul>
     {% endif %}
 
-    <form method="POST" action="{% url 'login' %}">
+    <form method="POST" action="{% url 'login' %}" id="multiStepLoginForm">
         {% csrf_token %}
-        <div class="form-group">
-            <label>Email manzil</label>
-            <input type="email" name="email" placeholder="example@gmail.com" required>
+        
+        <!-- Шаг 1: Email -->
+        <div class="form-step active" data-step="0">
+            <div class="form-group">
+                <label>Elektron pochta</label>
+                <div class="input-wrapper">
+                    <input type="email" name="email" id="email" placeholder="example@gmail.com" required autocomplete="email">
+                    <span class="input-icon">✉️</span>
+                </div>
+            </div>
+            <button type="button" class="btn-submit" onclick="nextStep(1)">Keyingisi ➔</button>
         </div>
-        <div class="form-group">
-            <label>Parol</label>
-            <input type="password" name="password" placeholder="••••••••" required>
+
+        <!-- Шаг 2: Пароль -->
+        <div class="form-step" data-step="1">
+            <div class="form-group">
+                <label>Parolingiz</label>
+                <div class="input-wrapper">
+                    <input type="password" name="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                    <span class="input-icon">🔒</span>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button type="button" class="btn-secondary" onclick="prevStep(0)">Orqaga</button>
+                <button type="submit" class="btn-submit">Tizimga kirish 🚀</button>
+            </div>
         </div>
-        <button type="submit" class="btn-submit">Tizimga kirish</button>
     </form>
 
     <div class="login-footer">
         Hisobingiz yo'qmi? <a href="{% url 'register' %}">Ro'yxatdan o'ting</a>
     </div>
 </div>
+
+<script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll('.form-step');
+    const indicators = document.querySelectorAll('.step-indicator-item');
+    const stepTitle = document.getElementById('step-title');
+    const stepDesc = document.getElementById('step-desc');
+
+    const stepInfo = [
+        { title: "Xush kelibsiz! 👋", desc: "Davom etish uchun emailingizni kiriting" },
+        { title: "Xavfsizlik 🛡️", desc: "Profilingiz uchun parolni kiriting" }
+    ];
+
+    function updateView() {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+        });
+
+        indicators.forEach((ind, index) => {
+            ind.classList.remove('active', 'completed');
+            const circle = ind.querySelector('.step-circle');
+            if (index < currentStep) {
+                ind.classList.add('completed');
+                circle.textContent = '✓';
+            } else if (index === currentStep) {
+                ind.classList.add('active');
+                circle.textContent = index + 1;
+            } else {
+                circle.textContent = index + 1;
+            }
+        });
+
+        stepTitle.textContent = stepInfo[currentStep].title;
+        stepDesc.textContent = stepInfo[currentStep].desc;
+        
+        setTimeout(() => {
+            const activeInput = steps[currentStep].querySelector('input');
+            if (activeInput) activeInput.focus();
+        }, 100);
+    }
+
+    function nextStep(targetStep) {
+        const currentInput = steps[currentStep].querySelector('input');
+        if (currentInput && !currentInput.checkValidity()) {
+            currentInput.reportValidity();
+            return;
+        }
+        currentStep = targetStep;
+        updateView();
+    }
+
+    function prevStep(targetStep) {
+        currentStep = targetStep;
+        updateView();
+    }
+
+    // Нажатие Enter для удобства
+    document.querySelectorAll('#multiStepLoginForm input').forEach((input, index) => {
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (index < 1) {
+                    nextStep(index + 1);
+                } else {
+                    document.getElementById('multiStepLoginForm').submit();
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
